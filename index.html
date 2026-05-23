@@ -1,0 +1,692 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Bitácora de Estudio</title>
+  <style>
+    :root{
+      --bg:#f6fbff; --card:#ffffff; --text:#0b1b2b; --muted:#4b647a;
+      --line:#dbe8f4; --accent:#4aa3df; --accent2:#59c3a6; --warn:#f59e0b; --ok:#16a34a;
+      --shadow: 0 10px 30px rgba(10,40,80,.08); --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 600px at 10% 0%, #e8f5ff, transparent),
+                  radial-gradient(900px 500px at 90% 10%, #e9fff6, transparent),
+                  var(--bg);
+      color:var(--text);
+    }
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter: blur(10px);
+      background: rgba(246,251,255,.82);
+      border-bottom: 1px solid var(--line);
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:16px;}
+    .top{display:flex; gap:12px; align-items:flex-end; justify-content:space-between; flex-wrap:wrap;}
+    h1{margin:0; font-size:18px;}
+    .sub{margin-top:6px; color:var(--muted); font-size:12px; line-height:1.3}
+    .controls{display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+    input, select, button, textarea{ font:inherit; }
+    select, input[type="date"], input[type="text"]{
+      padding:10px 12px; border-radius: 14px; border: 1px solid var(--line);
+      background: #fff; color: var(--text); outline:none;
+    }
+    label.toggle{
+      display:flex; align-items:center; gap:8px;
+      padding:10px 12px; border-radius: 14px; border: 1px solid var(--line);
+      background:#fff; color: var(--muted); font-size:12px;
+    }
+    button{
+      padding:10px 12px; border-radius: 14px; border: 1px solid var(--line);
+      background: linear-gradient(180deg, #ffffff, #f2f8ff);
+      cursor:pointer; box-shadow: 0 6px 18px rgba(10,40,80,.06);
+    }
+    button.primary{
+      border-color: rgba(74,163,223,.35);
+      background: linear-gradient(180deg, rgba(74,163,223,.14), rgba(74,163,223,.06));
+    }
+    .grid{display:grid; grid-template-columns: 1.25fr .75fr; gap:14px; padding:16px;}
+    @media (max-width: 980px){ .grid{grid-template-columns: 1fr; } }
+    .card{
+      background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+      box-shadow: var(--shadow); padding:14px;
+    }
+    .row{display:flex; gap:10px; flex-wrap:wrap; align-items:center}
+    .pill{
+      font-size:12px; padding:6px 10px; border-radius:999px; border:1px solid var(--line);
+      color: var(--muted); background: #fbfdff;
+    }
+    .pill.ok{border-color: rgba(22,163,74,.25); color:#166534; background: rgba(22,163,74,.06);}
+    .pill.warn{border-color: rgba(245,158,11,.28); color:#92400e; background: rgba(245,158,11,.08);}
+    .pill.sync{border-color: rgba(74,163,223,.28); color:#0b4a7b; background: rgba(74,163,223,.08);}
+
+    .dayHead{display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;}
+    .bigDate{font-size:16px; font-weight:700}
+    .note{font-size:12px; color:var(--muted)}
+
+    details{
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: linear-gradient(180deg, #ffffff, #f8fbff);
+      padding:10px 12px;
+      margin-top:10px;
+    }
+    details > summary{
+      cursor:pointer; list-style:none;
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      font-weight:600; font-size:13px;
+    }
+    details > summary::-webkit-details-marker{ display:none; }
+
+    .student{
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding:10px;
+      background:#fff;
+      margin-top:10px;
+    }
+    .studentHead{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap; margin-bottom:8px;}
+    .studentHead strong{font-size:13px}
+
+    .task{
+      display:grid; grid-template-columns: 26px 1fr;
+      gap:10px; padding:10px; border-radius: 12px;
+      border:1px solid var(--line); margin-bottom:10px; background:#fff;
+    }
+    .task.done{border-color: rgba(89,195,166,.35); background: rgba(89,195,166,.08);}
+    .tTitle{display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;}
+    .tTitle span{font-size:12px; color:var(--muted)}
+
+    .links{font-size:12px; color:var(--muted); margin-top:6px; line-height:1.6}
+    .links a{color: var(--accent); text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    .linkRow{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-top:6px;}
+    .miniBtn{
+      padding:6px 10px; border-radius:999px; border:1px solid var(--line);
+      background:#fff; cursor:pointer; font-size:12px; color:#0b4a7b;
+    }
+    .miniBtn:hover{background:#f2f8ff}
+    .danger{color:#9a3412}
+
+    textarea{
+      width:100%; min-height:52px; resize: vertical;
+      padding:10px 12px; border-radius: 12px;
+      border:1px solid var(--line); background: #fff; color: var(--text); outline:none;
+    }
+    .footerActions{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; margin-top:10px;}
+    .small{font-size:12px; color:var(--muted)}
+    .mutedBox{
+      border:1px dashed var(--line); border-radius: 14px; padding:10px;
+      background: rgba(255,255,255,.6); margin-top:10px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="top">
+      <div>
+        <h1>Bitácora de Estudio</h1>
+        <div class="sub">
+          GitHub Pages (hosting) + Firebase Realtime Database (sincronización). [7](https://www.lezhin.es/)[1](https://play.google.com/store/apps/details/?id=jp.co.shueisha.mangaplus&hl=es-CO)
+        </div>
+      </div>
+
+      <div class="controls">
+        <input type="date" id="datePick" />
+        <select id="viewMode">
+          <option value="day">Día</option>
+          <option value="week">Semana</option>
+        </select>
+
+        <select id="userPick" title="Quién usa la bitácora hoy">
+          <option value="family">Vista familiar</option>
+          <option value="may">May</option>
+          <option value="deadpool">Deadpoollcer0</option>
+        </select>
+
+        <label class="toggle"><input type="checkbox" id="onlyPending" /> Solo pendientes</label>
+        <label class="toggle"><input type="checkbox" id="examMode" /> Modo examen</label>
+
+        <input type="text" id="familyCode" placeholder="Código de familia (ej: casa2026)" />
+        <button class="primary" id="connectBtn">Conectar/Guardar</button>
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;">
+      <span class="pill sync" id="syncPill">Sin conexión</span>
+      <span class="pill" id="rangePill">Rango: 25/05/2026 → 15/09/2026</span>
+      <span class="pill" id="holidayPill">Festivos excluidos: 29/06, 16/07</span>
+    </div>
+  </div>
+</header>
+
+<main class="grid wrap">
+  <section class="card">
+    <div class="dayHead">
+      <div>
+        <div class="bigDate" id="titleDate">—</div>
+        <div class="note" id="titleNote">—</div>
+      </div>
+      <div class="row">
+        <span class="pill" id="dayTypePill">—</span>
+        <span class="pill" id="progressPill">—</span>
+      </div>
+    </div>
+
+    <div id="plan"></div>
+
+    <div class="footerActions">
+      <button id="exportBtn">Exportar progreso (JSON)</button>
+      <button id="importBtn">Importar progreso (JSON)</button>
+      <input id="importFile" type="file" accept="application/json" style="display:none" />
+    </div>
+    <div class="small">
+      La app registra (hecho/notas/validado). Los enlaces van dentro de cada tarea (no en un lateral).
+    </div>
+  </section>
+
+  <aside class="card">
+    <h2 class="sectionTitle">Panel rápido</h2>
+    <div class="small" id="statsBox">—</div>
+
+    <div class="mutedBox">
+      <strong style="font-size:13px;">¿Qué es el “Código de familia”?</strong>
+      <div class="small" style="margin-top:6px;">
+        Es el nombre del “espacio compartido” donde se guarda el progreso. Si ambos equipos ponen el mismo código, verán lo mismo. (Firebase RTDB sincroniza en tiempo real). [1](https://play.google.com/store/apps/details/?id=jp.co.shueisha.mangaplus&hl=es-CO)
+      </div>
+    </div>
+
+    <details style="margin-top:12px;">
+      <summary><span>Configuración (1 vez): Firebase</span><span class="pill">RTDB</span></summary>
+      <div class="small" style="margin:8px 0 10px;">
+        Pega tu <strong>firebaseConfig</strong> (se guarda en este navegador). [1](https://play.google.com/store/apps/details/?id=jp.co.shueisha.mangaplus&hl=es-CO)
+      </div>
+      <textarea id="firebaseConfig" placeholder='Pega aquí el objeto JSON:
+{
+  "apiKey": "...",
+  "authDomain": "...",
+  "databaseURL": "...",
+  "projectId": "...",
+  "appId": "..."
+}'></textarea>
+    </details>
+  </aside>
+</main>
+
+<!-- Firebase compat libs -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+<script>
+/** Plan */
+const RANGE = { start: "2026-05-25", end: "2026-09-15" };
+const HOLIDAYS = new Set(["2026-06-29", "2026-07-16"]);
+
+/** Links de ejemplo (los que ya encontré como deep links útiles) */
+const RESOURCES = {
+  // Profesor en Línea: fracciones, ecuaciones, fotosíntesis, historia
+  fracConcept: { label: "Fracciones (concepto)", url: "https://www.profesorenlinea.cl/matematica/FraccionConcepto.htm" }, // [2](https://tucuentofavorito.com/cuentos-cortos-para-adolescentes/)
+  eqFirst: { label: "Ecuaciones 1º grado", url: "https://www.profesorenlinea.cl/matematica/Ecuaciones_primer_grado.html" }, // [3](https://github.com/LukasMasuch/best-of-react)
+  photosynthesis: { label: "Fotosíntesis", url: "https://www.profesorenlinea.cl/Ciencias/Fotosintesis.htm" }, // [4](https://archive.org/details/comics?sort=-date)
+  indepChile1810: { label: "Independencia 1810", url: "https://www.profesorenlinea.cl/chilehistoria/Chilea.htm" }, // C0B171B983B71CAB&id=C0B171B983B71CAB!sca74728886104ab7bb89de6be9157c0c)
+  lineaTiempoChile: { label: "Línea de tiempo Chile", url: "https://www.profesorenlinea.cl/chilehistoria/LineaTiempo.htm" }, // [10](https://www.canva.com/es_es/checklist/plantillas/)
+
+  // Khan (porcentajes 6º Chile)
+  khan6Pct: { label: "Khan 6º: porcentajes", url: "https://es.khanacademy.org/math/mat-6-basico-cl/x49a7c3531c7031b5:porcentajes" }, // [5](https://v4.mui.com/es/getting-started/templates/)
+
+  // YouTube ejemplo (AprendoTV fracciones impropias)
+  aprendoTVFrac: { label: "Video (AprendoTV): fracciones", url: "https://www.youtube.com/watch?v=bc6TJSfArRI" }, // [6](https://www.elmostrador.cl/datos-utiles/2026/03/18/feriados-2026-en-chile-calendario-completo-y-fines-de-semana-largos-confirmados-2/)
+
+  duolingo: { label: "Duolingo", url: "https://es.duolingo.com/" },
+  webtoon: { label: "WEBTOON", url: "https://www.webtoons.com/es/" }, // [11](https://schools.duolingo.com/login)
+  mangaplus: { label: "MANGA Plus", url: "https://mangaplus.shueisha.co.jp/" } // [12](https://schools.duolingo.com/professionaldev)
+};
+
+const CURR_DEADPOOL = {
+  Matemática: [
+    { key:"M5", title:"Fracciones (base)", links:[RESOURCES.fracConcept, RESOURCES.aprendoTVFrac] },
+    { key:"M8", title:"Ecuaciones (intro)", links:[RESOURCES.eqFirst] }
+  ],
+  Lenguaje: [
+    { key:"L1", title:"Comprensión lectora (narraciones)", links:[] }
+  ],
+  Ciencias: [
+    { key:"C1", title:"Ciencias: base", links:[] }
+  ],
+  Historia: [
+    { key:"H1", title:"Historia: base", links:[] }
+  ],
+  Inglés: [
+    { key:"I1", title:"Inglés: rutina", links:[RESOURCES.duolingo] }
+  ]
+};
+
+const CURR_MAY = {
+  Matemática: [
+    { key:"M2", title:"Razón y porcentaje", links:[RESOURCES.khan6Pct] },
+    { key:"M5", title:"Ecuaciones 1er grado", links:[RESOURCES.eqFirst] }
+  ],
+  Ciencias: [
+    { key:"C1", title:"Fotosíntesis", links:[RESOURCES.photosynthesis] }
+  ],
+  Historia: [
+    { key:"H1", title:"Independencia + línea de tiempo", links:[RESOURCES.indepChile1810, RESOURCES.lineaTiempoChile] }
+  ],
+  Lenguaje: [
+    { key:"L1", title:"Lectura y escritura", links:[] }
+  ],
+  Inglés: [
+    { key:"I1", title:"Inglés: rutina", links:[RESOURCES.duolingo] }
+  ]
+};
+
+const STUDENTS = [
+  { id:"may", name:"May", grade:"6º básico", curriculum: CURR_MAY },
+  { id:"deadpool", name:"Deadpoollcer0", grade:"5º básico", curriculum: CURR_DEADPOOL }
+];
+
+const WEEK_PATTERN = [
+  { dow:1, slot1:"Matemática", slot2:"Ciencias" },
+  { dow:2, slot1:"Lenguaje",  slot2:"Historia" },
+  { dow:3, slot1:"Matemática", slot2:"Inglés" },
+  { dow:4, slot1:"Lenguaje",  slot2:"Ciencias" },
+  { dow:5, slot1:"Matemática", slot2:"Historia" }
+];
+
+function iso(d){ return d.toISOString().slice(0,10); }
+function parseISO(s){ const [y,m,dd]=s.split("-").map(Number); return new Date(y, m-1, dd); }
+function isWeekend(d){ const day=d.getDay(); return day===0 || day===6; }
+function isStudyDay(d){
+  const k = iso(d);
+  if (k < RANGE.start || k > RANGE.end) return false;
+  if (isWeekend(d)) return false;
+  if (HOLIDAYS.has(k)) return false;
+  return true;
+}
+function dayLabel(d){
+  return d.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"2-digit", day:"2-digit" });
+}
+function getPatternForDate(d){ return WEEK_PATTERN.find(p => p.dow === d.getDay()); }
+
+function makeQueues(){
+  const q = {};
+  for (const s of STUDENTS){
+    q[s.id] = {};
+    for (const subj of Object.keys(s.curriculum)){
+      q[s.id][subj] = { idx:0, items:s.curriculum[subj] };
+    }
+  }
+  return q;
+}
+const QUEUES = makeQueues();
+
+function pickBlock(studentId, subject){
+  const q = QUEUES[studentId][subject];
+  if (!q || !q.items.length) return { key:"NA", title:`${subject} (pendiente)`, links:[] };
+  const item = q.items[q.idx % q.items.length];
+  q.idx += 1;
+  return item;
+}
+
+function buildTasks({student, subject, block, d}){
+  const base = [
+    { id:"ver", text:"Ver/leer contenido principal (10–15 min)", links:block.links || [] },
+    { id:"hacer", text:"Práctica: 6–10 ítems o 1 actividad", links:block.links || [] },
+    { id:"explicar", text:"Explicar en voz alta (2 min) o escribir 3–5 líneas", links:block.links || [] }
+  ];
+
+  if (student.id === "deadpool"){
+    const dow = d.getDay();
+    const isComicDay = (subject === "Lenguaje" && (dow === 2 || dow === 4));
+    if (isComicDay){
+      base.unshift({ id:"comic", text:"Lectura cómic/manga 10–15 min + 3 ideas clave", links:[RESOURCES.webtoon, RESOURCES.mangaplus] });
+    }
+  }
+
+  if (subject === "Inglés"){
+    return [
+      { id:"duo", text:"Duolingo: 1 lección + 1 repaso (10–15 min)", links:[RESOURCES.duolingo] },
+      { id:"reading", text:"Leer 1 texto corto y subrayar 5 palabras", links:block.links || [] },
+      { id:"writing", text:"Escribir 5–8 frases usando la función del día", links:block.links || [] }
+    ];
+  }
+  return base;
+}
+
+function buildDayPlan(d){
+  const k = iso(d);
+  if (k < RANGE.start || k > RANGE.end) return { kind:"fuera", message:"Fuera del rango." };
+  if (HOLIDAYS.has(k)) return { kind:"descanso", message:"Festivo: descanso o ponerse al día." };
+  if (isWeekend(d)) return { kind:"descanso", message:"Fin de semana: descanso o ponerse al día." };
+  if (!isStudyDay(d)) return { kind:"descanso", message:"Día no lectivo." };
+
+  const p = getPatternForDate(d);
+  const slot1 = { title:`Cápsula 1 · ${p.slot1}`, subject:p.slot1, students:[] };
+  const slot2 = { title:`Cápsula 2 · ${p.slot2}`, subject:p.slot2, students:[] };
+
+  for (const s of STUDENTS){
+    const b1 = pickBlock(s.id, p.slot1);
+    const b2 = pickBlock(s.id, p.slot2);
+    slot1.students.push({ ...s, block:b1, tasks: buildTasks({student:s, subject:p.slot1, block:b1, d}) });
+    slot2.students.push({ ...s, block:b2, tasks: buildTasks({student:s, subject:p.slot2, block:b2, d}) });
+  }
+  return { kind:"estudio", date:k, slots:[slot1, slot2] };
+}
+
+/** Firebase state */
+let db=null, family="", liveUnsub=null, LIVE_CACHE={};
+
+function loadLocal(){ try{ return JSON.parse(localStorage.getItem("hs_local_v3")||"{}"); }catch(e){ return {}; } }
+function saveLocal(o){ localStorage.setItem("hs_local_v3", JSON.stringify(o)); }
+function safePath(...parts){ return parts.map(p => String(p).replace(/[.#$/\[\]]/g, "_")).join("/"); }
+function pathFor(item){ return safePath("families", family||"demo", "progress", item.date, item.studentId, item.subject, item.blockKey, item.taskId); }
+
+function setSyncState(text, ok){
+  const pill = document.getElementById("syncPill");
+  pill.textContent = text;
+  pill.className = ok ? "pill sync" : "pill warn";
+}
+
+async function connectFirebase(){
+  const cfgText = document.getElementById("firebaseConfig").value.trim();
+  family = (document.getElementById("familyCode").value.trim() || "demo");
+  localStorage.setItem("hs_family_v3", family);
+  if (cfgText) localStorage.setItem("hs_fb_cfg_v3", cfgText);
+
+  if (!cfgText){ setSyncState("Sin conexión (pega firebaseConfig)", false); return; }
+  let cfg=null; try{ cfg=JSON.parse(cfgText); }catch(e){ setSyncState("Config inválida", false); return; }
+
+  try{
+    firebase.initializeApp(cfg);
+    db = firebase.database();
+    setSyncState("Conectado (RTDB)", true);
+    startLiveSync();
+  }catch(e){
+    setSyncState("Error Firebase", false);
+  }
+}
+
+function startLiveSync(){
+  if (!db || !family) return;
+  if (liveUnsub) liveUnsub();
+  const ref = db.ref(safePath("families", family, "progress"));
+  const handler = (snap)=>{ LIVE_CACHE = snap.val() || {}; render(); };
+  ref.on("value", handler);
+  liveUnsub = ()=> ref.off("value", handler);
+}
+
+function getItemState(date, studentId, subject, blockKey, taskId){
+  const fb = (((LIVE_CACHE||{})[date]||{})[studentId]||{})[subject]||{};
+  const a = (fb[blockKey]||{})[taskId];
+  if (a) return a;
+  const local = loadLocal();
+  const b = (((local||{})[date]||{})[studentId]||{})[subject]||{};
+  return (b[blockKey]||{})[taskId] || null;
+}
+
+function setItemState(item, patch){
+  const local = loadLocal();
+  local[item.date] ??= {};
+  local[item.date][item.studentId] ??= {};
+  local[item.date][item.studentId][item.subject] ??= {};
+  local[item.date][item.studentId][item.subject][item.blockKey] ??= {};
+  const prev = local[item.date][item.studentId][item.subject][item.blockKey][item.taskId] || {};
+  local[item.date][item.studentId][item.subject][item.blockKey][item.taskId] = { ...prev, ...patch, updatedAt: new Date().toISOString() };
+  saveLocal(local);
+  if (db && family) db.ref(pathFor(item)).set(local[item.date][item.studentId][item.subject][item.blockKey][item.taskId]);
+}
+
+/** UI */
+function el(tag, attrs={}, children=[]){
+  const n = document.createElement(tag);
+  for (const [k,v] of Object.entries(attrs)){
+    if (k==="class") n.className=v;
+    else if (k==="html") n.innerHTML=v;
+    else if (k.startsWith("on") && typeof v==="function") n.addEventListener(k.slice(2), v);
+    else n.setAttribute(k, v);
+  }
+  for (const c of children){
+    if (typeof c==="string") n.appendChild(document.createTextNode(c));
+    else if (c) n.appendChild(c);
+  }
+  return n;
+}
+
+function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentLinks, examMode}){
+  if (examMode) return null;
+
+  const host = el("div", { class:"linkRow" });
+
+  // Mostrar links actuales
+  (currentLinks || []).forEach((l, idx) => {
+    host.appendChild(el("a", { href:l.url, target:"_blank", rel:"noopener" }, [l.label]));
+    host.appendChild(el("button", {
+      class:"miniBtn danger",
+      onClick:(e)=>{
+        e.preventDefault();
+        const next = currentLinks.filter((_,i)=>i!==idx);
+        setItemState({date, studentId, subject, blockKey, taskId}, { links: next });
+      }
+    }, ["Eliminar"]));
+  });
+
+  // Añadir link
+  host.appendChild(el("button", {
+    class:"miniBtn",
+    onClick:(e)=>{
+      e.preventDefault();
+      const label = prompt("Nombre del enlace (ej: Video fracciones)");
+      if (!label) return;
+      const url = prompt("URL del enlace (ej: https://www.youtube.com/watch?v=...)");
+      if (!url) return;
+      const next = [...(currentLinks||[]), { label, url }];
+      setItemState({date, studentId, subject, blockKey, taskId}, { links: next });
+    }
+  }, ["+ Añadir enlace"]));
+
+  return host;
+}
+
+function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPending}){
+  const st = getItemState(date, studentId, subject, blockKey, task.id) || {};
+  const done = !!st.done;
+  const parentOk = !!st.parentOk;
+
+  if (onlyPending && done) return null;
+
+  // Links: prioridad a links guardados por tarea (st.links), si no, a links del plan (task.links)
+  const effectiveLinks = (st.links && st.links.length) ? st.links : (task.links || []);
+
+  const wrap = el("div", { class: "task" + (done ? " done" : "") });
+
+  const cb = el("input", { type:"checkbox" });
+  cb.checked = done;
+  cb.disabled = examMode;
+  cb.addEventListener("change", ()=> setItemState({date, studentId, subject, blockKey, taskId: task.id}, { done: cb.checked }));
+
+  const body = el("div");
+  body.appendChild(el("div", { class:"tTitle" }, [
+    el("strong", {}, [task.text]),
+    el("span", {}, [ parentOk ? "Validado ✅" : "Sin validar" ])
+  ]));
+
+  if (!examMode && effectiveLinks.length){
+    const links = el("div", { class:"links" });
+    links.appendChild(document.createTextNode("Enlaces: "));
+    effectiveLinks.forEach((l, idx) => {
+      links.appendChild(el("a", { href:l.url, target:"_blank", rel:"noopener" }, [l.label]));
+      if (idx < effectiveLinks.length - 1) links.appendChild(document.createTextNode(" · "));
+    });
+    body.appendChild(links);
+  }
+
+  const editor = renderLinksEditor({
+    date, studentId, subject, blockKey, taskId: task.id,
+    currentLinks: st.links || [],
+    examMode
+  });
+  if (editor) body.appendChild(editor);
+
+  if (!examMode){
+    const ta = el("textarea", { placeholder:"Notas (resumen/dudas/evidencia)..." });
+    ta.value = st.note || "";
+    ta.addEventListener("input", ()=> setItemState({date, studentId, subject, blockKey, taskId: task.id}, { note: ta.value }));
+    body.appendChild(ta);
+
+    const ok = el("input", { type:"checkbox", style:"margin-right:8px;" });
+    ok.checked = parentOk;
+    ok.addEventListener("change", ()=> setItemState({date, studentId, subject, blockKey, taskId: task.id}, { parentOk: ok.checked }));
+    body.appendChild(el("label", { class:"small" }, [ok, document.createTextNode("Validado por padre/madre")]));
+  }
+
+  wrap.appendChild(cb);
+  wrap.appendChild(body);
+  return wrap;
+}
+
+function renderSlot(slot, day, userFilter, onlyPending, examMode){
+  const det = el("details", { open:false });
+  det.appendChild(el("summary", {}, [
+    el("span", {}, [slot.title]),
+    el("span", { class:"pill" }, [userFilter==="family" ? "Familiar" : userFilter])
+  ]));
+
+  for (const s of slot.students){
+    if (userFilter !== "family" && s.id !== userFilter) continue;
+
+    const stBox = el("div", { class:"student" });
+    stBox.appendChild(el("div", { class:"studentHead" }, [
+      el("strong", {}, [`${s.name} · ${s.grade}`]),
+      el("span", { class:"pill" }, [s.block.title])
+    ]));
+
+    for (const t of s.tasks){
+      const node = renderTask({ date: day.date, studentId: s.id, subject: slot.subject, blockKey: s.block.key, task:t, examMode, onlyPending });
+      if (node) stBox.appendChild(node);
+    }
+    det.appendChild(stBox);
+  }
+
+  if (onlyPending){
+    if (det.querySelectorAll(".task").length === 0) return null;
+  }
+  return det;
+}
+
+function calcDayProgress(dayPlan, userFilter){
+  if (dayPlan.kind !== "estudio") return {done:0,total:0};
+  let done=0, total=0;
+  for (const slot of dayPlan.slots){
+    for (const s of slot.students){
+      if (userFilter !== "family" && s.id !== userFilter) continue;
+      for (const t of s.tasks){
+        total++;
+        const st = getItemState(dayPlan.date, s.id, slot.subject, s.block.key, t.id) || {};
+        if (st.done) done++;
+      }
+    }
+  }
+  return {done,total};
+}
+
+function render(){
+  const datePick = document.getElementById("datePick");
+  const mode = document.getElementById("viewMode").value;
+  const userFilter = document.getElementById("userPick").value;
+  const onlyPending = document.getElementById("onlyPending").checked;
+  const examMode = document.getElementById("examMode").checked;
+
+  const d = parseISO(datePick.value || RANGE.start);
+  const planHost = document.getElementById("plan");
+  planHost.innerHTML = "";
+
+  document.getElementById("titleDate").textContent = dayLabel(d);
+
+  if (mode !== "day"){
+    planHost.appendChild(el("div", { class:"mutedBox" }, [
+      el("div", { class:"small" }, ["Esta V3 está centrada en vista Día (para foco). Si quieres, reactivamos vista Semana en una V4."])
+    ]));
+  }
+
+  const day = buildDayPlan(d);
+  const pill = document.getElementById("dayTypePill");
+
+  if (day.kind === "estudio"){
+    pill.className = "pill ok"; pill.textContent = "Día de estudio";
+    document.getElementById("titleNote").textContent = `Vista: ${userFilter} · enlaces dentro de tareas`;
+    const pr = calcDayProgress(day, userFilter);
+    document.getElementById("progressPill").textContent = `${pr.done}/${pr.total} tareas`;
+
+    day.slots.forEach(slot => {
+      const node = renderSlot(slot, day, userFilter, onlyPending, examMode);
+      if (node) planHost.appendChild(node);
+    });
+
+    document.getElementById("statsBox").textContent =
+      `Hoy: ${pr.done}/${pr.total}. ${examMode ? "Modo examen activo." : "Añade enlaces por tarea si necesitas."}`;
+
+    if (onlyPending && planHost.children.length === 0){
+      planHost.appendChild(el("div", { class:"mutedBox" }, [
+        el("div", { class:"small" }, ["No quedan pendientes para este día ✅"])
+      ]));
+    }
+
+  } else {
+    pill.className = "pill warn"; pill.textContent = "Descanso / puesta al día";
+    document.getElementById("titleNote").textContent = day.message;
+    document.getElementById("progressPill").textContent = "—";
+    planHost.appendChild(el("div", { class:"mutedBox" }, [
+      el("div", { class:"small" }, ["Hoy es descanso/puesta al día. Puedes usar el selector de usuario y revisar pendientes de días anteriores."])
+    ]));
+    document.getElementById("statsBox").textContent = "Hoy no hay cápsulas planificadas.";
+  }
+}
+
+/** Export / Import */
+document.getElementById("exportBtn").addEventListener("click", () => {
+  const payload = { exportedAt:new Date().toISOString(), range:RANGE, holidays:[...HOLIDAYS], family:family || localStorage.getItem("hs_family_v3") || "demo", local: loadLocal() };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = `progreso_bitacora_${payload.family}.json`;
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+document.getElementById("importBtn").addEventListener("click", ()=> document.getElementById("importFile").click());
+document.getElementById("importFile").addEventListener("change", async (e) => {
+  const f = e.target.files?.[0]; if (!f) return;
+  const txt = await f.text();
+  try{ const obj = JSON.parse(txt); if (obj.local){ saveLocal(obj.local); render(); alert("Importado."); } }
+  catch{ alert("JSON inválido."); }
+});
+
+/** Init */
+(function init(){
+  const today = new Date();
+  const start = parseISO(RANGE.start);
+  const end = parseISO(RANGE.end);
+  let initDate = start;
+  if (today >= start && today <= end) initDate = today;
+
+  document.getElementById("datePick").value = iso(initDate);
+  document.getElementById("familyCode").value = localStorage.getItem("hs_family_v3") || "";
+  const savedCfg = localStorage.getItem("hs_fb_cfg_v3");
+  if (savedCfg) document.getElementById("firebaseConfig").value = savedCfg;
+
+  document.getElementById("connectBtn").addEventListener("click", connectFirebase);
+  document.getElementById("datePick").addEventListener("change", render);
+  document.getElementById("userPick").addEventListener("change", render);
+  document.getElementById("onlyPending").addEventListener("change", render);
+  document.getElementById("examMode").addEventListener("change", render);
+
+  if (savedCfg) connectFirebase(); else setSyncState("Sin conexión (pega firebaseConfig)", false);
+  render();
+})();
+</script>
+</body>
+</html>
