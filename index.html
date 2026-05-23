@@ -747,16 +747,22 @@ function updateSyncAlert(){
   hint.className = "alertHint ok";
   hint.textContent = "Puedes cerrar sin problema ✅";
 }
-
+let lastDataSnapshot = null;
 function startLiveSync(){
   if (!db || !family) return;
 
   const ref = db.ref(safePath("families", family, "progress"));
   ref.on("value", (snap)=> {
-    LIVE_CACHE = snap.val() || {};
-    updateSyncAlert();
-    render();
-  });
+  const next = snap.val() || {};
+  const nextStr = JSON.stringify(next);
+
+  if (nextStr === lastDataSnapshot) return;
+  lastDataSnapshot = nextStr;
+
+  LIVE_CACHE = next;
+  updateSyncAlert();
+  render();
+});
 
   db.ref(".info/connected").on("value", (snap) => {
     connected = !!snap.val();
