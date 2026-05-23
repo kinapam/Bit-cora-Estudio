@@ -1296,6 +1296,19 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
+  <script>
+  // Activar RTDB dentro de la app
+  db = firebase.database();
+  firebaseReady = true;
+
+  // usa un código por defecto si aún no lo definiste en Ajustes
+  family = localStorage.getItem("hs_family") || "casa2026";
+
+  // arranca sincronización en tiempo real
+  startLiveSync();
+  updateSyncAlert();
+  render();
+</script>
 </script>
 </body>
 </html>
