@@ -1282,5 +1282,20 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   render();
 })();
 </script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyA_XGljcTFjP3-oANmalfQk1w8A4fH9Hi8",
+  authDomain: "sincrobitacora.firebaseapp.com",
+  databaseURL: "https://sincrobitacora-default-rtdb.firebaseio.com",
+  projectId: "sincrobitacora",
+  storageBucket: "sincrobitacora.firebasestorage.app",
+  messagingSenderId: "768003536284",
+  appId: "1:768003536284:web:be91e05e651d5d4e070459"
+};
+
+firebase.initializeApp(firebaseConfig);
+</script>
 </body>
 </html>
