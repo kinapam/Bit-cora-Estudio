@@ -1283,6 +1283,7 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
 })();
 </script>
 <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-database-compat.js"></script>
 
 <script>
 const firebaseConfig = {
@@ -1296,19 +1297,16 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-  <script>
-  // Activar RTDB dentro de la app
-  db = firebase.database();
-  firebaseReady = true;
 
-  // usa un código por defecto si aún no lo definiste en Ajustes
-  family = localStorage.getItem("hs_family") || "casa2026";
+// Activar RTDB dentro de la app
+db = firebase.database();
+firebaseReady = true;
 
-  // arranca sincronización en tiempo real
-  startLiveSync();
-  updateSyncAlert();
-  render();
-</script>
+family = localStorage.getItem("hs_family") || "casa2026";
+
+startLiveSync();
+updateSyncAlert();
+render();
 </script>
 </body>
 </html>
