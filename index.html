@@ -928,32 +928,17 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
     });
     if (editor) body.appendChild(editor);
 
-const ta = el("textarea", { placeholder:"Notas (resumen/dudas/evidencia)…" });
-ta.value = st.note || "";
+    const ta = el("textarea", { placeholder:"Notas (resumen/dudas/evidencia)…" });
+      ta.value = st.note || "";
 
-let noteTimer = null;
-
-ta.addEventListener("input", () => {
-  clearTimeout(noteTimer);
-  const value = ta.value;
-
-  noteTimer = setTimeout(() => {
-    setItemState(
+      ta.addEventListener("change", () => {
+      setItemState(
       { date, studentId, subject, blockKey, taskId: task.id },
-      { note: value }
+      { note: ta.value }
     );
-  }, 500);
-});
+     });
 
-ta.addEventListener("blur", () => {
-  clearTimeout(noteTimer);
-  setItemState(
-    { date, studentId, subject, blockKey, taskId: task.id },
-    { note: ta.value }
-  );
-});
-
-body.appendChild(ta);
+      body.appendChild(ta);
 
 
     const ok = el("input", { type:"checkbox", style:"margin-right:8px;" });
