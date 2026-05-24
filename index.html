@@ -1091,14 +1091,58 @@ function renderBacklog(userFilter){
 /** =========================
  *  RENDER
  *  ========================= */
+
+const PLAN_CACHE = {};
+let PLAN_RENDER_SEQ = 0;
+
 function render(){
   const userFilter = document.getElementById("userPick").value;
   const onlyPending = document.getElementById("onlyPending").checked;
   const examMode = document.getElementById("examMode").checked;
 
   const d = parseISO(document.getElementById("datePick").value || RANGE.start);
-  const day = buildDayPlan(d);
+  const dateKey = iso(d);
 
+  // Si no hay Firebase, cae al plan generado (modo local)
+  if (!db || !family){
+    const day = buildDayPlan(d);
+    return renderWithPlan(day, d, userFilter, onlyPending, examMode);
+  }
+
+  // Evita condiciones de carrera si cambias de día rápido
+  const seq = ++PLAN_RENDER_SEQ;
+
+  // Cache en memoria para no pedirlo repetido en la misma sesión
+  if (PLAN_CACHE[dateKey]){
+    return renderWithPlan(PLAN_CACHE[dateKey], d, userFilter, onlyPending, examMode);
+  }
+
+  const planRef = db.ref(safePath("families", family, "plans", dateKey));
+
+  planRef.once("value").then((snap) => { // lectura única [1](https://firebase.google.com/docs/database/web/read-and-write)
+    if (seq !== PLAN_RENDER_SEQ) return;
+
+    if (snap.exists()){
+      const day = snap.val();
+      PLAN_CACHE[dateKey] = day;
+      renderWithPlan(day, d, userFilter, onlyPending, examMode);
+    } else {
+      const day = buildDayPlan(d);
+      PLAN_CACHE[dateKey] = day;
+
+      planRef.set(day).then(() => { // escritura [1](https://firebase.google.com/docs/database/web/read-and-write)
+        if (seq !== PLAN_RENDER_SEQ) return;
+        renderWithPlan(day, d, userFilter, onlyPending, examMode);
+      });
+    }
+  }).catch(() => {
+    if (seq !== PLAN_RENDER_SEQ) return;
+    const day = buildDayPlan(d);
+    renderWithPlan(day, d, userFilter, onlyPending, examMode);
+  });
+}
+
+function renderWithPlan(day, d, userFilter, onlyPending, examMode){
   document.getElementById("titleDate").textContent = dayLabel(d);
   renderBacklog(userFilter);
 
