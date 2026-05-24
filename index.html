@@ -657,26 +657,113 @@ function buildTasks({student, subject, block, d}){
 /** =========================
  *  PLAN DEL DÍA
  *  ========================= */
-function buildDayPlan(d){
-  const k = iso(d);
-  if (!inRange(k)) return { kind:"fuera", message:"Fuera del rango del plan." };
-  if (EXCLUDED.has(k)) return { kind:"descanso", message:"Día especial: descanso / celebración / ponerse al día." };
-  if (isWeekend(d)) return { kind:"descanso", message:"Fin de semana: descanso o ponerse al día." };
-  if (!isStudyDay(d)) return { kind:"descanso", message:"Día no lectivo en el plan." };
 
-  const p = getPatternForDate(d);
-  const slot1 = { title:`Cápsula 1 · ${p.slot1}`, subject:p.slot1, students:[] };
-  const slot2 = { title:`Cápsula 2 · ${p.slot2}`, subject:p.slot2, students:[] };
+const CURRICULUM = {
+  deadpool: {
+    mate: [
+      { id: "OA1", text: "Conteo hasta 100", weight: 1 },
+      { id: "OA2", text: "Suma hasta 20", weight: 2 },
+      { id: "OA3", text: "Resta hasta 20", weight: 2 }
+    ],
+    lectura: [
+      { id: "L1", text: "Lectura diaria", weight: 1, repeat: true }
+    ]
+  },
 
-  for (const s of STUDENTS){
-    const b1 = pickBlock(s.id, p.slot1);
-    const b2 = pickBlock(s.id, p.slot2);
-
-    slot1.students.push({ ...s, block:b1, tasks: buildTasks({student:s, subject:p.slot1, block:b1, d}) });
-    slot2.students.push({ ...s, block:b2, tasks: buildTasks({student:s, subject:p.slot2, block:b2, d}) });
+  may: {
+    lenguaje: [
+      { id: "OA1", text: "Lectura básica", weight: 2 },
+      { id: "OA2", text: "Comprensión", weight: 2 }
+    ],
+    guitarra: [
+      { id: "G1", text: "Partes de guitarra", weight: 1 },
+      { id: "G2", text: "Acordes básicos", weight: 2 }
+    ]
   }
-  return { kind:"estudio", date:k, slots:[slot1, slot2] };
+};
+
+function expandByWeight(list){
+  const result = [];
+  list.forEach(item => {
+    for (let i = 0; i < item.weight; i++){
+      result.push(item);
+    }
+  });
+  return result;
 }
+
+function buildStudentPlan(student){
+  const subjects = CURRICULUM[student];
+  const result = {};
+
+  for (const subject in subjects){
+    result[subject] = expandByWeight(subjects[subject]);
+  }
+
+  return result;
+}
+
+function interleaveSubjects(subjectPlans){
+  const subjects = Object.keys(subjectPlans);
+  const maxLength = Math.max(...subjects.map(s => subjectPlans[s].length));
+
+  const result = [];
+
+  for (let i = 0; i < maxLength; i++){
+    subjects.forEach(subject => {
+      if (subjectPlans[subject][i]){
+        result.push({
+          subject,
+          task: subjectPlans[subject][i]
+        });
+      }
+    });
+  }
+
+  return result;
+}
+
+/* la función getDayIndex(date) */
+
+function getDayIndex(date){
+  const start = parseISO(RANGE.start);
+  return Math.floor((date - start) / (1000*60*60*24));
+}
+
+
+function buildDayPlan(date){
+  const dayIndex = getDayIndex(date); 
+  const deadpoolPlan = interleaveSubjects(buildStudentPlan("deadpool"));
+  const mayPlan = interleaveSubjects(buildStudentPlan("may"));
+
+  const tasksPerDay = 3; // puedes ajustar
+
+  return {
+    date,
+    kind: "estudio",
+    slots: [
+      {
+        title: "Deadpool",
+        students: [{
+          id: "deadpool",
+          name: "Deadpool",
+          block: { key:"main", title:"Estudio" },
+          tasks: deadpoolPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+        }]
+      },
+      {
+        title: "May",
+        students: [{
+          id: "may",
+          name: "May",
+          block: { key:"main", title:"Estudio" },
+          tasks: mayPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+        }]
+      }
+    ]
+  };
+}
+
 
 /** =========================
  *  PERSISTENCIA: Local + Firebase RTDB
