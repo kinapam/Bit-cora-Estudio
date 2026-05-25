@@ -661,18 +661,38 @@ function buildTasks({student, subject, block, d}){
 const CURRICULUM = {
   deadpool: {
 
-  matematicas: [
-    { id:"M1", text:"Números y valor posicional", weight:2 },
-    { id:"M2", text:"Suma y resta", weight:2 },
-    { id:"M3", text:"Multiplicación", weight:3 },
-    { id:"M4", text:"División", weight:3 },
-    { id:"M5", text:"Problemas matemáticos", weight:2 },
-    { id:"M6", text:"Fracciones básicas", weight:2 },
-    { id:"M7", text:"Introducción a decimales", weight:2 },
-    { id:"M8", text:"Geometría básica", weight:2 },
-    { id:"M9", text:"Medición", weight:2 },
-    { id:"M10", text:"Gráficos y datos", weight:1 }
-  ],
+matematicas: [
+  { id:"M1", text:"Números y valor posicional", weight:2 },
+
+  { 
+    id:"M2", 
+    text:"Suma y resta", 
+    weight:2,
+    links:[
+      { label:"Aprendo en Línea · Matemática 5° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
+    ]
+  },
+
+  { 
+    id:"M3", 
+    text:"Multiplicación", 
+    weight:3,
+    links:[
+      { label:"MINEDUC · Multiplicación 5° básico", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion" }
+    ]
+  },
+
+  { 
+    id:"M4", 
+    text:"División", 
+    weight:3,
+    links:[
+      { label:"MINEDUC · División OA04", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04" }
+    ]
+  },
+
+  { id:"M5", text:"Problemas matemáticos", weight:2 }
+],
 
   lenguaje: [
     { id:"L1", text:"Lectura guiada", weight:2 },
@@ -704,31 +724,40 @@ const CURRICULUM = {
 },
   may: {
 
-  matematicas: [
-    { id:"M1", text:"Valor posicional y números grandes", weight:2 },
-    { id:"M2", text:"Operaciones básicas (+, −, ×, ÷)", weight:3 },
-    { id:"M3", text:"Problemas matemáticos", weight:3 },
-    { id:"M4", text:"Fracciones (equivalencias y operaciones)", weight:3 },
-    { id:"M5", text:"Decimales y relación con fracciones", weight:2 },
-    { id:"M6", text:"Porcentaje", weight:2 },
-    { id:"M7", text:"Razones y proporciones", weight:2 },
-    { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2 },
-    { id:"M9", text:"Geometría (figuras y ángulos)", weight:2 },
-    { id:"M10", text:"Área y volumen", weight:2 },
-    { id:"M11", text:"Datos y gráficos", weight:2 }
-  ],
+matematicas: [
+  { id:"M1", text:"Valor posicional y números grandes", weight:2 },
+
+  { 
+    id:"M3", 
+    text:"Problemas matemáticos", 
+    weight:3,
+    links:[
+      { label:"Aprendo en Línea · Actividades matemáticas", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
+    ]
+  },
+
+  { 
+    id:"M6", 
+    text:"Porcentaje", 
+    weight:2,
+    links:[
+      { label:"MINEDUC · Porcentajes 6° básico", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes" }
+    ]
+  }
+],
 
   lenguaje: [
-    { id:"L1", text:"Lectura básica fluida", weight:2 },
-    { id:"L2", text:"Comprensión literal", weight:2 },
-    { id:"L3", text:"Comprensión inferencial", weight:3 },
-    { id:"L4", text:"Análisis de textos", weight:3 },
-    { id:"L5", text:"Vocabulario y ortografía", weight:2 },
-    { id:"L6", text:"Escritura de oraciones", weight:2 },
-    { id:"L7", text:"Redacción de textos narrativos", weight:3 },
-    { id:"L8", text:"Redacción informativa", weight:3 },
-    { id:"L9", text:"Opinión escrita y argumentación", weight:2 }
-  ],
+  { id:"L1", text:"Lectura básica fluida", weight:2 },
+
+  { 
+    id:"L2", 
+    text:"Comprensión literal", 
+    weight:2,
+    links:[
+      { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }
+    ]
+  }
+],
 
   ciencias: [
     { id:"C1", text:"Seres vivos y organización", weight:2 },
@@ -749,14 +778,18 @@ const CURRICULUM = {
   ],
 
   guitarra: [
-    { id:"G1", text:"Partes de la guitarra", weight:1 },
-    { id:"G2", text:"Postura y agarre", weight:1 },
-    { id:"G3", text:"Primeros acordes (Em, A, D)", weight:2 },
-    { id:"G4", text:"Acordes básicos (G, C)", weight:2 },
-    { id:"G5", text:"Cambio de acordes", weight:2 },
-    { id:"G6", text:"Ritmo básico", weight:2 },
-    { id:"G7", text:"Primera canción simple", weight:2 }
-  ]
+  { id:"G1", text:"Partes de la guitarra", weight:1 },
+
+  { 
+    id:"G3", 
+    text:"Primeros acordes (Em, A, D)", 
+    weight:2,
+    links:[
+      { label:"Curso guitarra desde cero", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" },
+      { label:"Playlist YouTube guitarra principiante", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
+    ]
+  }
+]
 }
 };
 
