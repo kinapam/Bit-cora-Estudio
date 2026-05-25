@@ -717,6 +717,7 @@ function interleaveSubjects(subjectPlans){
           id: item.id,
           text: item.text,
           subject
+          keywords: item.text + " " + subject + " niños explicación ejercicios"
           });
       }
     });
@@ -747,6 +748,7 @@ function buildDayPlan(date){
 slots: [
   ...(userFilter === "family" || userFilter === "deadpool" ? [{
     title: "Deadpool",
+    subject: "plan",
     students: [{
       id: "deadpool",
       name: "Deadpool",
@@ -757,6 +759,7 @@ slots: [
 
   ...(userFilter === "family" || userFilter === "may" ? [{
     title: "May",
+    subject: "plan",
     students: [{
       id: "may",
       name: "May",
@@ -1088,7 +1091,7 @@ function renderSlot(slot, day, userFilter, onlyPending, examMode){
       const node = renderTask({
         date: day.date,
         studentId: s.id,
-        subject: slot.subject,
+        subject: t.subject,
         blockKey: s.block.key,
         task: t,
         examMode,
@@ -1111,7 +1114,7 @@ function calcDayProgress(day, userFilter){
       if (userFilter !== "family" && s.id !== userFilter) continue;
       for (const t of s.tasks){
         total++;
-        const st = getItemState(day.date, s.id, slot.subject, s.block.key, t.id) || {};
+        const st = getItemState(day.date, s.id, t.subject, s.block.key, t.id) || {};
         if (st.done) done++;
       }
     }
