@@ -655,7 +655,7 @@ function buildTasks({student, subject, block, d}){
 }
 
 /** =========================
- *  PLAN DEL DÍA
+ *  PLAN DEL DÍA (OA en orden + peso)
  *  ========================= */
 
 const CURRICULUM = {
@@ -669,7 +669,6 @@ const CURRICULUM = {
       { id: "L1", text: "Lectura diaria", weight: 1, repeat: true }
     ]
   },
-
   may: {
     lenguaje: [
       { id: "OA1", text: "Lectura básica", weight: 2 },
@@ -682,10 +681,13 @@ const CURRICULUM = {
   }
 };
 
+const PLAN_VERSION = 3;
+
 function expandByWeight(list){
   const result = [];
   list.forEach(item => {
-    for (let i = 0; i < item.weight; i++){
+    const times = Math.max(1, Number(item.weight || 1));
+    for (let i = 0; i < times; i++){
       result.push(item);
     }
   });
@@ -693,97 +695,98 @@ function expandByWeight(list){
 }
 
 function buildStudentPlan(student){
-  const subjects = CURRICULUM[student];
+  const subjects = CURRICULUM[student] || {};
   const result = {};
-
   for (const subject in subjects){
     result[subject] = expandByWeight(subjects[subject]);
   }
-
   return result;
 }
 
 function interleaveSubjects(subjectPlans){
   const subjects = Object.keys(subjectPlans);
-  const maxLength = Math.max(...subjects.map(s => subjectPlans[s].length));
-
-  const result = [];
+  const maxLength = Math.max(0, ...subjects.map(s => subjectPlans[s].length));
+  const out = [];
 
   for (let i = 0; i < maxLength; i++){
     subjects.forEach(subject => {
-      if (subjectPlans[subject][i]){
-        const item = subjectPlans[subject][i];
-          result.push({
-          id: item.id,
-          text: item.text,
-          subject
-          keywords: item.text + " " + subject + " niños explicación ejercicios"
-          });
-      }
+      const item = subjectPlans[subject][i];
+      if (!item) return;
+
+      // ID único por "sesión" (evita colisiones si weight repite OA)
+      const sessionId = `${subject}_${item.id}_${i}`;
+
+      out.push({
+        id: sessionId,
+        baseId: item.id,
+        text: item.text,
+        subject,
+        links: item.links || [],
+        keywords: `${item.text} ${subject} explicación ejercicios paso a paso`
+      });
     });
   }
-
-  return result;
+  return out;
 }
 
-/* la función getDayIndex(date) */
-
-function getDayIndex(date){
+function studyDayIndex(date){
+  // índice SOLO contando días lectivos del plan
   const start = parseISO(RANGE.start);
-  return Math.floor((date - start) / (1000*60*60*24));
+  const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  let idx = -1;
+  for (let d = new Date(start.getFullYear(), start.getMonth(), start.getDate()); d <= target; d.setDate(d.getDate()+1)){
+    if (isStudyDay(d)) idx++;
+  }
+  return idx;
 }
-
 
 function buildDayPlan(date){
-  const dayIndex = getDayIndex(date); 
+  const k = iso(date);
+
+  if (!inRange(k)) return { kind:"fuera", message:"Fuera del rango del plan.", date:k, planVersion: PLAN_VERSION };
+  if (EXCLUDED.has(k)) return { kind:"descanso", message:"Día especial: descanso / celebración / ponerse al día.", date:k, planVersion: PLAN_VERSION };
+  if (isWeekend(date)) return { kind:"descanso", message:"Fin de semana: descanso o ponerse al día.", date:k, planVersion: PLAN_VERSION };
+  if (!isStudyDay(date)) return { kind:"descanso", message:"Día no lectivo en el plan.", date:k, planVersion: PLAN_VERSION };
+
+  const idx = Math.max(0, studyDayIndex(date));
+  const tasksPerDay = 3;
+
   const deadpoolPlan = interleaveSubjects(buildStudentPlan("deadpool"));
   const mayPlan = interleaveSubjects(buildStudentPlan("may"));
-  const k = iso(date);
-  const tasksPerDay = 3; // puedes ajustar
-  
-  const userFilter = document.getElementById("userPick").value;
-  return {
-    date: k,
-    kind: "estudio",
-slots: [
-  ...(userFilter === "family" || userFilter === "deadpool" ? [{
-    title: "Deadpool",
+
+  const deadpoolSlice = deadpoolPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
+  const maySlice = mayPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
+
+  // Slots por estudiante (UI actual)
+  const slotDeadpool = {
+    title: "Deadpoollcer0",
     subject: "plan",
     students: [{
       id: "deadpool",
-      name: "Deadpool",
+      name: "Deadpoollcer0",
+      grade: "5º básico",
       block: { key:"main", title:"Estudio" },
-      tasks: deadpoolPlan
-      .slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
-      .flatMap(t => buildTasks({
-      student: STUDENTS.find(s => s.id === "deadpool"),
-      subject: t.subject,
-      block: { key: t.id, title: t.text, links: [] },
-      d: date
-      }))
-
+      tasks: deadpoolSlice
     }]
-  }] : []),
+  };
 
-  ...(userFilter === "family" || userFilter === "may" ? [{
+  const slotMay = {
     title: "May",
     subject: "plan",
     students: [{
       id: "may",
       name: "May",
+      grade: "6º básico",
       block: { key:"main", title:"Estudio" },
-      tasks: mayPlan
-      .slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
-      .flatMap(t => buildTasks({
-      student: STUDENTS.find(s => s.id === "may"),
-      subject: t.subject,
-      block: { key: t.id, title: t.text, links: [] },
-      d: date
-  }))
-``
+      tasks: maySlice
     }]
-  }] : [])
-]
+  };
+
+  return {
+    planVersion: PLAN_VERSION,
+    kind: "estudio",
+    date: k,
+    slots: [slotDeadpool, slotMay]
   };
 }
 
@@ -941,7 +944,7 @@ function renderSmartButtons(keywords){
   const host = el("div", { class:"linkRow" });
 
   host.appendChild(el("a", {
-    href: youtubeSearchUrl(keywords),
+    href: youtubeSearchUrl(keywords || ""),
     target: "_blank",
     rel: "noopener noreferrer",
     class: "miniBtn",
@@ -949,17 +952,12 @@ function renderSmartButtons(keywords){
   }, ["🔍 YouTube"]));
 
   host.appendChild(el("a", {
-    href: googleSearchUrl(keywords),
+    href: googleSearchUrl(keywords || ""),
     target: "_blank",
     rel: "noopener noreferrer",
     class: "miniBtn",
     style: "text-decoration:none; display:inline-flex; align-items:center;"
   }, ["🌐 Google"]));
-
-  host.appendChild(el("button", {
-    class:"miniBtn",
-    onClick: async (e)=>{ e.preventDefault(); await copyText(keywords); }
-  }, ["📋 Copiar búsqueda"]));
 
   return host;
 }
@@ -968,13 +966,18 @@ function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentL
   if (examMode) return null;
 
   const host = el("div", { class:"linkRow" });
-  (currentLinks || []).forEach((l, idx) => {
+
+  const stNow = getItemState(date, studentId, subject, blockKey, taskId) || {};
+  const linksNow = stNow.links || currentLinks || [];
+
+  (linksNow || []).forEach((l, idx) => {
     host.appendChild(el("a", { href:l.url, target:"_blank", rel:"noopener noreferrer" }, [l.label]));
     host.appendChild(el("button", {
       class:"miniBtn danger",
       onClick:(e)=>{
         e.preventDefault();
-        const next = currentLinks.filter((_,i)=>i!==idx);
+        const fresh = (getItemState(date, studentId, subject, blockKey, taskId) || {}).links || linksNow;
+        const next = fresh.filter((_,i)=>i!==idx);
         setItemState({date, studentId, subject, blockKey, taskId}, { links: next });
       }
     }, ["Eliminar"]));
@@ -988,10 +991,14 @@ function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentL
       if (!label) return;
       const url = prompt("URL directa (YouTube o recurso)");
       if (!url) return;
-      const next = [...(currentLinks||[]), { label, url }];
+
+      const fresh = (getItemState(date, studentId, subject, blockKey, taskId) || {}).links || linksNow;
+      const next = [...fresh, { label, url }];
+
       setItemState({date, studentId, subject, blockKey, taskId}, { links: next });
     }
   }, ["+ Añadir enlace directo"]));
+
   return host;
 }
 
@@ -1081,6 +1088,8 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
 );
 
 if (!visibleStudents.length) return null;
+
+
 function renderSlot(slot, day, userFilter, onlyPending, examMode){
   const det = el("details", { open:false });
 
@@ -1099,7 +1108,7 @@ function renderSlot(slot, day, userFilter, onlyPending, examMode){
     el("span", { class:"pill" }, [`${dCount}/${tCount}`])
   ]));
 
-  for (const s of slot.students){
+  for (const s of visibleStudents){
     if (userFilter !== "family" && s.id !== userFilter) continue;
 
     const stBox = el("div", { class:"student" });
@@ -1240,8 +1249,13 @@ function render(){
 if (snap.exists()){
   const day = snap.val();
 
-  const isValid = day && day.kind === "estudio" && Array.isArray(day.slots) && day.slots.length > 0
-    && day.slots.some(s => Array.isArray(s.students) && s.students.some(st => Array.isArray(st.tasks) && st.tasks.length > 0));
+  const isValid =
+    day &&
+    day.kind === "estudio" &&
+    day.planVersion === PLAN_VERSION &&
+    Array.isArray(day.slots) &&
+    day.slots.length > 0 &&
+    day.slots.some(sl => Array.isArray(sl.students) && sl.students.some(st => Array.isArray(st.tasks) && st.tasks.length > 0));
 
   if (!isValid){
     const rebuilt = buildDayPlan(d);
@@ -1254,6 +1268,7 @@ if (snap.exists()){
 
   PLAN_CACHE[dateKey] = day;
   renderWithPlan(day, d, userFilter, onlyPending, examMode);
+  return;
 } else {
   const day = buildDayPlan(d);
   PLAN_CACHE[dateKey] = day;
