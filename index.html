@@ -805,7 +805,69 @@ function expandByWeight(list){
   });
   return result;
 }
+function autoLinks(studentId, subjectKey, text){
+  const t = (text || "").toLowerCase();
+  const out = [];
 
+  // --- MATEMÁTICAS (Deadpool 5º) ---
+  if (subjectKey === "matematicas" && studentId === "deadpool"){
+    if (t.includes("multiplic")) out.push({
+      label: "MINEDUC · 5º U1 Cap.2 Multiplicación",
+      url: "https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion"
+    }); // [2](https://dev.to/mohitsinghchauhan/detailed-guide-to-firebase-realtime-database-with-a-crud-tutorial-using-javascript-1dik)
+
+    if (t.includes("divisi")) out.push({
+      label: "MINEDUC · MA05 OA04 División (3 dígitos ÷ 1 dígito)",
+      url: "https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04"
+    }); // [3](https://view.genially.com/69ec245ddc5b8be99695f36f)
+  }
+
+  // --- MATEMÁTICAS (May 6º) ---
+  if (subjectKey === "matematicas" && studentId === "may"){
+    if (t.includes("porcent")) out.push({
+      label: "MINEDUC · 6º U4 Cap.15 Porcentajes (MA06 OA04)",
+      url: "https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes"
+    }); // [4](https://www.javaspring.net/blog/fast-stable-sorting-algorithm-implementation-in-javascript/)
+  }
+
+  // --- LENGUAJE (May 6º) ---
+  if (subjectKey === "lenguaje" && studentId === "may"){
+    if (t.includes("comprensi")) {
+      out.push({
+        label: "MINEDUC · Lenguaje 6º (incluye OA comprensión)",
+        url: "https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico"
+      }); // [6](https://revistas.uaa.mx/docere/article/download/2402/2197/5175)
+
+      out.push({
+        label: "educarchile · Actividad OA2 Comprensión lectora",
+        url: "https://centroderecursos.educarchile.cl/items/6dccd77e-a4c1-4be1-8143-c9589b080daa"
+      }); // [5](https://cs.stackexchange.com/questions/5008/differences-and-relationships-between-randomized-and-nondeterministic-algorithms)
+    }
+  }
+
+  // --- GUITARRA (May) ---
+  if (subjectKey === "guitarra" && studentId === "may"){
+    out.push({
+      label: "Marty Music · Curso gratis guitarra acústica (ruta completa)",
+      url: "https://www.martymusic.com/free-beginner-acoustic-guitar-lessons"
+    }); // [7](https://codezup.com/firebase-realtime-database-integration-guide/)
+
+    out.push({
+      label: "YouTube · Playlist Marty (Beginner Acoustic 1–8)",
+      url: "https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe"
+    }); // [8](https://rollout.com/integration-guides/firebase/reading-and-writing-data-using-the-firebase-api)
+  }
+
+  // --- REFUERZO (si mantienes conteo en algún sitio) ---
+  if (t.includes("conteo") && t.includes("100")){
+    out.push({
+      label: "MINEDUC · Recurso Conteo 0–100",
+      url: "https://www.curriculumnacional.cl/recursos/conteo-numeros-0-100"
+    }); // [9](https://educrea.cl/preparacion-de-objetivos-de-aprendizaje/)
+  }
+
+  return out;
+}
 function buildStudentPlan(student){
   const subjects = CURRICULUM[student] || {};
   const result = {};
@@ -815,30 +877,30 @@ function buildStudentPlan(student){
   return result;
 }
 
-function interleaveSubjects(subjectPlans){
+function interleaveSubjects(studentId, subjectPlans){
   const subjects = Object.keys(subjectPlans);
-  const maxLength = Math.max(0, ...subjects.map(s => subjectPlans[s].length));
-  const out = [];
+  const maxLength = Math.max(...subjects.map(s => subjectPlans[s].length));
+
+  const result = [];
 
   for (let i = 0; i < maxLength; i++){
     subjects.forEach(subject => {
       const item = subjectPlans[subject][i];
       if (!item) return;
 
-      // ID único por "sesión" (evita colisiones si weight repite OA)
-      const sessionId = `${subject}_${item.id}_${i}`;
+      const links = (item.links && item.links.length) ? item.links : autoLinks(studentId, subject, item.text);
 
-      out.push({
-        id: sessionId,
-        baseId: item.id,
+      result.push({
+        id: item.id,
         text: item.text,
-        subject,
-        links: item.links || [],
+        subject,               // "matematicas", "lenguaje", etc.
+        links,                 // ✅ aquí va lo automático
         keywords: `${item.text} ${subject} explicación ejercicios paso a paso`
       });
     });
   }
-  return out;
+
+  return result;
 }
 
 function studyDayIndex(date){
@@ -863,8 +925,8 @@ function buildDayPlan(date){
   const idx = Math.max(0, studyDayIndex(date));
   const tasksPerDay = 3;
 
-  const deadpoolPlan = interleaveSubjects(buildStudentPlan("deadpool"));
-  const mayPlan = interleaveSubjects(buildStudentPlan("may"));
+const deadpoolPlan = interleaveSubjects("deadpool", buildStudentPlan("deadpool"));
+const mayPlan = interleaveSubjects("may", buildStudentPlan("may"));
 
   const deadpoolSlice = deadpoolPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
   const maySlice = mayPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
