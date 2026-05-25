@@ -889,7 +889,12 @@ function interleaveSubjects(studentId, subjectPlans){
       if (!item) return;
 
       const links = (item.links && item.links.length) ? item.links : autoLinks(studentId, subject, item.text);
-
+      console.log("AUTO LINKS DEBUG →", {
+  studentId,
+  subject,
+  text: item.text,
+  links
+});  
       result.push({
         id: item.id,
         text: item.text,
