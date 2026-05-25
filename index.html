@@ -753,7 +753,15 @@ slots: [
       id: "deadpool",
       name: "Deadpool",
       block: { key:"main", title:"Estudio" },
-      tasks: deadpoolPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+      tasks: deadpoolPlan
+      .slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+      .flatMap(t => buildTasks({
+      student: STUDENTS.find(s => s.id === "deadpool"),
+      subject: t.subject,
+      block: { key: t.id, title: t.text, links: [] },
+      d: date
+      }))
+
     }]
   }] : []),
 
@@ -764,7 +772,15 @@ slots: [
       id: "may",
       name: "May",
       block: { key:"main", title:"Estudio" },
-      tasks: mayPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+      tasks: mayPlan
+      .slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+      .flatMap(t => buildTasks({
+      student: STUDENTS.find(s => s.id === "may"),
+      subject: t.subject,
+      block: { key: t.id, title: t.text, links: [] },
+      d: date
+  }))
+``
     }]
   }] : [])
 ]
