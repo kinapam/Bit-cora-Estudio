@@ -738,12 +738,12 @@ function buildDayPlan(date){
   const dayIndex = getDayIndex(date); 
   const deadpoolPlan = interleaveSubjects(buildStudentPlan("deadpool"));
   const mayPlan = interleaveSubjects(buildStudentPlan("may"));
-
+  const k = iso(date);
   const tasksPerDay = 3; // puedes ajustar
   
   const userFilter = document.getElementById("userPick").value;
   return {
-    date,
+    date: k,
     kind: "estudio",
 slots: [
   ...(userFilter === "family" || userFilter === "deadpool" ? [{
@@ -1076,15 +1076,20 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
   return wrap;
 }
 
+  const visibleStudents = slot.students.filter(s =>
+  userFilter === "family" || s.id === userFilter
+);
+
+if (!visibleStudents.length) return null;
 function renderSlot(slot, day, userFilter, onlyPending, examMode){
   const det = el("details", { open:false });
 
   let dCount=0, tCount=0;
-  for (const s of slot.students){
+  for (const s of visibleStudents){
     if (userFilter !== "family" && s.id !== userFilter) continue;
     for (const task of s.tasks){
       tCount++;
-      const st = getItemState(day.date, s.id, slot.subject, s.block.key, task.id) || {};
+      const st = getItemState(day.date, s.id, task.subject, s.block.key, task.id) || {};
       if (st.done) dCount++;
     }
   }
@@ -1232,19 +1237,31 @@ function render(){
   planRef.once("value").then((snap) => { // lectura única [1](https://firebase.google.com/docs/database/web/read-and-write)
     if (seq !== PLAN_RENDER_SEQ) return;
 
-    if (snap.exists()){
-      const day = snap.val();
-      PLAN_CACHE[dateKey] = day;
-      renderWithPlan(day, d, userFilter, onlyPending, examMode);
-    } else {
-      const day = buildDayPlan(d);
-      PLAN_CACHE[dateKey] = day;
+if (snap.exists()){
+  const day = snap.val();
 
-      planRef.set(day).then(() => { // escritura [1](https://firebase.google.com/docs/database/web/read-and-write)
-        if (seq !== PLAN_RENDER_SEQ) return;
-        renderWithPlan(day, d, userFilter, onlyPending, examMode);
-      });
-    }
+  const isValid = day && day.kind === "estudio" && Array.isArray(day.slots) && day.slots.length > 0
+    && day.slots.some(s => Array.isArray(s.students) && s.students.some(st => Array.isArray(st.tasks) && st.tasks.length > 0));
+
+  if (!isValid){
+    const rebuilt = buildDayPlan(d);
+    PLAN_CACHE[dateKey] = rebuilt;
+    planRef.set(rebuilt).then(() => {
+      renderWithPlan(rebuilt, d, userFilter, onlyPending, examMode);
+    });
+    return;
+  }
+
+  PLAN_CACHE[dateKey] = day;
+  renderWithPlan(day, d, userFilter, onlyPending, examMode);
+} else {
+  const day = buildDayPlan(d);
+  PLAN_CACHE[dateKey] = day;
+  planRef.set(day).then(() => {
+    renderWithPlan(day, d, userFilter, onlyPending, examMode);
+  });
+}
+    
   }).catch(() => {
     if (seq !== PLAN_RENDER_SEQ) return;
     const day = buildDayPlan(d);
