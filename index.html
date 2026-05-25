@@ -1083,18 +1083,20 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
   return wrap;
 }
 
-  const visibleStudents = slot.students.filter(s =>
-  userFilter === "family" || s.id === userFilter
-);
-
-if (!visibleStudents.length) return null;
-
 
 function renderSlot(slot, day, userFilter, onlyPending, examMode){
+
+  const visibleStudents = slot.students.filter(s =>
+    userFilter === "family" || s.id === userFilter
+  );
+
+  if (!visibleStudents.length) return null;
+
   const det = el("details", { open:false });
 
   let dCount=0, tCount=0;
   for (const s of visibleStudents){
+
     if (userFilter !== "family" && s.id !== userFilter) continue;
     for (const task of s.tasks){
       tCount++;
