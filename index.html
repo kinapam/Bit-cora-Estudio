@@ -712,10 +712,12 @@ function interleaveSubjects(subjectPlans){
   for (let i = 0; i < maxLength; i++){
     subjects.forEach(subject => {
       if (subjectPlans[subject][i]){
-        result.push({
-          subject,
-          task: subjectPlans[subject][i]
-        });
+        const item = subjectPlans[subject][i];
+          result.push({
+          id: item.id,
+          text: item.text,
+          subject
+          });
       }
     });
   }
