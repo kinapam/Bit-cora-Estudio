@@ -660,25 +660,104 @@ function buildTasks({student, subject, block, d}){
 
 const CURRICULUM = {
   deadpool: {
-    mate: [
-      { id: "OA1", text: "Conteo hasta 100", weight: 1 },
-      { id: "OA2", text: "Suma hasta 20", weight: 2 },
-      { id: "OA3", text: "Resta hasta 20", weight: 2 }
-    ],
-    lectura: [
-      { id: "L1", text: "Lectura diaria", weight: 1, repeat: true }
-    ]
-  },
+
+  matematicas: [
+    { id:"M1", text:"Números y valor posicional", weight:2 },
+    { id:"M2", text:"Suma y resta", weight:2 },
+    { id:"M3", text:"Multiplicación", weight:3 },
+    { id:"M4", text:"División", weight:3 },
+    { id:"M5", text:"Problemas matemáticos", weight:2 },
+    { id:"M6", text:"Fracciones básicas", weight:2 },
+    { id:"M7", text:"Introducción a decimales", weight:2 },
+    { id:"M8", text:"Geometría básica", weight:2 },
+    { id:"M9", text:"Medición", weight:2 },
+    { id:"M10", text:"Gráficos y datos", weight:1 }
+  ],
+
+  lenguaje: [
+    { id:"L1", text:"Lectura guiada", weight:2 },
+    { id:"L2", text:"Comprensión literal", weight:2 },
+    { id:"L3", text:"Comprensión básica", weight:2 },
+    { id:"L4", text:"Vocabulario", weight:2 },
+    { id:"L5", text:"Escritura de oraciones", weight:2 },
+    { id:"L6", text:"Pequeños textos", weight:2 }
+  ],
+
+  ciencias: [
+    { id:"C1", text:"Seres vivos", weight:2 },
+    { id:"C2", text:"Cuerpo humano", weight:2 },
+    { id:"C3", text:"Energía", weight:2 },
+    { id:"C4", text:"Materia", weight:2 },
+    { id:"C5", text:"Agua y medio ambiente", weight:2 }
+  ],
+
+  historia: [
+    { id:"H1", text:"Zonas geográficas", weight:2 },
+    { id:"H2", text:"Recursos naturales", weight:2 },
+    { id:"H3", text:"Pueblos originarios", weight:2 },
+    { id:"H4", text:"Inicio de la historia de Chile", weight:2 }
+  ],
+
+  lectura: [
+    { id:"R1", text:"Lectura recreativa diaria", weight:1 }
+  ]
+},
   may: {
-    lenguaje: [
-      { id: "OA1", text: "Lectura básica", weight: 2 },
-      { id: "OA2", text: "Comprensión", weight: 2 }
-    ],
-    guitarra: [
-      { id: "G1", text: "Partes de guitarra", weight: 1 },
-      { id: "G2", text: "Acordes básicos", weight: 2 }
-    ]
-  }
+
+  matematicas: [
+    { id:"M1", text:"Valor posicional y números grandes", weight:2 },
+    { id:"M2", text:"Operaciones básicas (+, −, ×, ÷)", weight:3 },
+    { id:"M3", text:"Problemas matemáticos", weight:3 },
+    { id:"M4", text:"Fracciones (equivalencias y operaciones)", weight:3 },
+    { id:"M5", text:"Decimales y relación con fracciones", weight:2 },
+    { id:"M6", text:"Porcentaje", weight:2 },
+    { id:"M7", text:"Razones y proporciones", weight:2 },
+    { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2 },
+    { id:"M9", text:"Geometría (figuras y ángulos)", weight:2 },
+    { id:"M10", text:"Área y volumen", weight:2 },
+    { id:"M11", text:"Datos y gráficos", weight:2 }
+  ],
+
+  lenguaje: [
+    { id:"L1", text:"Lectura básica fluida", weight:2 },
+    { id:"L2", text:"Comprensión literal", weight:2 },
+    { id:"L3", text:"Comprensión inferencial", weight:3 },
+    { id:"L4", text:"Análisis de textos", weight:3 },
+    { id:"L5", text:"Vocabulario y ortografía", weight:2 },
+    { id:"L6", text:"Escritura de oraciones", weight:2 },
+    { id:"L7", text:"Redacción de textos narrativos", weight:3 },
+    { id:"L8", text:"Redacción informativa", weight:3 },
+    { id:"L9", text:"Opinión escrita y argumentación", weight:2 }
+  ],
+
+  ciencias: [
+    { id:"C1", text:"Seres vivos y organización", weight:2 },
+    { id:"C2", text:"Sistema del cuerpo humano", weight:2 },
+    { id:"C3", text:"Energía y cambios", weight:2 },
+    { id:"C4", text:"Materia y propiedades", weight:2 },
+    { id:"C5", text:"Ecosistemas", weight:2 },
+    { id:"C6", text:"Cuidado del medio ambiente", weight:2 }
+  ],
+
+  historia: [
+    { id:"H1", text:"Formación de América", weight:2 },
+    { id:"H2", text:"Conquista de América", weight:2 },
+    { id:"H3", text:"Colonia", weight:2 },
+    { id:"H4", text:"Independencia", weight:2 },
+    { id:"H5", text:"Organización del Estado", weight:2 },
+    { id:"H6", text:"Derechos y ciudadanía", weight:2 }
+  ],
+
+  guitarra: [
+    { id:"G1", text:"Partes de la guitarra", weight:1 },
+    { id:"G2", text:"Postura y agarre", weight:1 },
+    { id:"G3", text:"Primeros acordes (Em, A, D)", weight:2 },
+    { id:"G4", text:"Acordes básicos (G, C)", weight:2 },
+    { id:"G5", text:"Cambio de acordes", weight:2 },
+    { id:"G6", text:"Ritmo básico", weight:2 },
+    { id:"G7", text:"Primera canción simple", weight:2 }
+  ]
+}
 };
 
 const PLAN_VERSION = 3;
