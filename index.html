@@ -739,30 +739,32 @@ function buildDayPlan(date){
   const mayPlan = interleaveSubjects(buildStudentPlan("may"));
 
   const tasksPerDay = 3; // puedes ajustar
-
+  
+  const userFilter = document.getElementById("userPick").value;
   return {
     date,
     kind: "estudio",
-    slots: [
-      {
-        title: "Deadpool",
-        students: [{
-          id: "deadpool",
-          name: "Deadpool",
-          block: { key:"main", title:"Estudio" },
-          tasks: deadpoolPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
-        }]
-      },
-      {
-        title: "May",
-        students: [{
-          id: "may",
-          name: "May",
-          block: { key:"main", title:"Estudio" },
-          tasks: mayPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
-        }]
-      }
-    ]
+slots: [
+  ...(userFilter === "family" || userFilter === "deadpool" ? [{
+    title: "Deadpool",
+    students: [{
+      id: "deadpool",
+      name: "Deadpool",
+      block: { key:"main", title:"Estudio" },
+      tasks: deadpoolPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+    }]
+  }] : []),
+
+  ...(userFilter === "family" || userFilter === "may" ? [{
+    title: "May",
+    students: [{
+      id: "may",
+      name: "May",
+      block: { key:"main", title:"Estudio" },
+      tasks: mayPlan.slice(dayIndex*tasksPerDay, (dayIndex+1)*tasksPerDay)
+    }]
+  }] : [])
+]
   };
 }
 
