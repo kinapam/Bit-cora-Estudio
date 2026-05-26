@@ -391,18 +391,11 @@ o
 
 <script>
 /** =========================
- *  PLAN
+ *  CONFIG GENERAL
  *  ========================= */
 const RANGE = { start: "2026-05-25", end: "2026-09-15" };
 const EXCLUDED = new Set(["2026-06-29","2026-07-16","2026-08-04","2026-09-03"]);
-
-const WEEK_PATTERN = [
-  { dow:1, slot1:"Matemática", slot2:"Ciencias" },
-  { dow:2, slot1:"Lenguaje",  slot2:"Historia" },
-  { dow:3, slot1:"Matemática", slot2:"Inglés" },
-  { dow:4, slot1:"Lenguaje",  slot2:"Ciencias" },
-  { dow:5, slot1:"Matemática", slot2:"Historia" }
-];
+const PLAN_VERSION = 5;
 
 function iso(d){ return d.toISOString().slice(0,10); }
 function parseISO(s){ const [y,m,dd]=s.split("-").map(Number); return new Date(y, m-1, dd); }
@@ -418,383 +411,132 @@ function isStudyDay(d){
 function dayLabel(d){
   return d.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"2-digit", day:"2-digit" });
 }
-function getPatternForDate(d){ return WEEK_PATTERN.find(p => p.dow === d.getDay()); }
 
 /** =========================
- *  LINKS DIRECTOS (verificados)
+ *  CURRÍCULUM (versión actual + links explícitos)
  *  ========================= */
-const LINKS = {
-  // Matemática 6°
-  MA06_OA03_RAZONES: {label:"MA06 OA03 · Razones (recursos)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-6-basico/MA06-OA-03/17688:MA06-OA-03"},
-  MA06_OA04_PORC:   {label:"MA06 OA04 · Porcentajes (actividades)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-04"},
-  MA06_OA11_ECU:    {label:"MA06 OA11 · Ecuaciones (recursos)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-6-basico/MA06-OA-11/17696:MA06-OA-11"},
-  MA06_OA11_BAL:    {label:"Guía · Ecuaciones y balanzas", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-6-basico/MA06-OA-11/24283:Ecuaciones-y-balanzas"},
-  MA06_OA16_ANG:    {label:"MA06 OA16 · Ángulos (opuestos/complementarios)", url:"https://www.curriculumnacional.cl/docente/629/w3-article-17701.html"},
-  MA06_OA13_AREA:   {label:"MA06 OA13 · Área (redes de cubos/paralelepípedos)", url:"https://www.curriculumnacional.cl/docente/629/w3-article-17698.html"},
-  MA06_OA19_VOL:    {label:"MA06 OA19 · Volumen (cubo/paralelepípedo)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-6-basico/MA06-OA-19/17704:MA06-OA-19"},
-  MA06_OA24_GRAF:   {label:"MA06 OA24 · Gráficos (barra doble y circular)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-24"},
-
-  // Matemática 5°
-  MAT5_MULT:        {label:"5º Matemática · Unidad 1 Cap.2 Multiplicación", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion"},
-  MAT5_DIV:         {label:"5º Matemática · Unidad 1 Cap.5 División", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-5-division"},
-  MAT5_FRAC:        {label:"5º Matemática · Unidad 2 Cap.8 Fracciones", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-2-capitulo-8-fracciones"},
-  MAT5_ECU:         {label:"5º Matemática · Unidad 4 Cap.15 Ecuaciones e inecuaciones", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-4-capitulo-15-ecuaciones-inecuaciones"},
-  MAT5_OA15:        {label:"MA05 OA15 · Ecuaciones (recursos)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-15/17653:MA05-OA-15"},
-  MAT5_CAPS_OA15:   {label:"Cápsula · Ecuaciones e inecuaciones (5º)", url:"https://www.curriculumnacional.cl/docente/629/w3-article-205559.html"},
-
-  // Ciencias 5°
-  CN05_OA01:        {label:"CN05 OA01 · Células/tejidos/órganos", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-01/18462:CN05-OA-01"},
-  CN05_OA07:        {label:"CN05 OA07 · Microorganismos e higiene", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-07/18468:CN05-OA-07"},
-  CN05_OA10:        {label:"CN05 OA10 · Conductores y aislantes", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-10/18471:CN05-OA-10"},
-  CN05_OA12:        {label:"CN05 OA12 · Agua dulce/salada y escasez", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-12/18473:CN05-OA-12"},
-  CN05_VIDEO_OA12:  {label:"Cápsula · Distribución del agua (5º)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Ciencias-naturales/Ciencias-Naturales-5-basico/205442:Distribucion-del-agua-en-la-Tierra-Cs-Naturales-5-basico"},
-
-  // Historia 5°
-  HI05_OA01:        {label:"HI05 OA01 · Viajes de descubrimiento", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-01/18189:HI05-OA-01"},
-  HI05_OA02:        {label:"HI05 OA02 · Conquista de América y Chile", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-02/18190:HI05-OA-02"},
-  HI05_OA06:        {label:"HI05 OA06 · Colonia (aspectos centrales)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-06"},
-  HI05_OA09:        {label:"HI05 OA09 · Zonas naturales de Chile", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-09/18197:HI05-OA-09"},
-  HI05_OA10:        {label:"HI05 OA10 · Recursos naturales de Chile", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-10"},
-  HI05_OA13:        {label:"HI05 OA13 · Derechos humanos (personas sujetos de derecho)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-13"},
-  HI05_OA14:        {label:"HI05 OA14 · Derechos, deberes y Estado", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-14/18202:HI05-OA-14"},
-
-  // Lenguaje 5°/6°
-  LE05_OA14:        {label:"LE05 OA14 · Escritura de narraciones", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-14/17272:LE05-OA-14"},
-  LE05_OA15:        {label:"LE05 OA15 · Artículo informativo (fuentes)", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-15/17273:LE05-OA-15"},
-  LE06_OA14:        {label:"LE06 OA14 · Escritura de narraciones", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-14"},
-  LE06_OA15:        {label:"LE06 OA15 · Artículo informativo (fuentes)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-15"},
-  LE_APRENDOTV_OA15:{label:"AprendoTV · Artículos informativos (5º-6º)", url:"https://www.curriculumnacional.cl/docente/629/w3-article-214545.html"},
-
-  // Otros
-  DUOLINGO:         {label:"Duolingo", url:"https://es.duolingo.com/"},
-  BPDIGITAL:        {label:"BPDigital (lectura)", url:"https://www.bpdigital.cl/"},
-  PROF_FOTO:        {label:"Fotosíntesis (Profesor en Línea)", url:"https://www.profesorenlinea.cl/Ciencias/Fotosintesis.htm"}
-};
-
-/** =========================
- *  CURRÍCULOS (con enlaces directos)
- *  ========================= */
-const CURR_MAY = {
-  Matemática: [
-    { key:"MA06_OA04", title:"Porcentajes (concreto/pictórico/simbólico)", oa:"MA06 OA04", links:[LINKS.MA06_OA04_PORC] },
-    { key:"MA06_OA03", title:"Razones (razón y proporción)", oa:"MA06 OA03", links:[LINKS.MA06_OA03_RAZONES] },
-    { key:"MA06_OA11", title:"Ecuaciones de 1er grado (1 incógnita)", oa:"MA06 OA11", links:[LINKS.MA06_OA11_ECU, LINKS.MA06_OA11_BAL] },
-    { key:"MA06_OA16", title:"Ángulos opuestos por el vértice y complementarios", oa:"MA06 OA16", links:[LINKS.MA06_OA16_ANG] },
-    { key:"MA06_OA13", title:"Área de superficie (redes de cuerpos)", oa:"MA06 OA13", links:[LINKS.MA06_OA13_AREA] },
-    { key:"MA06_OA19", title:"Volumen de cubos y paralelepípedos", oa:"MA06 OA19", links:[LINKS.MA06_OA19_VOL] },
-    { key:"MA06_OA24", title:"Interpretar gráficos (barra doble y circular)", oa:"MA06 OA24", links:[LINKS.MA06_OA24_GRAF] }
-  ],
-  Lenguaje: [
-    { key:"LE06_OA14", title:"Escritura creativa: narraciones (estructura + conectores)", oa:"LE06 OA14", links:[LINKS.LE06_OA14] },
-    { key:"LE06_OA15", title:"Artículo informativo (tema + párrafos + fuentes)", oa:"LE06 OA15", links:[LINKS.LE06_OA15, LINKS.LE_APRENDOTV_OA15] }
-  ],
-  Ciencias: [
-    { key:"C_FOTO", title:"Fotosíntesis (proceso y factores)", oa:"", links:[LINKS.PROF_FOTO] }
-  ],
-  Historia: [
-    { key:"H_GEN", title:"Historia (según colegio): repasar con guía + mapa mental", oa:"", links:[] }
-  ],
-  Inglés: [
-    { key:"I_DUO", title:"Inglés: rutina (reading + writing)", oa:"", links:[LINKS.DUOLINGO] }
-  ]
-};
-
-const CURR_DEADPOOL = {
-  Matemática: [
-    { key:"MAT5_MULT", title:"Multiplicación (estrategias y algoritmo)", oa:"MA05 OA02/OA03", links:[LINKS.MAT5_MULT] },
-    { key:"MAT5_DIV",  title:"División (3 dígitos ÷ 1 dígito)", oa:"MA05 OA04", links:[LINKS.MAT5_DIV] },
-    { key:"MAT5_FRAC", title:"Fracciones (representar y equivalencias)", oa:"MA05 OA07", links:[LINKS.MAT5_FRAC] },
-    { key:"MAT5_ECU",  title:"Ecuaciones e inecuaciones (1 paso)", oa:"MA05 OA15", links:[LINKS.MAT5_ECU, LINKS.MAT5_OA15, LINKS.MAT5_CAPS_OA15] }
-  ],
-  Lenguaje: [
-    { key:"LE05_OA14", title:"Narración (comprender y luego escribir)", oa:"LE05 OA14", links:[LINKS.LE05_OA14] },
-    { key:"LE05_OA15", title:"Artículo informativo (idea central + fuentes)", oa:"LE05 OA15", links:[LINKS.LE05_OA15, LINKS.LE_APRENDOTV_OA15] }
-  ],
-  Ciencias: [
-    { key:"CN05_OA01", title:"Células → tejidos → órganos → sistemas", oa:"CN05 OA01", links:[LINKS.CN05_OA01] },
-    { key:"CN05_OA07", title:"Microorganismos + higiene (beneficios/daños)", oa:"CN05 OA07", links:[LINKS.CN05_OA07] },
-    { key:"CN05_OA10", title:"Conductores vs aislantes (seguridad)", oa:"CN05 OA10", links:[LINKS.CN05_OA10] },
-    { key:"CN05_OA12", title:"Agua dulce/salada y escasez (hidrósfera)", oa:"CN05 OA12", links:[LINKS.CN05_OA12, LINKS.CN05_VIDEO_OA12] }
-  ],
-  Historia: [
-    { key:"HI05_OA09", title:"Zonas naturales de Chile", oa:"HI05 OA09", links:[LINKS.HI05_OA09] },
-    { key:"HI05_OA10", title:"Recursos naturales (renovables/no renovables)", oa:"HI05 OA10", links:[LINKS.HI05_OA10] },
-    { key:"HI05_OA01", title:"Viajes de descubrimiento (Colón, Magallanes)", oa:"HI05 OA01", links:[LINKS.HI05_OA01] },
-    { key:"HI05_OA02", title:"Conquista de América y de Chile", oa:"HI05 OA02", links:[LINKS.HI05_OA02] },
-    { key:"HI05_OA06", title:"Colonia: metrópoli, Iglesia y mestizaje", oa:"HI05 OA06", links:[LINKS.HI05_OA06] },
-    { key:"HI05_OA13", title:"Derechos humanos (todas las personas)", oa:"HI05 OA13", links:[LINKS.HI05_OA13] },
-    { key:"HI05_OA14", title:"Derechos → deberes (personas y Estado)", oa:"HI05 OA14", links:[LINKS.HI05_OA14] }
-  ],
-  Inglés: [
-    { key:"I_DUO", title:"Inglés: rutina", oa:"", links:[LINKS.DUOLINGO] }
-  ]
-};
-
-const STUDENTS = [
-  { id:"may", name:"May", grade:"6º básico", gradeNum:6, curriculum: CURR_MAY },
-  { id:"deadpool", name:"Deadpoollcer0", grade:"5º básico", gradeNum:5, curriculum: CURR_DEADPOOL }
-];
-
-/** =========================
- *  COLAS (rotación)
- *  ========================= */
-function makeQueues(){
-  const queues = {};
-  for (const s of STUDENTS){
-    queues[s.id] = {};
-    for (const subj of Object.keys(s.curriculum)){
-      queues[s.id][subj] = { idx:0, items: s.curriculum[subj] };
-    }
-  }
-  return queues;
-}
-const QUEUES = makeQueues();
-
-function pickBlock(studentId, subject){
-  const q = QUEUES[studentId][subject];
-  const items = q?.items || [];
-  if (!items.length) return { key:"GEN", title:`${subject} (sin bloque)`, oa:"", links:[] };
-  const item = items[q.idx % items.length];
-  q.idx += 1;
-  return item;
-}
-
-/** =========================
- *  BÚSQUEDAS guiadas (YouTube/Google) + Copiar
- *  ========================= */
-function youtubeSearchUrl(q){
-  const query = encodeURIComponent(q).replace(/%20/g, "+");
-  return `https://www.youtube.com/results?search_query=${query}`;
-}
-function googleSearchUrl(q){
-  const query = encodeURIComponent(q).replace(/%20/g, "+");
-  return `https://www.google.com/search?q=${query}`;
-}
-
-function showToast(text="Copiado ✅"){
-  const t = document.getElementById("toast");
-  t.textContent = text;
-  t.classList.add("show");
-  setTimeout(()=> t.classList.remove("show"), 900);
-}
-async function copyText(text){
-  try{
-    await navigator.clipboard.writeText(text);
-    showToast("Búsqueda copiada ✅");
-  }catch(e){
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    try{ document.execCommand("copy"); showToast("Búsqueda copiada ✅"); }catch(_){}
-    ta.remove();
-  }
-}
-
-/** keywords más detalladas */
-function makeKeywords(student, subject, block){
-  const base = [
-    `${block.title}`,
-    block.oa ? `(${block.oa})` : "",
-    `${subject}`,
-    `${student.gradeNum} básico`,
-    "Chile",
-    "Currículum Nacional",
-    "explicación",
-    "ejercicios",
-    "paso a paso",
-    "ejemplos resueltos",
-    "AprendoTV"
-  ].filter(Boolean).join(" ");
-
-  if (subject === "Matemática") return base + " guía actividades";
-  if (subject === "Ciencias") return base + " experimento simple";
-  if (subject === "Historia") return base + " resumen línea de tiempo";
-  if (subject === "Lenguaje") return base + " ejemplo texto";
-  if (subject === "Inglés") return `inglés ${student.gradeNum} básico Chile vocabulario frases reading writing ejercicios`;
-  return base;
-}
-
-/** =========================
- *  TAREAS (con énfasis en enlaces)
- *  ========================= */
-function buildTasks({student, subject, block, d}){
-  const keywords = makeKeywords(student, subject, block);
-
-  const base = [
-    { id:"ver", text:`Ver/leer: ${block.title} (10–15 min)`, links:block.links || [], keywords },
-    { id:"hacer", text:`Practicar: ${block.title} (6–10 ítems)`, links:block.links || [], keywords },
-    { id:"explicar", text:`Explicar: ${block.title} (2 min / 3–5 líneas)`, links:block.links || [], keywords }
-  ];
-
-  // Lectura atractiva 1–2/semana (mar/jue) para Deadpoollcer0
-  if (student.id === "deadpool" && subject === "Lenguaje"){
-    const dow = d.getDay();
-    if (dow === 2 || dow === 4){
-      base.unshift({
-        id:"lectura",
-        text:"Lectura atractiva (BPDigital) 10–15 min + 3 ideas clave",
-        links:[LINKS.BPDIGITAL],
-        keywords: `novela gráfica infantil juvenil recomendada ${student.gradeNum} básico Chile BPDigital lectura`
-      });
-    }
-  }
-
-  if (subject === "Inglés"){
-    return [
-      { id:"duo", text:"Duolingo: 1 lección + 1 repaso (10–15 min)", links:[LINKS.DUOLINGO], keywords: makeKeywords(student, subject, block) },
-      { id:"reading", text:"Reading: texto corto + 5 palabras", links:block.links || [], keywords: makeKeywords(student, subject, block) },
-      { id:"writing", text:"Writing: 5–8 frases", links:block.links || [], keywords: makeKeywords(student, subject, block) }
-    ];
-  }
-
-  if (subject === "Historia"){
-    base.push({ id:"mapa", text:"Mini mapa mental o línea temporal (5–7 min)", links:block.links || [], keywords });
-  }
-  return base;
-}
-
-/** =========================
- *  PLAN DEL DÍA (OA en orden + peso)
- *  ========================= */
-
 const CURRICULUM = {
   deadpool: {
+    matematicas: [
+      { id:"M1", text:"Números y valor posicional", weight:2, links:[] },
+      { id:"M2", text:"Suma y resta", weight:2, links:[
+        { label:"Aprendo en Línea · Matemática 5° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
+      ]},
+      { id:"M3", text:"Multiplicación", weight:3, links:[
+        { label:"MINEDUC · 5º U1 Cap.2 Multiplicación", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion" }
+      ]}, /* recurso oficial MINEDUC */ 
+      { id:"M4", text:"División", weight:3, links:[
+        { label:"MINEDUC · MA05 OA04 División", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04" }
+      ]}, /* OA oficial división */
+      { id:"M5", text:"Problemas matemáticos", weight:2, links:[] },
+      { id:"M6", text:"Fracciones básicas", weight:2, links:[] },
+      { id:"M7", text:"Introducción a decimales", weight:2, links:[] },
+      { id:"M8", text:"Geometría básica", weight:2, links:[] },
+      { id:"M9", text:"Medición", weight:2, links:[] },
+      { id:"M10", text:"Gráficos y datos", weight:1, links:[] }
+    ],
 
-matematicas: [
-  { id:"M1", text:"Números y valor posicional", weight:2 },
+    lenguaje: [
+      { id:"L1", text:"Lectura guiada", weight:2, links:[] },
+      { id:"L2", text:"Comprensión literal", weight:2, links:[] },
+      { id:"L3", text:"Comprensión básica", weight:2, links:[] },
+      { id:"L4", text:"Vocabulario", weight:2, links:[] },
+      { id:"L5", text:"Escritura de oraciones", weight:2, links:[] },
+      { id:"L6", text:"Pequeños textos", weight:2, links:[] }
+    ],
 
-  { 
-    id:"M2", 
-    text:"Suma y resta", 
-    weight:2,
-    links:[
-      { label:"Aprendo en Línea · Matemática 5° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
+    ciencias: [
+      { id:"C1", text:"Seres vivos", weight:2, links:[] },
+      { id:"C2", text:"Cuerpo humano", weight:2, links:[] },
+      { id:"C3", text:"Energía", weight:2, links:[] },
+      { id:"C4", text:"Materia", weight:2, links:[] },
+      { id:"C5", text:"Agua y medio ambiente", weight:2, links:[] }
+    ],
+
+    historia: [
+      { id:"H1", text:"Zonas geográficas", weight:2, links:[] },
+      { id:"H2", text:"Recursos naturales", weight:2, links:[] },
+      { id:"H3", text:"Pueblos originarios", weight:2, links:[] },
+      { id:"H4", text:"Inicio de la historia de Chile", weight:2, links:[] }
+    ],
+
+    lectura: [
+      { id:"R1", text:"Lectura recreativa diaria", weight:1, links:[
+        { label:"BPDigital", url:"https://www.bpdigital.cl/" }
+      ]}
     ]
   },
 
-  { 
-    id:"M3", 
-    text:"Multiplicación", 
-    weight:3,
-    links:[
-      { label:"MINEDUC · Multiplicación 5° básico", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion" }
-    ]
-  },
-
-  { 
-    id:"M4", 
-    text:"División", 
-    weight:3,
-    links:[
-      { label:"MINEDUC · División OA04", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04" }
-    ]
-  },
-
-  { id:"M5", text:"Problemas matemáticos", weight:2 }
-],
-
-  lenguaje: [
-    { id:"L1", text:"Lectura guiada", weight:2 },
-    { id:"L2", text:"Comprensión literal", weight:2 },
-    { id:"L3", text:"Comprensión básica", weight:2 },
-    { id:"L4", text:"Vocabulario", weight:2 },
-    { id:"L5", text:"Escritura de oraciones", weight:2 },
-    { id:"L6", text:"Pequeños textos", weight:2 }
-  ],
-
-  ciencias: [
-    { id:"C1", text:"Seres vivos", weight:2 },
-    { id:"C2", text:"Cuerpo humano", weight:2 },
-    { id:"C3", text:"Energía", weight:2 },
-    { id:"C4", text:"Materia", weight:2 },
-    { id:"C5", text:"Agua y medio ambiente", weight:2 }
-  ],
-
-  historia: [
-    { id:"H1", text:"Zonas geográficas", weight:2 },
-    { id:"H2", text:"Recursos naturales", weight:2 },
-    { id:"H3", text:"Pueblos originarios", weight:2 },
-    { id:"H4", text:"Inicio de la historia de Chile", weight:2 }
-  ],
-
-  lectura: [
-    { id:"R1", text:"Lectura recreativa diaria", weight:1 }
-  ]
-},
   may: {
+    matematicas: [
+      { id:"M1", text:"Valor posicional y números grandes", weight:2, links:[] },
+      { id:"M2", text:"Operaciones básicas (+, −, ×, ÷)", weight:3, links:[] },
+      { id:"M3", text:"Problemas matemáticos", weight:3, links:[
+        { label:"Aprendo en Línea · Matemática 5°/6° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
+      ]},
+      { id:"M4", text:"Fracciones (equivalencias y operaciones)", weight:3, links:[] },
+      { id:"M5", text:"Decimales y relación con fracciones", weight:2, links:[] },
+      { id:"M6", text:"Porcentaje", weight:2, links:[
+        { label:"MINEDUC · 6º U4 Cap.15 Porcentajes", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes" }
+      ]}, /* recurso oficial MINEDUC */
+      { id:"M7", text:"Razones y proporciones", weight:2, links:[] },
+      { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2, links:[] },
+      { id:"M9", text:"Geometría (figuras y ángulos)", weight:2, links:[] },
+      { id:"M10", text:"Área y volumen", weight:2, links:[] },
+      { id:"M11", text:"Datos y gráficos", weight:2, links:[] }
+    ],
 
-matematicas: [
-  { id:"M1", text:"Valor posicional y números grandes", weight:2 },
+    lenguaje: [
+      { id:"L1", text:"Lectura básica fluida", weight:2, links:[] },
+      { id:"L2", text:"Comprensión literal", weight:2, links:[
+        { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" },
+        { label:"educarchile · Actividad OA2 Comprensión lectora", url:"https://centroderecursos.educarchile.cl/items/6dccd77e-a4c1-4be1-8143-c9589b080daa" }
+      ]}, /* currículo + actividad OA2 */
+      { id:"L3", text:"Comprensión inferencial", weight:3, links:[] },
+      { id:"L4", text:"Análisis de textos", weight:3, links:[] },
+      { id:"L5", text:"Vocabulario y ortografía", weight:2, links:[] },
+      { id:"L6", text:"Escritura de oraciones", weight:2, links:[] },
+      { id:"L7", text:"Redacción de textos narrativos", weight:3, links:[] },
+      { id:"L8", text:"Redacción informativa", weight:3, links:[] },
+      { id:"L9", text:"Opinión escrita y argumentación", weight:2, links:[] }
+    ],
 
-  { 
-    id:"M3", 
-    text:"Problemas matemáticos", 
-    weight:3,
-    links:[
-      { label:"Aprendo en Línea · Actividades matemáticas", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
-    ]
-  },
+    ciencias: [
+      { id:"C1", text:"Seres vivos y organización", weight:2, links:[] },
+      { id:"C2", text:"Sistema del cuerpo humano", weight:2, links:[] },
+      { id:"C3", text:"Energía y cambios", weight:2, links:[] },
+      { id:"C4", text:"Materia y propiedades", weight:2, links:[] },
+      { id:"C5", text:"Ecosistemas", weight:2, links:[] },
+      { id:"C6", text:"Cuidado del medio ambiente", weight:2, links:[] }
+    ],
 
-  { 
-    id:"M6", 
-    text:"Porcentaje", 
-    weight:2,
-    links:[
-      { label:"MINEDUC · Porcentajes 6° básico", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes" }
-    ]
-  }
-],
+    historia: [
+      { id:"H1", text:"Formación de América", weight:2, links:[] },
+      { id:"H2", text:"Conquista de América", weight:2, links:[] },
+      { id:"H3", text:"Colonia", weight:2, links:[] },
+      { id:"H4", text:"Independencia", weight:2, links:[] },
+      { id:"H5", text:"Organización del Estado", weight:2, links:[] },
+      { id:"H6", text:"Derechos y ciudadanía", weight:2, links:[] }
+    ],
 
-  lenguaje: [
-  { id:"L1", text:"Lectura básica fluida", weight:2 },
-
-  { 
-    id:"L2", 
-    text:"Comprensión literal", 
-    weight:2,
-    links:[
-      { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }
-    ]
-  }
-],
-
-  ciencias: [
-    { id:"C1", text:"Seres vivos y organización", weight:2 },
-    { id:"C2", text:"Sistema del cuerpo humano", weight:2 },
-    { id:"C3", text:"Energía y cambios", weight:2 },
-    { id:"C4", text:"Materia y propiedades", weight:2 },
-    { id:"C5", text:"Ecosistemas", weight:2 },
-    { id:"C6", text:"Cuidado del medio ambiente", weight:2 }
-  ],
-
-  historia: [
-    { id:"H1", text:"Formación de América", weight:2 },
-    { id:"H2", text:"Conquista de América", weight:2 },
-    { id:"H3", text:"Colonia", weight:2 },
-    { id:"H4", text:"Independencia", weight:2 },
-    { id:"H5", text:"Organización del Estado", weight:2 },
-    { id:"H6", text:"Derechos y ciudadanía", weight:2 }
-  ],
-
-  guitarra: [
-  { id:"G1", text:"Partes de la guitarra", weight:1 },
-
-  { 
-    id:"G3", 
-    text:"Primeros acordes (Em, A, D)", 
-    weight:2,
-    links:[
-      { label:"Curso guitarra desde cero", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" },
-      { label:"Playlist YouTube guitarra principiante", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
+    guitarra: [
+      { id:"G1", text:"Partes de la guitarra", weight:1, links:[] },
+      { id:"G2", text:"Postura y agarre", weight:1, links:[] },
+      { id:"G3", text:"Primeros acordes (Em, A, D)", weight:2, links:[
+        { label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" },
+        { label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
+      ]}, /* curso y playlist */
+      { id:"G4", text:"Acordes básicos (G, C)", weight:2, links:[] },
+      { id:"G5", text:"Cambio de acordes", weight:2, links:[] },
+      { id:"G6", text:"Ritmo básico", weight:2, links:[] },
+      { id:"G7", text:"Primera canción simple", weight:2, links:[] }
     ]
   }
-]
-}
 };
 
-const PLAN_VERSION = 4;
-
+/** =========================
+ *  GENERACIÓN DEL PLAN
+ *  ========================= */
 function expandByWeight(list){
   const result = [];
   list.forEach(item => {
@@ -805,74 +547,9 @@ function expandByWeight(list){
   });
   return result;
 }
-function autoLinks(studentId, subjectKey, text){
-  const t = (text || "")
-  .toLowerCase()
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "");
-  const out = [];
 
-  // --- MATEMÁTICAS (Deadpool 5º) ---
-  if (subjectKey === "matematicas" && studentId === "deadpool"){
-    if (t.includes("multiplic")) out.push({
-      label: "MINEDUC · 5º U1 Cap.2 Multiplicación",
-      url: "https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion"
-    }); // [2](https://dev.to/mohitsinghchauhan/detailed-guide-to-firebase-realtime-database-with-a-crud-tutorial-using-javascript-1dik)
-
-    if (t.includes("divisi")) out.push({
-      label: "MINEDUC · MA05 OA04 División (3 dígitos ÷ 1 dígito)",
-      url: "https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04"
-    }); // [3](https://view.genially.com/69ec245ddc5b8be99695f36f)
-  }
-
-  // --- MATEMÁTICAS (May 6º) ---
-  if (subjectKey === "matematicas" && studentId === "may"){
-    if (t.includes("porcent")) out.push({
-      label: "MINEDUC · 6º U4 Cap.15 Porcentajes (MA06 OA04)",
-      url: "https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes"
-    }); // [4](https://www.javaspring.net/blog/fast-stable-sorting-algorithm-implementation-in-javascript/)
-  }
-
-  // --- LENGUAJE (May 6º) ---
-  if (subjectKey === "lenguaje" && studentId === "may"){
-    if (t.includes("comprensi")) {
-      out.push({
-        label: "MINEDUC · Lenguaje 6º (incluye OA comprensión)",
-        url: "https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico"
-      }); // [6](https://revistas.uaa.mx/docere/article/download/2402/2197/5175)
-
-      out.push({
-        label: "educarchile · Actividad OA2 Comprensión lectora",
-        url: "https://centroderecursos.educarchile.cl/items/6dccd77e-a4c1-4be1-8143-c9589b080daa"
-      }); // [5](https://cs.stackexchange.com/questions/5008/differences-and-relationships-between-randomized-and-nondeterministic-algorithms)
-    }
-  }
-
-  // --- GUITARRA (May) ---
-  if (subjectKey === "guitarra" && studentId === "may"){
-    out.push({
-      label: "Marty Music · Curso gratis guitarra acústica (ruta completa)",
-      url: "https://www.martymusic.com/free-beginner-acoustic-guitar-lessons"
-    }); // [7](https://codezup.com/firebase-realtime-database-integration-guide/)
-
-    out.push({
-      label: "YouTube · Playlist Marty (Beginner Acoustic 1–8)",
-      url: "https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe"
-    }); // [8](https://rollout.com/integration-guides/firebase/reading-and-writing-data-using-the-firebase-api)
-  }
-
-  // --- REFUERZO (si mantienes conteo en algún sitio) ---
-  if (t.includes("conteo") && t.includes("100")){
-    out.push({
-      label: "MINEDUC · Recurso Conteo 0–100",
-      url: "https://www.curriculumnacional.cl/recursos/conteo-numeros-0-100"
-    }); // [9](https://educrea.cl/preparacion-de-objetivos-de-aprendizaje/)
-  }
-
-  return out;
-}
-function buildStudentPlan(student){
-  const subjects = CURRICULUM[student] || {};
+function buildStudentPlan(studentId){
+  const subjects = CURRICULUM[studentId] || {};
   const result = {};
   for (const subject in subjects){
     result[subject] = expandByWeight(subjects[subject]);
@@ -882,8 +559,7 @@ function buildStudentPlan(student){
 
 function interleaveSubjects(studentId, subjectPlans){
   const subjects = Object.keys(subjectPlans);
-  const maxLength = Math.max(...subjects.map(s => subjectPlans[s].length));
-
+  const maxLength = Math.max(0, ...subjects.map(s => subjectPlans[s].length));
   const result = [];
 
   for (let i = 0; i < maxLength; i++){
@@ -891,28 +567,19 @@ function interleaveSubjects(studentId, subjectPlans){
       const item = subjectPlans[subject][i];
       if (!item) return;
 
-      const links = (item.links && item.links.length) ? item.links : autoLinks(studentId, subject, item.text);
-      console.log("AUTO LINKS DEBUG →", {
-  studentId,
-  subject,
-  text: item.text,
-  links
-});  
       result.push({
-        id: item.id,
+        id: `${subject}_${item.id}_${i}`,   // ✅ único por sesión
         text: item.text,
-        subject,               // "matematicas", "lenguaje", etc.
-        links,                 // ✅ aquí va lo automático
+        subject,
+        links: item.links || [],
         keywords: `${item.text} ${subject} explicación ejercicios paso a paso`
       });
     });
   }
-
   return result;
 }
 
 function studyDayIndex(date){
-  // índice SOLO contando días lectivos del plan
   const start = parseISO(RANGE.start);
   const target = new Date(date.getFullYear(), date.getMonth(), date.getDate());
   let idx = -1;
@@ -933,13 +600,12 @@ function buildDayPlan(date){
   const idx = Math.max(0, studyDayIndex(date));
   const tasksPerDay = 3;
 
-const deadpoolPlan = interleaveSubjects("deadpool", buildStudentPlan("deadpool"));
-const mayPlan = interleaveSubjects("may", buildStudentPlan("may"));
+  const deadpoolPlan = interleaveSubjects("deadpool", buildStudentPlan("deadpool"));
+  const mayPlan = interleaveSubjects("may", buildStudentPlan("may"));
 
   const deadpoolSlice = deadpoolPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
   const maySlice = mayPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
 
-  // Slots por estudiante (UI actual)
   const slotDeadpool = {
     title: "Deadpoollcer0",
     subject: "plan",
@@ -972,7 +638,6 @@ const mayPlan = interleaveSubjects("may", buildStudentPlan("may"));
   };
 }
 
-
 /** =========================
  *  PERSISTENCIA: Local + Firebase RTDB
  *  ========================= */
@@ -983,10 +648,10 @@ let connected = false;
 let LIVE_CACHE = {};
 let pendingWrites = 0;
 
-function loadLocal(){ try{ return JSON.parse(localStorage.getItem("hs_local_final_links")||"{}"); }catch(e){ return {}; } }
+function loadLocal(){ try{ return JSON.parse(localStorage.getItem("hs_local_final_links") || "{}"); }catch(e){ return {}; } }
 function saveLocal(o){ localStorage.setItem("hs_local_final_links", JSON.stringify(o)); }
 function safePath(...parts){ return parts.map(p => String(p).replace(/[.#$/\[\]]/g, "_")).join("/"); }
-function pathFor(item){ return safePath("families", family||"demo", "progress", item.date, item.studentId, item.subject, item.blockKey, item.taskId); }
+function pathFor(item){ return safePath("families", family || "demo", "progress", item.date, item.studentId, item.subject, item.blockKey, item.taskId); }
 
 function setCfgPill(ok, text){
   const pill = document.getElementById("cfgStatus");
@@ -995,12 +660,12 @@ function setCfgPill(ok, text){
 }
 
 function parseFirebaseConfig(text){
-  const t = (text||"").trim();
+  const t = (text || "").trim();
   if (!t) return null;
   const firstBrace = t.indexOf("{");
   const lastBrace = t.lastIndexOf("}");
   if (firstBrace === -1 || lastBrace === -1 || lastBrace <= firstBrace) return null;
-  const objText = t.slice(firstBrace, lastBrace+1);
+  const objText = t.slice(firstBrace, lastBrace + 1);
   try{ return JSON.parse(objText); }catch(e){
     try{ return JSON.parse(objText.replace(/'/g, '"')); }catch(_){ return null; }
   }
@@ -1042,22 +707,21 @@ function updateSyncAlert(){
   hint.className = "alertHint ok";
   hint.textContent = "Puedes cerrar sin problema ✅";
 }
+
 let lastDataSnapshot = null;
 function startLiveSync(){
   if (!db || !family) return;
 
   const ref = db.ref(safePath("families", family, "progress"));
-  ref.on("value", (snap)=> {
-  const next = snap.val() || {};
-  const nextStr = JSON.stringify(next);
-
-  if (nextStr === lastDataSnapshot) return;
-  lastDataSnapshot = nextStr;
-
-  LIVE_CACHE = next;
-  updateSyncAlert();
-  render();
-});
+  ref.on("value", (snap) => {
+    const next = snap.val() || {};
+    const nextStr = JSON.stringify(next);
+    if (nextStr === lastDataSnapshot) return;
+    lastDataSnapshot = nextStr;
+    LIVE_CACHE = next;
+    updateSyncAlert();
+    render();
+  });
 
   db.ref(".info/connected").on("value", (snap) => {
     connected = !!snap.val();
@@ -1066,29 +730,28 @@ function startLiveSync(){
 }
 
 function getItemState(date, studentId, subject, blockKey, taskId){
-  const fb = (((LIVE_CACHE||{})[date]||{})[studentId]||{})[subject]||{};
-  const a = (fb[blockKey]||{})[taskId];
+  const fb = (((LIVE_CACHE || {})[date] || {})[studentId] || {})[subject] || {};
+  const a = (fb[blockKey] || {})[taskId];
   if (a) return a;
 
   const local = loadLocal();
-  const b = (((local||{})[date]||{})[studentId]||{})[subject]||{};
-  return (b[blockKey]||{})[taskId] || null;
+  const b = (((local || {})[date] || {})[studentId] || {})[subject] || {};
+  return (b[blockKey] || {})[taskId] || null;
 }
 
 function setItemState(item, patch){
-  // local
   const local = loadLocal();
   local[item.date] ??= {};
   local[item.date][item.studentId] ??= {};
   local[item.date][item.studentId][item.subject] ??= {};
   local[item.date][item.studentId][item.subject][item.blockKey] ??= {};
+
   const prev = local[item.date][item.studentId][item.subject][item.blockKey][item.taskId] || {};
   local[item.date][item.studentId][item.subject][item.blockKey][item.taskId] = {
     ...prev, ...patch, updatedAt: new Date().toISOString()
   };
   saveLocal(local);
 
-  // firebase
   if (db && family){
     pendingWrites++;
     updateSyncAlert();
@@ -1105,13 +768,13 @@ function setItemState(item, patch){
 }
 
 /** =========================
- *  UI helpers
+ *  UI HELPERS
  *  ========================= */
 function el(tag, attrs={}, children=[]){
   const n = document.createElement(tag);
   for (const [k,v] of Object.entries(attrs)){
-    if (k==="class") n.className = v;
-    else if (k==="html") n.innerHTML = v;
+    if (k === "class") n.className = v;
+    else if (k === "html") n.innerHTML = v;
     else if (k.startsWith("on") && typeof v === "function") n.addEventListener(k.slice(2), v);
     else n.setAttribute(k, v);
   }
@@ -1120,6 +783,15 @@ function el(tag, attrs={}, children=[]){
     else if (c) n.appendChild(c);
   }
   return n;
+}
+
+function youtubeSearchUrl(q){
+  const query = encodeURIComponent(q || "").replace(/%20/g, "+");
+  return `https://www.youtube.com/results?search_query=${query}`;
+}
+function googleSearchUrl(q){
+  const query = encodeURIComponent(q || "").replace(/%20/g, "+");
+  return `https://www.google.com/search?q=${query}`;
 }
 
 function renderSmartButtons(keywords){
@@ -1148,7 +820,6 @@ function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentL
   if (examMode) return null;
 
   const host = el("div", { class:"linkRow" });
-
   const stNow = getItemState(date, studentId, subject, blockKey, taskId) || {};
   const linksNow = stNow.links || currentLinks || [];
 
@@ -1176,7 +847,6 @@ function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentL
 
       const fresh = (getItemState(date, studentId, subject, blockKey, taskId) || {}).links || linksNow;
       const next = [...fresh, { label, url }];
-
       setItemState({date, studentId, subject, blockKey, taskId}, { links: next });
     }
   }, ["+ Añadir enlace directo"]));
@@ -1208,7 +878,6 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
     el("span", {}, [ parentOk ? "Validado ✅" : "Sin validar" ])
   ]));
 
-  // Caja de enlaces con énfasis
   if (!examMode){
     const linksBox = el("div", { class:"links" });
     if (effectiveLinks.length){
@@ -1218,14 +887,12 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
         if (idx < effectiveLinks.length - 1) linksBox.appendChild(document.createTextNode(" · "));
       });
     } else {
-      linksBox.innerHTML = "<strong>Enlaces directos:</strong> (ninguno aún). Usa los botones de búsqueda guiada abajo.";
+      linksBox.innerHTML = "<strong>Enlaces directos:</strong> (ninguno aún). Usa los botones de búsqueda guiada abajo o añade uno.";
     }
     body.appendChild(linksBox);
 
-    // Botones guiados siempre presentes
     body.appendChild(renderSmartButtons(task.keywords));
 
-    // Editor de enlaces directos
     const editor = renderLinksEditor({
       date, studentId, subject, blockKey, taskId: task.id,
       currentLinks: st.links || [],
@@ -1234,17 +901,14 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
     if (editor) body.appendChild(editor);
 
     const ta = el("textarea", { placeholder:"Notas (resumen/dudas/evidencia)…" });
-      ta.value = st.note || "";
-
-      ta.addEventListener("change", () => {
+    ta.value = st.note || "";
+    ta.addEventListener("change", ()=> {
       setItemState(
-      { date, studentId, subject, blockKey, taskId: task.id },
-      { note: ta.value }
-    );
-     });
-
-      body.appendChild(ta);
-
+        { date, studentId, subject, blockKey, taskId: task.id },
+        { note: ta.value }
+      );
+    });
+    body.appendChild(ta);
 
     const ok = el("input", { type:"checkbox", style:"margin-right:8px;" });
     ok.checked = parentOk;
@@ -1265,21 +929,16 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
   return wrap;
 }
 
-
 function renderSlot(slot, day, userFilter, onlyPending, examMode){
-
   const visibleStudents = slot.students.filter(s =>
     userFilter === "family" || s.id === userFilter
   );
-
   if (!visibleStudents.length) return null;
 
   const det = el("details", { open:false });
 
   let dCount=0, tCount=0;
   for (const s of visibleStudents){
-
-    if (userFilter !== "family" && s.id !== userFilter) continue;
     for (const task of s.tasks){
       tCount++;
       const st = getItemState(day.date, s.id, task.subject, s.block.key, task.id) || {};
@@ -1293,8 +952,6 @@ function renderSlot(slot, day, userFilter, onlyPending, examMode){
   ]));
 
   for (const s of visibleStudents){
-    if (userFilter !== "family" && s.id !== userFilter) continue;
-
     const stBox = el("div", { class:"student" });
     stBox.appendChild(el("div", { class:"studentHead" }, [
       el("strong", {}, [`${s.name} · ${s.grade}`]),
@@ -1348,7 +1005,7 @@ function buildBacklog(userFilter){
   const dates = Array.from(mergedDates).sort();
   const today = iso(parseISO(document.getElementById("datePick").value || RANGE.start));
 
-  const users = (userFilter==="family") ? ["may","deadpool"] : [userFilter];
+  const users = (userFilter === "family") ? ["may","deadpool"] : [userFilter];
   const out = [];
 
   for (const date of dates){
@@ -1399,7 +1056,6 @@ function renderBacklog(userFilter){
 /** =========================
  *  RENDER
  *  ========================= */
-
 const PLAN_CACHE = {};
 let PLAN_RENDER_SEQ = 0;
 
@@ -1411,56 +1067,52 @@ function render(){
   const d = parseISO(document.getElementById("datePick").value || RANGE.start);
   const dateKey = iso(d);
 
-  // Si no hay Firebase, cae al plan generado (modo local)
   if (!db || !family){
     const day = buildDayPlan(d);
     return renderWithPlan(day, d, userFilter, onlyPending, examMode);
   }
 
-  // Evita condiciones de carrera si cambias de día rápido
   const seq = ++PLAN_RENDER_SEQ;
 
-  // Cache en memoria para no pedirlo repetido en la misma sesión
   if (PLAN_CACHE[dateKey]){
     return renderWithPlan(PLAN_CACHE[dateKey], d, userFilter, onlyPending, examMode);
   }
 
   const planRef = db.ref(safePath("families", family, "plans", dateKey));
 
-  planRef.once("value").then((snap) => { // lectura única [1](https://firebase.google.com/docs/database/web/read-and-write)
+  planRef.once("value").then((snap) => {
     if (seq !== PLAN_RENDER_SEQ) return;
 
-if (snap.exists()){
-  const day = snap.val();
+    if (snap.exists()){
+      const day = snap.val();
 
-  const isValid =
-    day &&
-    day.kind === "estudio" &&
-    day.planVersion === PLAN_VERSION &&
-    Array.isArray(day.slots) &&
-    day.slots.length > 0 &&
-    day.slots.some(sl => Array.isArray(sl.students) && sl.students.some(st => Array.isArray(st.tasks) && st.tasks.length > 0));
+      const isValid =
+        day &&
+        day.kind === "estudio" &&
+        day.planVersion === PLAN_VERSION &&
+        Array.isArray(day.slots) &&
+        day.slots.length > 0 &&
+        day.slots.some(sl => Array.isArray(sl.students) && sl.students.some(st => Array.isArray(st.tasks) && st.tasks.length > 0));
 
-  if (!isValid){
-    const rebuilt = buildDayPlan(d);
-    PLAN_CACHE[dateKey] = rebuilt;
-    planRef.set(rebuilt).then(() => {
-      renderWithPlan(rebuilt, d, userFilter, onlyPending, examMode);
+      if (!isValid){
+        const rebuilt = buildDayPlan(d);
+        PLAN_CACHE[dateKey] = rebuilt;
+        planRef.set(rebuilt).then(() => {
+          renderWithPlan(rebuilt, d, userFilter, onlyPending, examMode);
+        });
+        return;
+      }
+
+      PLAN_CACHE[dateKey] = day;
+      renderWithPlan(day, d, userFilter, onlyPending, examMode);
+      return;
+    }
+
+    const day = buildDayPlan(d);
+    PLAN_CACHE[dateKey] = day;
+    planRef.set(day).then(() => {
+      renderWithPlan(day, d, userFilter, onlyPending, examMode);
     });
-    return;
-  }
-
-  PLAN_CACHE[dateKey] = day;
-  renderWithPlan(day, d, userFilter, onlyPending, examMode);
-  return;
-} else {
-  const day = buildDayPlan(d);
-  PLAN_CACHE[dateKey] = day;
-  planRef.set(day).then(() => {
-    renderWithPlan(day, d, userFilter, onlyPending, examMode);
-  });
-}
-    
   }).catch(() => {
     if (seq !== PLAN_RENDER_SEQ) return;
     const day = buildDayPlan(d);
@@ -1497,7 +1149,6 @@ function renderWithPlan(day, d, userFilter, onlyPending, examMode){
 
     document.getElementById("statsBox").textContent =
       `Hoy: ${pr.done}/${pr.total}. ` + (examMode ? "Modo examen activo." : "Añade enlaces directos si encuentras un vídeo exacto.");
-
   } else {
     document.getElementById("titleNote").textContent = day.message;
     document.getElementById("dayTypePill").className = "pill warn";
@@ -1513,7 +1164,7 @@ function renderWithPlan(day, d, userFilter, onlyPending, examMode){
 }
 
 /** =========================
- *  HOY / AJUSTES
+ *  NAVEGACIÓN / AJUSTES
  *  ========================= */
 function showPage(which){
   const today = document.getElementById("pageToday");
@@ -1524,9 +1175,6 @@ function showPage(which){
 document.getElementById("settingsBtn").addEventListener("click", ()=> showPage("settings"));
 document.getElementById("backBtn").addEventListener("click", ()=> showPage("today"));
 
-/** =========================
- *  AJUSTES: guardar family + conectar firebase
- *  ========================= */
 (function initSettings(){
   document.getElementById("familyCode").value = localStorage.getItem("hs_family") || "casa2026";
   document.getElementById("firebaseConfig").value = localStorage.getItem("hs_fb_cfg") || "";
@@ -1607,7 +1255,9 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   try{
     const obj = JSON.parse(txt);
     if (obj.local){ saveLocal(obj.local); render(); alert("Importado correctamente."); }
-  }catch{ alert("No se pudo importar: JSON inválido."); }
+  }catch{
+    alert("No se pudo importar: JSON inválido.");
+  }
 });
 
 /** =========================
@@ -1626,7 +1276,6 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   document.getElementById("onlyPending").addEventListener("change", render);
   document.getElementById("examMode").addEventListener("change", render);
 
-  // auto-connect si existe config guardada
   family = localStorage.getItem("hs_family") || "casa2026";
   const cfgText = localStorage.getItem("hs_fb_cfg") || "";
   if (cfgText){
@@ -1663,6 +1312,5 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   render();
 })();
 </script>
-
 </body>
 </html>
