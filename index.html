@@ -806,7 +806,10 @@ function expandByWeight(list){
   return result;
 }
 function autoLinks(studentId, subjectKey, text){
-  const t = (text || "").toLowerCase();
+  const t = (text || "")
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "");
   const out = [];
 
   // --- MATEMÁTICAS (Deadpool 5º) ---
