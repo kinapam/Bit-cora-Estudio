@@ -413,23 +413,32 @@ function dayLabel(d){
 }
 
 /** =========================
- *  CURRÍCULUM (versión actual + links explícitos)
+ *  CURRÍCULUM (sin autoLinks)
  *  ========================= */
 const CURRICULUM = {
   deadpool: {
     matematicas: [
       { id:"M1", text:"Números y valor posicional", weight:2, links:[] },
+
       { id:"M2", text:"Suma y resta", weight:2, links:[
         { label:"Aprendo en Línea · Matemática 5° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
       ]},
+
       { id:"M3", text:"Multiplicación", weight:3, links:[
         { label:"MINEDUC · 5º U1 Cap.2 Multiplicación", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion" }
-      ]}, /* recurso oficial MINEDUC */ 
+      ]},
+
       { id:"M4", text:"División", weight:3, links:[
         { label:"MINEDUC · MA05 OA04 División", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04" }
-      ]}, /* OA oficial división */
+      ]},
+
       { id:"M5", text:"Problemas matemáticos", weight:2, links:[] },
-      { id:"M6", text:"Fracciones básicas", weight:2, links:[] },
+
+      { id:"M6", text:"Fracciones básicas", weight:2, links:[
+        { label:"MINEDUC · 5º U2 Cap.8 Fracciones", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-2-capitulo-8-fracciones" },
+        { label:"MINEDUC · ¿Qué aprendí? Fracciones", url:"https://www.curriculumnacional.cl/recursos/aprendi-5o-basico-unidad-2-capitulo-8-fracciones" }
+      ]},
+
       { id:"M7", text:"Introducción a decimales", weight:2, links:[] },
       { id:"M8", text:"Geometría básica", weight:2, links:[] },
       { id:"M9", text:"Medición", weight:2, links:[] },
@@ -441,23 +450,66 @@ const CURRICULUM = {
       { id:"L2", text:"Comprensión literal", weight:2, links:[] },
       { id:"L3", text:"Comprensión básica", weight:2, links:[] },
       { id:"L4", text:"Vocabulario", weight:2, links:[] },
+
       { id:"L5", text:"Escritura de oraciones", weight:2, links:[] },
-      { id:"L6", text:"Pequeños textos", weight:2, links:[] }
+
+      { id:"L6", text:"Pequeños textos", weight:2, links:[
+        { label:"MINEDUC · LE05 OA14 Escritura de narraciones", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-14/17272:LE05-OA-14" },
+        { label:"MINEDUC · Actividad LE05 OA14", url:"https://www.curriculumnacional.cl/recursos/le05-oa14-u2-a1" },
+        { label:"MINEDUC · LE05 OA15 Artículo informativo", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-15/17273:LE05-OA-15" },
+        { label:"MINEDUC · OA15 Escribiendo un informe", url:"https://www.curriculumnacional.cl/recursos/evaluacion-programas-oa15-escribiendo-informe-0" }
+      ]}
     ],
 
     ciencias: [
-      { id:"C1", text:"Seres vivos", weight:2, links:[] },
+      { id:"C1", text:"Seres vivos", weight:2, links:[
+        { label:"MINEDUC · CN05 OA01", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-01" },
+        { label:"MINEDUC · Niveles de organización de los seres vivos", url:"https://www.curriculumnacional.cl/recursos/niveles-organizacion-seres-vivos" }
+      ]},
+
       { id:"C2", text:"Cuerpo humano", weight:2, links:[] },
-      { id:"C3", text:"Energía", weight:2, links:[] },
-      { id:"C4", text:"Materia", weight:2, links:[] },
-      { id:"C5", text:"Agua y medio ambiente", weight:2, links:[] }
+
+      { id:"C3", text:"Energía", weight:2, links:[
+        { label:"MINEDUC · CN05 OA10 Conductores y aislantes", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-10" },
+        { label:"MINEDUC · Aislantes y conductores de electricidad", url:"https://www.curriculumnacional.cl/recursos/aislantes-conductores-electricidad" }
+      ]},
+
+      { id:"C4", text:"Materia", weight:2, links:[
+        { label:"MINEDUC · CN05 OA07 Microorganismos e higiene", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-07" }
+      ]},
+
+      { id:"C5", text:"Agua y medio ambiente", weight:2, links:[
+        { label:"MINEDUC · Distribución de agua dulce y salada", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-12/19427:Distribucion-de-agua-dulce-y-salada" },
+        { label:"MINEDUC · Cómo hacer agua dulce de agua salada", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-12/19426:Como-hacer-agua-dulce-de-agua-salada" },
+        { label:"MINEDUC · El ciclo del agua", url:"https://www.curriculumnacional.cl/recursos/ciclo-agua-0" }
+      ]}
     ],
 
     historia: [
-      { id:"H1", text:"Zonas geográficas", weight:2, links:[] },
-      { id:"H2", text:"Recursos naturales", weight:2, links:[] },
+      { id:"H1", text:"Zonas geográficas", weight:2, links:[
+        { label:"MINEDUC · HI05 OA09 Zonas naturales", url:"https://www.curriculumnacional.cl/recursos/hi-05-oa-9-u1-a9" },
+        { label:"MINEDUC · Mapa zonas naturales de Chile", url:"https://www.curriculumnacional.cl/recursos/mapa-zonas-naturales-chile" }
+      ]},
+
+      { id:"H2", text:"Recursos naturales", weight:2, links:[
+        { label:"MINEDUC · HI05 OA10 Recursos naturales", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-10" },
+        { label:"MINEDUC · Chile y su producción de recursos", url:"https://www.curriculumnacional.cl/recursos/chile-produccion-recursos" }
+      ]},
+
       { id:"H3", text:"Pueblos originarios", weight:2, links:[] },
-      { id:"H4", text:"Inicio de la historia de Chile", weight:2, links:[] }
+
+      { id:"H4", text:"Inicio de la historia de Chile", weight:2, links:[
+        { label:"MINEDUC · HI05 OA01 Viajes de descubrimiento", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-01/18189:HI05-OA-01" },
+        { label:"MINEDUC · Viajes y descubrimientos geográficos", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-01/33997:Viajes-y-descubrimientos-geograficos" },
+        { label:"MINEDUC · HI05 OA02 Conquista de América y Chile", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-02/18190:HI05-OA-02" },
+        { label:"MINEDUC · Conquista de América", url:"https://www.curriculumnacional.cl/docente/629/w3-article-23337.html" },
+        { label:"MINEDUC · HI05 OA06 Colonia", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-06" },
+        { label:"MINEDUC · La colonia en América", url:"https://www.curriculumnacional.cl/recursos/colonia-america" },
+        { label:"MINEDUC · HI05 OA13 Derechos humanos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-13" },
+        { label:"MINEDUC · Todas las personas tenemos derechos", url:"https://www.curriculumnacional.cl/recursos/personas-derechos" },
+        { label:"MINEDUC · HI05 OA14 Derechos y deberes", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-14" },
+        { label:"MINEDUC · Derechos y deberes (actividad)", url:"https://www.curriculumnacional.cl/recursos/hi-05-oa13-oa-14-u4-a2" }
+      ]}
     ],
 
     lectura: [
@@ -471,33 +523,71 @@ const CURRICULUM = {
     matematicas: [
       { id:"M1", text:"Valor posicional y números grandes", weight:2, links:[] },
       { id:"M2", text:"Operaciones básicas (+, −, ×, ÷)", weight:3, links:[] },
-      { id:"M3", text:"Problemas matemáticos", weight:3, links:[
-        { label:"Aprendo en Línea · Matemática 5°/6° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }
-      ]},
+      { id:"M3", text:"Problemas matemáticos", weight:3, links:[] },
       { id:"M4", text:"Fracciones (equivalencias y operaciones)", weight:3, links:[] },
       { id:"M5", text:"Decimales y relación con fracciones", weight:2, links:[] },
+
       { id:"M6", text:"Porcentaje", weight:2, links:[
         { label:"MINEDUC · 6º U4 Cap.15 Porcentajes", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes" }
-      ]}, /* recurso oficial MINEDUC */
-      { id:"M7", text:"Razones y proporciones", weight:2, links:[] },
-      { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2, links:[] },
-      { id:"M9", text:"Geometría (figuras y ángulos)", weight:2, links:[] },
-      { id:"M10", text:"Área y volumen", weight:2, links:[] },
-      { id:"M11", text:"Datos y gráficos", weight:2, links:[] }
+      ]},
+
+      { id:"M7", text:"Razones y proporciones", weight:2, links:[
+        { label:"MINEDUC · 6º U3 Cap.14 Razones", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-3-capitulo-14-razones" },
+        { label:"MINEDUC · Inicio de razones", url:"https://www.curriculumnacional.cl/recursos/inicio-razones" }
+      ]},
+
+      { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2, links:[
+        { label:"MINEDUC · MA06 OA11 Ecuaciones", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-11" },
+        { label:"MINEDUC · Actividad MA06 OA11", url:"https://www.curriculumnacional.cl/recursos/ma-06b-oa-11-u2-a1" }
+      ]},
+
+      { id:"M9", text:"Geometría (figuras y ángulos)", weight:2, links:[
+        { label:"MINEDUC · 6º U1 Cap.3 Ángulos", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-1-capitulo-3-angulos" },
+        { label:"MINEDUC · MA06 OA16 Ángulos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-16" }
+      ]},
+
+      { id:"M10", text:"Área y volumen", weight:2, links:[
+        { label:"MINEDUC · 6º U1 Cap.5 Área de cubos y paralelepípedos", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-1-capitulo-5-area-cubos-paralelepipedos" },
+        { label:"MINEDUC · MA06 OA19 Volumen", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-19" }
+      ]},
+
+      { id:"M11", text:"Datos y gráficos", weight:2, links:[
+        { label:"MINEDUC · MA06 OA24 Gráficos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-24" },
+        { label:"MINEDUC · Actividad MA06 OA24", url:"https://www.curriculumnacional.cl/recursos/ma-06b-oa-24-u4-a6" }
+      ]}
     ],
 
     lenguaje: [
       { id:"L1", text:"Lectura básica fluida", weight:2, links:[] },
+
       { id:"L2", text:"Comprensión literal", weight:2, links:[
         { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" },
         { label:"educarchile · Actividad OA2 Comprensión lectora", url:"https://centroderecursos.educarchile.cl/items/6dccd77e-a4c1-4be1-8143-c9589b080daa" }
-      ]}, /* currículo + actividad OA2 */
-      { id:"L3", text:"Comprensión inferencial", weight:3, links:[] },
-      { id:"L4", text:"Análisis de textos", weight:3, links:[] },
+      ]},
+
+      { id:"L3", text:"Comprensión inferencial", weight:3, links:[
+        { label:"MINEDUC · Lenguaje 6° básico (OA comprensión)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }
+      ]},
+
+      { id:"L4", text:"Análisis de textos", weight:3, links:[
+        { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }
+      ]},
+
       { id:"L5", text:"Vocabulario y ortografía", weight:2, links:[] },
       { id:"L6", text:"Escritura de oraciones", weight:2, links:[] },
-      { id:"L7", text:"Redacción de textos narrativos", weight:3, links:[] },
-      { id:"L8", text:"Redacción informativa", weight:3, links:[] },
+
+      { id:"L7", text:"Redacción de textos narrativos", weight:3, links:[
+        { label:"MINEDUC · LE06 OA14 Escritura creativa", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-14" },
+        { label:"MINEDUC · Actividad LE06 OA14", url:"https://www.curriculumnacional.cl/recursos/le06-oa14-u1-a4" },
+        { label:"MINEDUC · Aprendo TV OA14", url:"https://www.curriculumnacional.cl/recursos/aprendo-tv-lenguaje-5-6-basico-capitulo-06-oa14-escritura-creativa" }
+      ]},
+
+      { id:"L8", text:"Redacción informativa", weight:3, links:[
+        { label:"MINEDUC · LE06 OA15 Artículo informativo", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-15" },
+        { label:"MINEDUC · Actividad LE06 OA15", url:"https://www.curriculumnacional.cl/recursos/le06-oa15-u2-a4" },
+        { label:"MINEDUC · Recurso OA15 PDF", url:"https://www.curriculumnacional.cl/sites/default/files/newtenberg/614/articles-217593_recurso_pdf.pdf" }
+      ]},
+
       { id:"L9", text:"Opinión escrita y argumentación", weight:2, links:[] }
     ],
 
@@ -520,16 +610,34 @@ const CURRICULUM = {
     ],
 
     guitarra: [
-      { id:"G1", text:"Partes de la guitarra", weight:1, links:[] },
-      { id:"G2", text:"Postura y agarre", weight:1, links:[] },
+      { id:"G1", text:"Partes de la guitarra", weight:1, links:[
+        { label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+      ]},
+
+      { id:"G2", text:"Postura y agarre", weight:1, links:[
+        { label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+      ]},
+
       { id:"G3", text:"Primeros acordes (Em, A, D)", weight:2, links:[
-        { label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" },
+        { label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" },
+        { label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+      ]},
+
+      { id:"G4", text:"Acordes básicos (G, C)", weight:2, links:[
         { label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
-      ]}, /* curso y playlist */
-      { id:"G4", text:"Acordes básicos (G, C)", weight:2, links:[] },
-      { id:"G5", text:"Cambio de acordes", weight:2, links:[] },
-      { id:"G6", text:"Ritmo básico", weight:2, links:[] },
-      { id:"G7", text:"Primera canción simple", weight:2, links:[] }
+      ]},
+
+      { id:"G5", text:"Cambio de acordes", weight:2, links:[
+        { label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+      ]},
+
+      { id:"G6", text:"Ritmo básico", weight:2, links:[
+        { label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+      ]},
+
+      { id:"G7", text:"Primera canción simple", weight:2, links:[
+        { label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
+      ]}
     ]
   }
 };
@@ -568,7 +676,7 @@ function interleaveSubjects(studentId, subjectPlans){
       if (!item) return;
 
       result.push({
-        id: `${subject}_${item.id}_${i}`,   // ✅ único por sesión
+        id: `${subject}_${item.id}_${i}`,
         text: item.text,
         subject,
         links: item.links || [],
@@ -576,6 +684,7 @@ function interleaveSubjects(studentId, subjectPlans){
       });
     });
   }
+
   return result;
 }
 
@@ -1074,7 +1183,7 @@ function render(){
 
   const seq = ++PLAN_RENDER_SEQ;
 
-  if (PLAN_CACHE[dateKey]){
+  if (PLAN_CACHE[dateKey] && PLAN_CACHE[dateKey].planVersion === PLAN_VERSION){
     return renderWithPlan(PLAN_CACHE[dateKey], d, userFilter, onlyPending, examMode);
   }
 
@@ -1247,6 +1356,7 @@ document.getElementById("exportBtn").addEventListener("click", ()=>{
   a.click();
   URL.revokeObjectURL(a.href);
 });
+
 document.getElementById("importBtn").addEventListener("click", ()=> document.getElementById("importFile").click());
 document.getElementById("importFile").addEventListener("change", async (e)=>{
   const f = e.target.files?.[0];
@@ -1312,5 +1422,7 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   render();
 })();
 </script>
+
+  
 </body>
 </html>
