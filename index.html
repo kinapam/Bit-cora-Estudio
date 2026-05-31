@@ -261,7 +261,9 @@
 
         <label class="toggle"><input type="checkbox" id="onlyPending" /> Solo pendientes</label>
         <label class="toggle"><input type="checkbox" id="examMode" /> Modo examen</label>
+        <label class="toggle"><input type="checkbox" id="parentMode" /> Modo adulto</label>
 
+        
         <button class="iconBtn" id="settingsBtn" title="Ajustes">⚙️</button>
       </div>
     </div>
@@ -395,7 +397,7 @@ o
  *  ========================= */
 const RANGE = { start: "2026-05-25", end: "2026-09-15" };
 const EXCLUDED = new Set(["2026-06-29","2026-07-16","2026-08-04","2026-09-03"]);
-const PLAN_VERSION = 7;
+const PLAN_VERSION = 8;
 
 function iso(d){ return d.toISOString().slice(0,10); }
 function parseISO(s){ const [y,m,dd]=s.split("-").map(Number); return new Date(y, m-1, dd); }
@@ -417,36 +419,89 @@ function dayLabel(d){
  *  ========================= */
 const CURRICULUM = {
   deadpool: {
-    matematicas: [
-      { id:"M1", text:"Números y valor posicional", weight:2, links:[{ label:"Guía valor posicional 5°", url:"https://rural.mineduc.cl/wp-content/uploads/sites/22/2020/04/Mat_5Basico_Semana1.pdf" }] },
-      { id:"M2", text:"Suma y resta", weight:2, links:[{ label:"Aprendo en Línea · Matemática 5° básico", url:"https://aprendoenlinea.mineduc.gob.cl/1o-6o-basico/5-basico/matematica" }]},
-      { id:"M3", text:"Multiplicación", weight:3, links:[{ label:"MINEDUC · 5º U1 Cap.2 Multiplicación", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-1-capitulo-2-multiplicacion" }]},
-      { id:"M4", text:"División", weight:3, links:[{ label:"MINEDUC · MA05 OA04 División", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Matematica-5-basico/MA05-OA-04/17642:MA05-OA-04" }]},
-      { id:"M5", text:"Problemas matemáticos", weight:2, links:[{ label:"Problemas matemáticos 5° básico", url:"https://www.curriculumnacional.cl/recursos/problemas-matematicos-basicos" }] },
-      { id:"M6", text:"Fracciones básicas", weight:2, links:[
-                                                             { label:"MINEDUC · 5º U2 Cap.8 Fracciones", url:"https://www.curriculumnacional.cl/recursos/5o-basico-unidad-2-capitulo-8-fracciones" },
-                                                             { label:"MINEDUC · ¿Qué aprendí? Fracciones", url:"https://www.curriculumnacional.cl/recursos/aprendi-5o-basico-unidad-2-capitulo-8-fracciones" }]},
-      { id:"M7",  text:"Introducción a decimales",  weight:2,  links:[
-                                                               { label:"MINEDUC · MA05 OA07 Decimales", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/5-basico/ma05-oa-07"},
-                                                               { label:"Actividad decimales paso a paso", url:"https://www.curriculumnacional.cl/recursos/decimales-explicacion-ejercicios" }]},
-      {  id:"M8",  text:"Geometría básica",  weight:2,  links:[{ label:"MA05 OA14 Figuras 2D", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/5-basico/ma05-oa-14" },
-                                                               { label:"Actividad figuras geométricas", url:"https://www.curriculumnacional.cl/recursos/identificar-figuras-geometricas" }]},
-      { id:"M9", text:"Medición", weight:2, links:[{ label:"Unidades de medida guía", url:"https://www.curriculumnacional.cl/recursos/medicion-unidades" }] },
-      { id:"M10", text:"Gráficos y datos", weight:1, links:[{ label:"Interpretación de gráficos", url:"https://www.curriculumnacional.cl/recursos/graficos-tablas" }] },
-    ],
+   matematicas: [
+  {
+    id:"M1",
+    title:"Valor posicional y descomposición",
+    oa:"OA1",
+    criterion:"Identificar el valor posicional de los dígitos, componer y descomponer números naturales y ordenarlos.",
+    objective:"Reconocer el valor de cada cifra dentro de un número grande.",
+    learnContent:"En un número, cada cifra vale según su posición: unidades, decenas, centenas, unidades de millar, decenas de millar y centenas de millar.\nEjemplo: 345.678 = 300.000 + 40.000 + 5.000 + 600 + 70 + 8.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve los siguientes ejercicios.",
+      questions:[
+        "Descompón: 482.315",
+        "Descompón: 706.094",
+        "Ordena de menor a mayor: 456.321, 465.231, 405.623",
+        "¿Qué cifra ocupa la decena de millar en 582.417?"
+      ]
+    },
+    evidence:"Resolver correctamente las descomposiciones, el orden y la identificación de posición.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"M2",
+    title:"Problemas con dinero",
+    oa:"OA6",
+    criterion:"Resolver problemas que involucren las cuatro operaciones en situaciones de dinero.",
+    objective:"Escoger la operación correcta en un problema cotidiano con dinero.",
+    learnContent:"Antes de resolver, piensa qué está ocurriendo:\n- juntar = suma\n- quitar = resta\n- grupos iguales = multiplicación\n- repartir = división",
+    activity:{
+      type:"problem_solving",
+      text:"Lucas tiene $3.500. Compra un jugo por $900 y un pan por $700.\n\nResponde:\n1. ¿Cuánto dinero gastó en total?\n2. ¿Cuánto dinero le quedó?\n3. Explica qué operaciones usaste."
+    },
+    evidence:"Resolver el problema y explicar el procedimiento.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+],
+
 
     lenguaje: [
-      { id:"L1", text:"Lectura guiada", weight:2, links:[{ label:"Texto lectura 5° básico", url:"https://rural.mineduc.cl/wp-content/uploads/sites/22/2020/10/5to-Len-Semana1.pdf" }]},
-      { id:"L2", text:"Comprensión literal", weight:2, links:[{ label:"Guía comprensión lectora OA4", url:"https://centroderecursos.educarchile.cl/items/9a802388-9f29-434d-b91a-014c59d09078" }]},
-      { id:"L3", text:"Comprensión básica", weight:2, links:[{ label:"Fichas comprensión 5°", url:"https://www.fundacionarauco.cl/recurso/fichas-de-comprension-lectora-5-basico/" }]},
-      { id:"L4", text:"Vocabulario", weight:2, links:[{ label:"Ejercicios vocabulario y comprensión", url:"https://www.rmm.cl/portales/3622/recursos/fichas-de-comprension-5deg-basico" }]},
-      { id:"L5", text:"Escritura de oraciones", weight:2, links:[{ label:"Escritura de oraciones guía 5°", url:"https://rural.mineduc.cl/wp-content/uploads/sites/22/2020/10/5to-Len-Semana1.pdf" }] },
-      { id:"L6", text:"Pequeños textos", weight:2, links:[
-        { label:"MINEDUC · LE05 OA14 Escritura de narraciones", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-14/17272:LE05-OA-14" },
-        { label:"MINEDUC · Actividad LE05 OA14", url:"https://www.curriculumnacional.cl/recursos/le05-oa14-u2-a1" },
-        { label:"MINEDUC · LE05 OA15 Artículo informativo", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Lenguaje-y-comunicacion-5-basico/LE05-OA-15/17273:LE05-OA-15" },
-        { label:"MINEDUC · OA15 Escribiendo un informe", url:"https://www.curriculumnacional.cl/recursos/evaluacion-programas-oa15-escribiendo-informe-0" }]},
-    ],
+  {
+    id:"L1",
+    title:"Comprensión de narración breve",
+    oa:"OA4",
+    criterion:"Extraer información explícita e implícita en narraciones, y opinar sobre acciones de personajes fundamentando con información del texto.",
+    objective:"Comprender una narración breve y distinguir entre información explícita e implícita.",
+    learnContent:"Una respuesta explícita sale directamente del texto.\nUna respuesta implícita se deduce a partir de pistas.\nUna opinión fundamentada incluye una razón basada en lo leído.",
+    activity:{
+      type:"reading_questions",
+      text:"Alicia salió temprano de casa porque el cielo estaba gris. Su hermano le dijo que llevara paraguas, pero Alicia respondió que no era necesario. A mitad de camino al almacén comenzó a llover fuerte. Alicia intentó cubrir su mochila con la chaqueta, pero los cuadernos igual se mojaron. Cuando volvió, dijo: 'La próxima vez escucharé mejor'.",
+      questions:[
+        "¿Por qué Alicia salió temprano?",
+        "¿Quién le aconsejó llevar paraguas?",
+        "¿Por qué los cuadernos se mojaron?",
+        "¿Qué aprendió Alicia?",
+        "¿Te parece responsable Alicia? Explica tu respuesta."
+      ]
+    },
+    evidence:"Responder por escrito las preguntas del texto.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"L2",
+    title:"Escritura de narración breve",
+    oa:"OA14",
+    criterion:"Escribir narraciones con estructura clara, conectores adecuados, descripciones y un conflicto evidente.",
+    objective:"Escribir una historia corta con inicio, problema y final.",
+    learnContent:"Una narración breve debe tener tres partes:\n1. inicio: quién y dónde\n2. problema: qué ocurre\n3. final: cómo se resuelve\nPuedes usar conectores como primero, después y al final.",
+    activity:{
+      type:"writing",
+      text:"Escribe una historia de 6 a 8 líneas que comience así:\n\n“Primero, un perro pequeño encontró una caja en el patio…”\n\nTu historia debe incluir:\n- un lugar\n- un problema\n- una solución"
+    },
+    evidence:"Escribir un texto con inicio, problema y final.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+],
 
     ciencias: [
       { id:"C1", text:"Seres vivos", weight:2, links:[
@@ -493,55 +548,98 @@ const CURRICULUM = {
 
   may: {
     matematicas: [
-      { id:"M1", text:"Valor posicional y números grandes", weight:2, links:[{ label:"Valor posicional guía 6° básico", url:"https://rural.mineduc.cl/wp-content/uploads/sites/22/2020/04/Mat_5Basico_Semana1.pdf" }] },
-      { id:"M2", text:"Operaciones básicas (+, −, ×, ÷)", weight:3, links:[{ label:"Operaciones básicas ejercicios", url:"https://www.curriculumnacional.cl/recursos/operaciones-basicas-ejercicios" }] },
-      { id:"M3", text:"Problemas matemáticos", weight:3, links:[{ label:"Problemas matemáticos 6°", url:"https://www.curriculumnacional.cl/recursos/problemas-matematicos-basicos" }] },
-      { id:"M4", text:"Fracciones (equivalencias y operaciones)", weight:3, links:[
-          { label:"MINEDUC · MA06 OA06 Fracciones", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-06" },
-          { label:"Ejercicios fracciones paso a paso", url:"https://www.curriculumnacional.cl/recursos/fracciones-ejercicios-resueltos" }]},
-      { id:"M5", text:"Decimales y relación con fracciones", weight:2, links:[
-          { label:"MA06 OA07 Decimales", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-07" },
-          { label:"Relación fracción-decimal", url:"https://www.curriculumnacional.cl/recursos/fraccion-decimal-relacion" }]},
-      { id:"M6", text:"Porcentaje", weight:2, links:[
-          { label:"MINEDUC · 6º U4 Cap.15 Porcentajes", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-4-capitulo-15-porcentajes" }]},
-      { id:"M7", text:"Razones y proporciones", weight:2, links:[
-          { label:"MINEDUC · 6º U3 Cap.14 Razones", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-3-capitulo-14-razones" },
-          { label:"MINEDUC · Inicio de razones", url:"https://www.curriculumnacional.cl/recursos/inicio-razones" }]},
-      { id:"M8", text:"Álgebra básica (ecuaciones simples)", weight:2, links:[
-          { label:"MINEDUC · MA06 OA11 Ecuaciones", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-11" },
-          { label:"MINEDUC · Actividad MA06 OA11", url:"https://www.curriculumnacional.cl/recursos/ma-06b-oa-11-u2-a1" }]},
-      { id:"M9", text:"Geometría (figuras y ángulos)", weight:2, links:[
-          { label:"MINEDUC · 6º U1 Cap.3 Ángulos", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-1-capitulo-3-angulos" },
-          { label:"MINEDUC · MA06 OA16 Ángulos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-16" }]},
-      { id:"M10", text:"Área y volumen", weight:2, links:[
-          { label:"MINEDUC · 6º U1 Cap.5 Área de cubos y paralelepípedos", url:"https://www.curriculumnacional.cl/recursos/6o-basico-unidad-1-capitulo-5-area-cubos-paralelepipedos" },
-          { label:"MINEDUC · MA06 OA19 Volumen", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-19" }]},
-      { id:"M11", text:"Datos y gráficos", weight:2, links:[
-          { label:"MINEDUC · MA06 OA24 Gráficos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/matematica/6-basico/ma06-oa-24" },
-          { label:"MINEDUC · Actividad MA06 OA24", url:"https://www.curriculumnacional.cl/recursos/ma-06b-oa-24-u4-a6" }]}
-    ],
+  {
+    id:"15,    id:"M1",
+    weight:1,
+    links:[]
+  }
+],
+    title:"Fracciones impropias y números mixtos",
+    oa:"OA5",
+    criterion:"Expresar fracciones impropias como números mixtos y viceversa.",
+    objective:"Transformar fracciones impropias en números mixtos y convertir números mixtos en fracciones impropias.",
+    learnContent:"Una fracción impropia tiene numerador mayor que denominador.\nPara convertir 7/3 a número mixto, divide 7 entre 3: caben 2 y sobra 1. Entonces 7/3 = 2 1/3.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve los siguientes ejercicios.",
+      questions:[
+        "Convierte 9/4 a número mixto.",
+        "Convierte 11/2 a número mixto.",
+        "Convierte 8/3 a número mixto.",
+        "Convierte 1 2/5 a fracción impropia.",
+        "Convierte 3 1/4 a fracción impropia."
+      ]
+    },
+    evidence:"Resolver correctamente al menos 4 de los 5 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"M2",
+    title:"Porcentaje como parte de 100",
+    oa:"OA4",
+    criterion:"Expresar porcentajes como fracción o decimal y resolver problemas que involucren porcentajes.",
+    objective:"Entender el porcentaje como una parte de cada 100.",
+    learnContent:"El porcentaje significa 'de cada 100'.\n25% = 25 de cada 100\n50% = la mitad\n10% = 10 de cada 100",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve los siguientes ejercicios.",
+      questions:[
+        "25% de 100 =",
+        "50% de 200 =",
+        "10% de 80 =",
+        "En una clase hay 20 estudiantes. Si el 50% lleva cuaderno azul, ¿cuántos estudiantes son?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de los 4 ejercicios.",
 
     lenguaje: [
-      { id:"L1", text:"Lectura básica fluida", weight:2, links:[{ label:"Lectura fluida y comprensión 6°", url:"https://centroderecursos.educarchile.cl/items/9a802388-9f29-434d-b91a-014c59d09078" }] },
-      { id:"L2", text:"Comprensión literal", weight:2, links:[
-        { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" },
-        { label:"educarchile · Actividad OA2 Comprensión lectora", url:"https://centroderecursos.educarchile.cl/items/6dccd77e-a4c1-4be1-8143-c9589b080daa" }]},
-      { id:"L3", text:"Comprensión inferencial", weight:3, links:[
-        { label:"MINEDUC · Lenguaje 6° básico (OA comprensión)", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }]},
-      { id:"L4", text:"Análisis de textos", weight:3, links:[
-        { label:"MINEDUC · Lenguaje 6° básico", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico" }]},
-      { id:"L5", text:"Vocabulario y ortografía", weight:2, links:[{ label:"Vocabulario y comprensión ejercicios", url:"https://www.fundacionarauco.cl/recurso/fichas-de-comprension-lectora-5-basico/" }] },
-      { id:"L6", text:"Escritura de oraciones", weight:2, links:[{ label:"Guía escritura de oraciones", url:"https://centroderecursos.educarchile.cl/items/9a802388-9f29-434d-b91a-014c59d09078" }] },
-      { id:"L7", text:"Redacción de textos narrativos", weight:3, links:[
-        { label:"MINEDUC · LE06 OA14 Escritura creativa", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-14" },
-        { label:"MINEDUC · Actividad LE06 OA14", url:"https://www.curriculumnacional.cl/recursos/le06-oa14-u1-a4" },
-        { label:"MINEDUC · Aprendo TV OA14", url:"https://www.curriculumnacional.cl/recursos/aprendo-tv-lenguaje-5-6-basico-capitulo-06-oa14-escritura-creativa" }]},
-      { id:"L8", text:"Redacción informativa", weight:3, links:[
-        { label:"MINEDUC · LE06 OA15 Artículo informativo", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/lenguaje-comunicacion/6-basico/le06-oa-15" },
-        { label:"MINEDUC · Actividad LE06 OA15", url:"https://www.curriculumnacional.cl/recursos/le06-oa15-u2-a4" },
-        { label:"MINEDUC · Recurso OA15 PDF", url:"https://www.curriculumnacional.cl/sites/default/files/newtenberg/614/articles-217593_recurso_pdf.pdf" }]},
-      { id:"L9", text:"Opinión escrita y argumentación", weight:2, links:[] }
-    ],
+  {
+ causa-consecuencia en las acciones ocurridas en narraciones.",    id:"L1",
+    objective:"Reconocer qué hecho provoca otro dentro de una narración.",
+    learnContent:"La causa es lo que hace que algo ocurra.\nLa consecuencia es lo que ocurre después por esa causa.",
+    activity:{
+      type:"reading_questions",
+      text:"Tomás debía llevar un cartel para la feria científica. Lo dejó junto a la puerta la noche anterior, pero por la mañana salió con prisa y no lo tomó. En el colegio, cuando llegó su turno de exponer, se dio cuenta de que no lo tenía. Tuvo que explicar el experimento solo de memoria. Aunque lo hizo bastante bien, prometió revisar su mochila antes de salir de casa.",
+      questions:[
+        "¿Qué olvidó Tomás?",
+        "¿Por qué olvidó el cartel?",
+        "¿Qué consecuencia tuvo ese olvido?",
+        "¿Qué aprendió Tomás al final?",
+        "Escribe una oración de causa y otra de consecuencia."
+      ]
+    },
+    evidence:"Responder correctamente las preguntas y escribir una causa y una consecuencia.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"L2",
+    title:"Opinión fundamentada sobre un personaje",
+    oa:"OA4",
+    criterion:"Expresar opiniones sobre actitudes y acciones de personajes, fundamentándolas con ejemplos del texto.",
+    objective:"Escribir una opinión breve, clara y fundamentada.",
+    learnContent:"Una opinión fundamentada debe decir lo que piensas y agregar una razón usando información del texto.\nPuedes usar: “Creo que… porque en el texto…”",
+    activity:{
+      type:"reading_questions",
+      text:"Sofía vio a un compañero nuevo en el recreo. Como estaba solo, le preguntó si quería jugar. El compañero aceptó y luego le agradeció la invitación.",
+      questions:[
+        "¿Qué hizo Sofía?",
+        "¿Te parece una buena actitud?",
+        "Escribe tu opinión en 3 líneas usando esta estructura: Creo que… porque en el texto…"
+      ]
+    },
+    evidence:"Escribir una opinión con una razón basada en el texto.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  }
+],
+    title:"Causa y consecuencia en narraciones",
+    oa:"OA4",
+
 
     ciencias: [
       {id:"C1", text:"Seres vivos y organización",  weight:2,  links:[{ label:"Sistema de clasificación de seres vivos", url:"https://www.curriculumnacional.cl/recursos/clasificacion-seres-vivos" }]},
@@ -615,10 +713,18 @@ function interleaveSubjects(studentId, subjectPlans){
 
       result.push({
         id: `${subject}_${item.id}_${i}`,
-        text: item.text,
         subject,
+        title: item.title || item.text || "Cápsula",
+        text: item.text || item.title || "Cápsula",
+        oa: item.oa || "",
+        criterion: item.criterion || "",
+        objective: item.objective || "",
+        learnContent: item.learnContent || "",
+        activity: item.activity || null,
+        evidence: item.evidence || "",
+        durationMin: item.durationMin || 20,
         links: item.links || [],
-        keywords: `${item.text} ${subject} explicación ejercicios paso a paso`
+        keywords: item.keywords || `${item.title || item.text || ""} ${subject} explicación ejercicios paso a paso`
       });
     });
   }
@@ -902,6 +1008,7 @@ function renderLinksEditor({date, studentId, subject, blockKey, taskId, currentL
 }
 
 function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPending}){
+  const parentMode = document.getElementById("parentMode")?.checked || false;
   const st = getItemState(date, studentId, subject, blockKey, task.id) || {};
   const done = !!st.done;
   const parentOk = !!st.parentOk;
@@ -920,42 +1027,108 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
   ));
 
   const body = el("div");
+
+  // CABECERA
   body.appendChild(el("div", { class:"tTitle" }, [
-    el("strong", {}, [task.text]),
-    el("span", {}, [ parentOk ? "Validado ✅" : "Sin validar" ])
+    el("strong", {}, [task.title || task.text || "Cápsula"]),
+    el("span", {}, [`${task.durationMin || 20} min`])
   ]));
 
-  if (!examMode){
-    const linksBox = el("div", { class:"links" });
-    if (effectiveLinks.length){
-      linksBox.appendChild(el("strong", {}, ["Enlaces directos (contenido): "]));
-      effectiveLinks.forEach((l, idx) => {
-        linksBox.appendChild(el("a", { href:l.url, target:"_blank", rel:"noopener noreferrer" }, [l.label]));
-        if (idx < effectiveLinks.length - 1) linksBox.appendChild(document.createTextNode(" · "));
-      });
-    } else {
-      linksBox.innerHTML = "<strong>Enlaces directos:</strong> (ninguno aún). Usa los botones de búsqueda guiada abajo o añade uno.";
+  // OA
+  if (task.oa){
+    body.appendChild(el("div", { class:"small", style:"margin-top:6px; font-weight:700; color:#0b4a7b;" }, [
+      `OA: ${task.oa}`
+    ]));
+  }
+
+  // OBJETIVO
+  if (task.objective){
+    body.appendChild(el("div", { class:"mutedBox", style:"margin-top:8px;" }, [
+      el("strong", { style:"font-size:12px;" }, ["Objetivo de la sesión"]),
+      el("div", { class:"small", style:"margin-top:6px;" }, [task.objective])
+    ]));
+  }
+
+  // CONTENIDO A APRENDER
+  if (task.learnContent){
+    body.appendChild(el("div", { class:"mutedBox", style:"margin-top:8px;" }, [
+      el("strong", { style:"font-size:12px;" }, ["Contenido a aprender"]),
+      el("div", { class:"small", style:"margin-top:6px; line-height:1.45; white-space:pre-wrap;" }, [task.learnContent])
+    ]));
+  }
+
+  // ACTIVIDAD
+  if (task.activity){
+    const actBox = el("div", { class:"mutedBox", style:"margin-top:8px;" });
+    actBox.appendChild(el("strong", { style:"font-size:12px;" }, ["Actividad"]));
+
+    if (task.activity.text){
+      actBox.appendChild(el("div", {
+        class:"small",
+        style:"margin-top:8px; line-height:1.5; white-space:pre-wrap;"
+      }, [task.activity.text]));
     }
-    body.appendChild(linksBox);
 
-    body.appendChild(renderSmartButtons(task.keywords));
+    if (Array.isArray(task.activity.questions) && task.activity.questions.length){
+      const list = el("ol", { class:"small", style:"margin-top:8px; padding-left:18px; line-height:1.6;" });
+      task.activity.questions.forEach(q => {
+        list.appendChild(el("li", {}, [q]));
+      });
+      actBox.appendChild(list);
+    }
 
-    const editor = renderLinksEditor({
-      date, studentId, subject, blockKey, taskId: task.id,
-      currentLinks: st.links || [],
-      examMode
+    body.appendChild(actBox);
+  }
+
+  // EVIDENCIA
+  if (task.evidence){
+    body.appendChild(el("div", { class:"small", style:"margin-top:8px; color:#166534; font-weight:700;" }, [
+      `Evidencia esperada: ${task.evidence}`
+    ]));
+  }
+
+  // APOYO OPCIONAL
+  if (!examMode && effectiveLinks.length){
+    const linksBox = el("div", { class:"links" });
+    linksBox.appendChild(el("strong", {}, ["Apoyo opcional: "]));
+    effectiveLinks.forEach((l, idx) => {
+      linksBox.appendChild(el("a", { href:l.url, target:"_blank", rel:"noopener noreferrer" }, [l.label]));
+      if (idx < effectiveLinks.length - 1) {
+        linksBox.appendChild(document.createTextNode(" · "));
+      }
     });
-    if (editor) body.appendChild(editor);
+    body.appendChild(linksBox);
+  }
 
-    const ta = el("textarea", { placeholder:"Notas (resumen/dudas/evidencia)…" });
-    ta.value = st.note || "";
-    ta.addEventListener("change", ()=> {
+  // RESPUESTA DEL ESTUDIANTE
+  const ta = el("textarea", { placeholder:"Respuesta del estudiante…" });
+  ta.value = st.studentAnswer || "";
+  ta.addEventListener("change", () => {
+    setItemState(
+      { date, studentId, subject, blockKey, taskId: task.id },
+      { studentAnswer: ta.value }
+    );
+  });
+  body.appendChild(ta);
+
+  // MODO ADULTO
+  if (parentMode){
+    if (task.criterion){
+      body.appendChild(el("div", { class:"mutedBox", style:"margin-top:8px;" }, [
+        el("strong", { style:"font-size:12px;" }, ["Criterio de evaluación"]),
+        el("div", { class:"small", style:"margin-top:6px; line-height:1.45; white-space:pre-wrap;" }, [task.criterion])
+      ]));
+    }
+
+    const adultObs = el("textarea", { placeholder:"Observación del adulto…" });
+    adultObs.value = st.parentObservation || "";
+    adultObs.addEventListener("change", () => {
       setItemState(
         { date, studentId, subject, blockKey, taskId: task.id },
-        { note: ta.value }
+        { parentObservation: adultObs.value }
       );
     });
-    body.appendChild(ta);
+    body.appendChild(adultObs);
 
     const ok = el("input", { type:"checkbox", style:"margin-right:8px;" });
     ok.checked = parentOk;
@@ -963,12 +1136,12 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
       {date, studentId, subject, blockKey, taskId: task.id},
       { parentOk: ok.checked }
     ));
-    body.appendChild(el("label", { class:"small" }, [ok, document.createTextNode("Validado por padre/madre")]));
-  } else {
-    body.appendChild(el("div", { class:"small", style:"margin-top:8px;" }, [
-      "Modo examen: usa los botones de búsqueda para ver/repasar y luego explica lo aprendido."
-    ]));
-    body.appendChild(renderSmartButtons(task.keywords));
+    body.appendChild(el("label", { class:"small" }, [ok, document.createTextNode("Validado por adulto")]));
+  }
+
+  // BÚSQUEDA OPCIONAL
+  if (!examMode){
+    body.appendChild(renderSmartButtons(task.keywords || ""));
   }
 
   wrap.appendChild(cb);
@@ -1195,7 +1368,7 @@ function renderWithPlan(day, d, userFilter, onlyPending, examMode){
     }
 
     document.getElementById("statsBox").textContent =
-      `Hoy: ${pr.done}/${pr.total}. ` + (examMode ? "Modo examen activo." : "Añade enlaces directos si encuentras un vídeo exacto.");
+      `Hoy: ${pr.done}/${pr.total}. ` + (examMode ? "Modo examen activo." : "Cápsulas pedagógicas activas.");
   } else {
     document.getElementById("titleNote").textContent = day.message;
     document.getElementById("dayTypePill").className = "pill warn";
@@ -1225,6 +1398,7 @@ document.getElementById("backBtn").addEventListener("click", ()=> showPage("toda
 (function initSettings(){
   document.getElementById("familyCode").value = localStorage.getItem("hs_family") || "casa2026";
   document.getElementById("firebaseConfig").value = localStorage.getItem("hs_fb_cfg") || "";
+  document.getElementById("parentMode").checked = localStorage.getItem("hs_parent_mode") === "true";
 })();
 
 document.getElementById("saveFamilyBtn").addEventListener("click", ()=>{
@@ -1323,6 +1497,9 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   document.getElementById("userPick").addEventListener("change", render);
   document.getElementById("onlyPending").addEventListener("change", render);
   document.getElementById("examMode").addEventListener("change", render);
+  document.getElementById("parentMode").addEventListener("change", (e) => {localStorage.setItem("hs_parent_mode", e.target.checked ? "true" : "false");  
+                                                                          render();
+  
 
   family = localStorage.getItem("hs_family") || "casa2026";
   const cfgText = localStorage.getItem("hs_fb_cfg") || "";
