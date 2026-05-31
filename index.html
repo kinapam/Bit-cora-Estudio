@@ -1498,6 +1498,7 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
   document.getElementById("examMode").addEventListener("change", render);
   document.getElementById("parentMode").addEventListener("change", (e) => {localStorage.setItem("hs_parent_mode", e.target.checked ? "true" : "false");  
                                                                           render();
+                                                                          });
   
 
   family = localStorage.getItem("hs_family") || "casa2026";
