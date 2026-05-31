@@ -397,7 +397,7 @@ o
  *  ========================= */
 const RANGE = { start: "2026-05-25", end: "2026-09-15" };
 const EXCLUDED = new Set(["2026-06-29","2026-07-16","2026-08-04","2026-09-03"]);
-const PLAN_VERSION = 8;
+const PLAN_VERSION = 9;
 
 function iso(d){ return d.toISOString().slice(0,10); }
 function parseISO(s){ const [y,m,dd]=s.split("-").map(Number); return new Date(y, m-1, dd); }
