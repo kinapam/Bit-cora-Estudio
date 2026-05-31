@@ -501,19 +501,137 @@ links:[]
 }
 ],
 ciencias: [
-{ id:"C1", text:"Seres vivos", weight:2, links:[
-{ label:"MINEDUC · CN05 OA01", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-01" },
-{ label:"MINEDUC · Niveles de organización de los seres vivos", url:"https://www.curriculumnacional.cl/recursos/niveles-organizacion-seres-vivos" }]},
-{ id:"C2", text:"Cuerpo humano", weight:2, links:[{label:"Sistema cuerpo humano guía", url:"https://www.curriculumnacional.cl/recursos/cuerpo-humano-sistemas"}]},
-{ id:"C3", text:"Energía", weight:2, links:[
-{ label:"MINEDUC · CN05 OA10 Conductores y aislantes", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-10" },
-{ label:"MINEDUC · Aislantes y conductores de electricidad", url:"https://www.curriculumnacional.cl/recursos/aislantes-conductores-electricidad" }]},
-{ id:"C4", text:"Materia", weight:2, links:[
-{ label:"MINEDUC · CN05 OA07 Microorganismos e higiene", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/ciencias-naturales/5-basico/cn05-oa-07" }]},
-{ id:"C5", text:"Agua y medio ambiente", weight:2, links:[
-{ label:"MINEDUC · Distribución de agua dulce y salada", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-12/19427:Distribucion-de-agua-dulce-y-salada" },
-{ label:"MINEDUC · Cómo hacer agua dulce de agua salada", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Ciencias-Naturales-5-basico/CN05-OA-12/19426:Como-hacer-agua-dulce-de-agua-salada" },
-{ label:"MINEDUC · El ciclo del agua", url:"https://www.curriculumnacional.cl/recursos/ciclo-agua-0" }]},
+  {
+    id:"C1",
+    title:"Organización de los seres vivos",
+    oa:"OA1",
+    criterion:"Reconocer que los seres vivos se organizan en célula, tejido, órgano, sistema y organismo.",
+    objective:"Comprender los niveles de organización de los seres vivos.",
+    learnContent:"Los seres vivos se organizan así:\ncélula → tejido → órgano → sistema → organismo",
+    activity:{
+      type:"classification",
+      text:"Ordena correctamente los siguientes conceptos.",
+      questions:[
+        "célula",
+        "órgano",
+        "sistema",
+        "tejido",
+        "organismo"
+      ]
+    },
+    evidence:"Ordenar correctamente los niveles y explicarlos brevemente.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"C2",
+    title:"Ciclo del agua",
+    oa:"OA12",
+    criterion:"Reconocer el ciclo del agua y sus etapas.",
+    objective:"Comprender cómo circula el agua en la naturaleza.",
+    learnContent:"El ciclo del agua tiene 4 etapas:\nevaporación, formación de nubes, lluvia y retorno a ríos y mares.",
+    activity:{
+      type:"drawing_explanation",
+      text:"Dibuja el ciclo del agua e identifica sus etapas.\nLuego explica qué ocurre en cada una."
+    },
+    evidence:"Dibujo correcto + explicación simple.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+],
+ingles: [
+  {
+    id:"EN1",
+    title:"Comprensión de texto simple",
+    oa:"OA5",
+    criterion:"Leer textos simples y responder preguntas sobre información explícita.",
+    objective:"Comprender información básica en un texto corto en inglés.",
+    learnContent:"En textos simples en inglés, busca palabras clave como nombre, edad, gustos y familia.",
+    activity:{
+      type:"reading_questions",
+      text:"My name is Ben. I am ten years old. I live with my mother and my sister. I like apples and milk.",
+      questions:[
+        "What is the boy’s name?",
+        "How old is Ben?",
+        "Who does Ben live with?",
+        "What does Ben like?",
+        "Write one sentence: I like ______."
+      ]
+    },
+    evidence:"Responder correctamente las preguntas y escribir una frase propia.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"ENR1",
+    title:"Uso de frases simples",
+    oa:"OA15",
+    criterion:"Escribir frases simples en inglés.",
+    objective:"Reforzar escritura básica en inglés.",
+    learnContent:"Frases simples usan:\nI + verbo + complemento\nEjemplo: I like apples",
+    activity:{
+      type:"writing",
+      text:"Escribe 4 frases:",
+      questions:[
+        "I like ______",
+        "I have ______",
+        "I am ______",
+        "I can ______"
+      ]
+    },
+    evidence:"Frases comprensibles.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  }
+],
+refuerzo: [
+  {
+    id:"R1",
+    title:"Repaso de comprensión lectora",
+    oa:"OA4",
+    criterion:"Responder preguntas de comprensión identificando información explícita e implícita.",
+    objective:"Revisar habilidades de comprensión lectora.",
+    learnContent:"Para comprender un texto debes:\n- leer con atención\n- buscar información clave\n- responder usando el texto",
+    activity:{
+      type:"reading_questions",
+      text:"Juan salió sin chaqueta. El cielo estaba nublado, pero pensó que no llovería. Después de unos minutos comenzó a llover fuerte y Juan se mojó completamente.",
+      questions:[
+        "¿Por qué Juan salió sin chaqueta?",
+        "¿Qué sucedió después?",
+        "¿Cometió un error Juan? ¿por qué?"
+      ]
+    },
+    evidence:"Respuestas correctas y explicación simple.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"R2",
+    title:"Mini evaluación matemática",
+    oa:"OA1-OA6",
+    criterion:"Aplicar operaciones y comprender números en situaciones simples.",
+    objective:"Demostrar dominio básico en matemáticas.",
+    learnContent:"Aplica lo aprendido en ejercicios y problemas.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "Descompón 345.678",
+        "Ordena: 450.321, 405.999, 499.100",
+        "Resuelve: 36 × 4",
+        "Problema: Si tienes $2000 y gastas $750, ¿cuánto te queda?"
+      ]
+    },
+    evidence:"Resolver al menos 3 correctamente.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
 ],
 historia: [
 { id:"H1", text:"Zonas geográficas", weight:2, links:[
@@ -586,7 +704,29 @@ evidence: "Resolver correctamente al menos 3 de los 4 ejercicios.",
 durationMin: 15,
 weight: 1,
 links: []
-}
+},
+{
+    id:"ME2",
+    title:"Mini evaluación matemática",
+    oa:"OA2-OA5",
+    criterion:"Aplicar operaciones, fracciones y porcentajes.",
+    objective:"Demostrar habilidades matemáticas.",
+    learnContent:"Aplica lo aprendido sin apoyo.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Convierte 9/4 a número mixto",
+        "25% de 200 =",
+        "Resuelve: 45 × 3",
+        "Problema: Si compras algo por $1500 y pagas $2000, ¿cuánto te devuelven?"
+      ]
+    },
+    evidence:"Al menos 3 correctas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
 ],
 lenguaje: [
 {
@@ -632,25 +772,139 @@ evidence: "Escribir una opinión con una razón basada en el texto.",
 durationMin: 15,
 weight: 1,
 links: []
-}
+},
+{
+    id:"LR1",
+    title:"Comprensión y opinión",
+    oa:"OA4",
+    criterion:"Opinar fundamentando con información del texto.",
+    objective:"Demostrar comprensión y opinión.",
+    learnContent:"Una buena respuesta:\n- dice lo que piensas\n- incluye una razón\n- usa información del texto",
+    activity:{
+      type:"reading_questions",
+      text:"Carlos ayudó a un compañero a levantar sus cuadernos. El profesor destacó su acción frente al curso.",
+      questions:[
+        "¿Qué hizo Carlos?",
+        "¿Por qué fue importante?",
+        "¿Te parece correcta su acción? Explica."
+      ]
+    },
+    evidence:"Opinión con justificación.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  }
 ],
 ciencias: [
-{id:"C1", text:"Seres vivos y organización",  weight:2,  links:[{ label:"Sistema de clasificación de seres vivos", url:"https://www.curriculumnacional.cl/recursos/clasificacion-seres-vivos" }]},
-{id:"C2", text:"Sistema del cuerpo humano", weight:2, links:[{ label:"Guía cuerpo humano", url:"https://www.curriculumnacional.cl/recursos/cuerpo-humano-funcionamiento" }] },
-{id:"C3", text:"Energía y cambios",  weight:2,  links:[{ label:"Transformaciones de energía", url:"https://www.curriculumnacional.cl/recursos/transformaciones-energia" }]},
-{id:"C4", text:"Materia y propiedades", weight:2, links:[{ label:"Estados de la materia", url:"https://www.curriculumnacional.cl/recursos/estados-materia" }] },
-{id:"C5", text:"Ecosistemas",  weight:2,  links:[{ label:"Ecosistemas explicación", url:"https://www.curriculumnacional.cl/recursos/ecosistemas-funcionamiento" }]},
-{id:"C6", text:"Cuidado del medio ambiente", weight:2, links:[{ label:"Medio ambiente explicación", url:"https://www.curriculumnacional.cl/recursos/cuidado-medioambiente" }] }
+  {
+    id:"C1",
+    title:"Fotosíntesis",
+    oa:"OA1",
+    criterion:"Explicar el proceso de fotosíntesis identificando sus elementos.",
+    objective:"Comprender cómo las plantas producen su alimento.",
+    learnContent:"La fotosíntesis necesita:\nagua, dióxido de carbono y luz.\nProduce azúcar y oxígeno.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué necesita la planta para la fotosíntesis?",
+        "¿Qué produce?",
+        "¿Por qué es importante la luz?"
+      ]
+    },
+    evidence:"Responder correctamente y explicar en forma simple.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"C2",
+    title:"Tipos de energía",
+    oa:"OA8",
+    criterion:"Clasificar tipos de energía e identificar su origen.",
+    objective:"Reconocer diferentes tipos de energía.",
+    learnContent:"Energías renovables: sol, viento, agua.\nNo renovables: petróleo, carbón.",
+    activity:{
+      type:"classification",
+      text:"Clasifica las siguientes fuentes:",
+      questions:[
+        "Energía solar",
+        "Petróleo",
+        "Viento",
+        "Carbón"
+      ]
+    },
+    evidence:"Clasificación correcta.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  }
 ],
+
 historia: [
-{ id:"H1", text:"Formación de América", weight:2, links:[{ label:"Historia América básica", url:"https://www.curriculumnacional.cl/recursos/formacion-america" }] },
-{ id:"H2", text:"Conquista de América", weight:2, links:[{ label:"Conquista explicado claro", url:"https://www.curriculumnacional.cl/recursos/conquista-america" }] },
-{ id:"H3", text:"Colonia", weight:2, links:[{ label:"La colonia en Chile explicación", url:"https://www.curriculumnacional.cl/recursos/colonia-chile-explicacion" }] },
-{ id:"H4", text:"Independencia", weight:2, links:[
-{ label:"Proceso independencia Chile", url:"https://www.curriculumnacional.cl/recursos/independencia-chile-explicacion" },                
-{ label:"Guía completa independencia Chile", url:"https://www.col-cemar.cl/wp-content/uploads/2020/06/guia7_6tobasico_historia_independencia.pdf"}] },
-{ id:"H5", text:"Organización del Estado", weight:2, links:[{ label:"Organización Estado Chile", url:"https://www.curriculumnacional.cl/recursos/estado-chileno" }]},
-{ id:"H6", text:"Derechos y ciudadanía", weight:2, links:[{ label:"Formación ciudadana explicación", url:"https://www.curriculumnacional.cl/recursos/formacion-ciudadana" }] }
+  {
+    id:"H1",
+    title:"Independencia de Chile",
+    oa:"OA2",
+    criterion:"Describir el proceso de independencia de Chile.",
+    objective:"Comprender los eventos principales de la independencia.",
+    learnContent:"La independencia comenzó en 1810 con la Primera Junta.\nFue un proceso con avances y retrocesos.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué ocurrió en 1810?",
+        "¿Fue fácil el proceso de independencia? ¿por qué?",
+        "¿Por qué se considera un proceso?"
+      ]
+    },
+    evidence:"Responder con ideas claras.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+{
+    id:"HR1",
+    title:"Repaso independencia",
+    oa:"OA2",
+    criterion:"Identificar eventos clave de la independencia.",
+    objective:"Reforzar comprensión histórica.",
+    learnContent:"La independencia fue un proceso que comenzó en 1810.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué ocurrió en 1810?",
+        "¿Quiénes participaron?",
+        "¿Por qué fue importante?"
+      ]
+    },
+    evidence:"Respuestas claras.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+  {
+    id:"H2",
+    title:"Democracia y ciudadanía",
+    oa:"OA15",
+    criterion:"Reconocer la importancia de la participación ciudadana.",
+    objective:"Comprender el rol de los ciudadanos en la democracia.",
+    learnContent:"La democracia permite elegir autoridades y participar en decisiones.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué es la democracia?",
+        "¿Por qué es importante votar?",
+        "Da un ejemplo de participación."
+      ]
+    },
+    evidence:"Explicaciones simples y correctas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  }
 ],
 guitarra: [
 { id:"G1", text:"Partes de la guitarra", weight:1, links:[
@@ -1092,7 +1346,7 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
   }
 
   // RESPUESTA DEL ESTUDIANTE
-  const ta = el("textarea", { placeholder:"Respuesta del estudiante…" });
+  const ta = el("textarea", { placeholder:"Escribe tu respuesta aquí…" });
   ta.value = st.studentAnswer || "";
   ta.addEventListener("change", () => {
     setItemState(
