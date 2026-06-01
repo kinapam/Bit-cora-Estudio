@@ -397,8 +397,76 @@ o
  *  ========================= */
 const RANGE = { start: "2026-05-25", end: "2026-09-15" };
 const EXCLUDED = new Set(["2026-06-29","2026-07-16","2026-08-04","2026-09-03"]);
-const PLAN_VERSION = 9;
+const PLAN_VERSION = 10;
+const SUBJECT_ORDER = {
+  deadpool: ["matematicas", "lenguaje", "ciencias", "historia", "ingles", "lectura"],
+  may: ["matematicas", "lenguaje", "ciencias", "historia", "ingles", "guitarra"]
+};
 
+const PHASE_WEIGHT = {
+  base: 1,
+  practice: 2,
+  application: 3,
+  refuerzo: 4,
+  evaluation: 5
+};
+
+function inferPhase(subject, item){
+  if (item.phase) return item.phase;
+
+  const id = String(item.id || "").toUpperCase();
+  const title = String(item.title || item.text || "").toLowerCase();
+  const subjectKey = String(subject || "").toLowerCase();
+
+  if (subjectKey.includes("refuerzo")) return "refuerzo";
+  if (subjectKey.includes("evalu")) return "evaluation";
+
+  if (title.includes("evaluación") || title.includes("evaluacion")) return "evaluation";
+  if (title.includes("refuerzo") || title.includes("repaso")) return "refuerzo";
+
+  if (id.includes("_E") || /E\d+$/.test(id)) return "evaluation";
+  if (id.includes("_R") || /R\d+$/.test(id)) return "refuerzo";
+
+  if (
+    title.includes("problema") ||
+    title.includes("aplic") ||
+    title.includes("producción") ||
+    title.includes("produccion") ||
+    title.includes("escritura")
+  ) {
+    return "application";
+  }
+
+  return "base";
+}
+
+function inferLevel(subject, item, idx){
+  if (Number.isFinite(Number(item.level))) return Number(item.level);
+
+  const phase = inferPhase(subject, item);
+  if (phase === "refuerzo") return 90;
+  if (phase === "evaluation") return 99;
+
+  return idx + 1;
+}
+
+function inferSequence(item, idx){
+  if (Number.isFinite(Number(item.sequence))) return Number(item.sequence);
+  return idx + 1;
+}
+
+function normalizeCurriculumItem(subject, item, idx){
+  const phase = inferPhase(subject, item);
+  const level = inferLevel(subject, item, idx);
+  const sequence = inferSequence(item, idx);
+
+  return {
+    ...item,
+    phase,
+    level,
+    sequence
+  };
+}
 function iso(d){ return d.toISOString().slice(0,10); }
 function parseISO(s){ const [y,m,dd]=s.split("-").map(Number); return new Date(y, m-1, dd); }
 function isWeekend(d){ const day=d.getDay(); return day===0 || day===6; }
@@ -420,45 +488,869 @@ function dayLabel(d){
 const CURRICULUM = {
 deadpool: {
 matematicas: [
-{
-id:"M1",
-title:"Valor posicional y descomposición",
-oa:"OA1",
-criterion:"Identificar el valor posicional de los dígitos, componer y descomponer números naturales y ordenarlos.",
-objective:"Reconocer el valor de cada cifra dentro de un número grande.",
-learnContent:"En un número, cada cifra vale según su posición: unidades, decenas, centenas, unidades de millar, decenas de millar y centenas de millar.\nEjemplo: 345.678 = 300.000 + 40.000 + 5.000 + 600 + 70 + 8.",
-activity:{
-type:"math_exercises",
-text:"Resuelve los siguientes ejercicios.",
-questions:[
-"Descompón: 482.315",
-"Descompón: 706.094",
-"Ordena de menor a mayor: 456.321, 465.231, 405.623",
-"¿Qué cifra ocupa la decena de millar en 582.417?"
-]
-},
-evidence:"Resolver correctamente las descomposiciones, el orden y la identificación de posición.",
-durationMin:20,
-weight:1,
-links:[]
-},
-{
-id:"M2",
-title:"Problemas con dinero",
-oa:"OA6",
-criterion:"Resolver problemas que involucren las cuatro operaciones en situaciones de dinero.",
-objective:"Escoger la operación correcta en un problema cotidiano con dinero.",
-learnContent:"Antes de resolver, piensa qué está ocurriendo:\n- juntar = suma\n- quitar = resta\n- grupos iguales = multiplicación\n- repartir = división",
-activity:{
-type:"problem_solving",
-text:"Lucas tiene $3.500. Compra un jugo por $900 y un pan por $700.\n\nResponde:\n1. ¿Cuánto dinero gastó en total?\n2. ¿Cuánto dinero le quedó?\n3. Explica qué operaciones usaste."
-},
-evidence:"Resolver el problema y explicar el procedimiento.",
-durationMin:20,
-weight:1,
-links:[]
-}
+
+  // =========================
+  // NIVEL 0 · REFUERZOS PREVIOS NECESARIOS
+  // =========================
+  {
+    id:"M0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Lectura de números pequeños y medianos",
+    oa:"Refuerzo previo",
+    criterion:"Leer correctamente números naturales en voz alta y por escrito.",
+    objective:"Asegurar lectura fluida de números antes de trabajar valor posicional.",
+    learnContent:"Antes de descomponer o comparar números grandes, conviene leer bien números de 2, 3, 4 y 5 cifras.",
+    activity:{
+      type:"math_exercises",
+      text:"Lee y escribe con palabras:",
+      questions:[
+        "345",
+        "2.018",
+        "45.120",
+        "98.007"
+      ]
+    },
+    evidence:"Leer correctamente y escribir con palabras al menos 3 de 4 números.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Suma y resta de refuerzo",
+    oa:"Refuerzo previo",
+    criterion:"Resolver sumas y restas básicas correctamente.",
+    objective:"Reforzar cálculo base para problemas posteriores.",
+    learnContent:"La suma junta cantidades y la resta encuentra diferencia o quita.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "248 + 376",
+        "905 - 478",
+        "1.240 + 560",
+        "2.000 - 875"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M0_3",
+    level:0,
+    phase:"base",
+    sequence:3,
+    title:"Tablas de multiplicar y reparto simple",
+    oa:"Refuerzo previo",
+    criterion:"Resolver multiplicaciones básicas y reconocer divisiones simples.",
+    objective:"Preparar multiplicación y división formal.",
+    learnContent:"Multiplicar es repetir grupos iguales; dividir es repartir o agrupar.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "6 × 7",
+        "8 × 4",
+        "24 ÷ 6",
+        "35 ÷ 5"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA1 · NÚMEROS NATURALES GRANDES
+  // =========================
+  {
+    id:"M1_1",
+    level:1,
+    phase:"base",
+    sequence:1,
+    title:"Valor posicional en números grandes",
+    oa:"OA1",
+    criterion:"Identificar el valor posicional de los dígitos en números naturales grandes.",
+    objective:"Reconocer qué valor tiene cada cifra según su posición.",
+    learnContent:"En un número grande, cada cifra cambia de valor según su lugar: unidad, decena, centena, unidad de millar, decena de millar, centena de millar, etc.",
+    activity:{
+      type:"math_exercises",
+      text:"Responde:",
+      questions:[
+        "¿Qué valor tiene el 5 en 452.318?",
+        "¿Qué valor tiene el 7 en 7.204.100?",
+        "¿Qué cifra está en la decena de millar en 386.254?",
+        "¿Qué cifra está en la unidad de millar en 904.781?"
+      ]
+    },
+    evidence:"Identificar correctamente valor o posición en al menos 3 de 4 preguntas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M1_2",
+    level:1,
+    phase:"base",
+    sequence:2,
+    title:"Composición y descomposición",
+    oa:"OA1",
+    criterion:"Componer y descomponer números en forma estándar y expandida.",
+    objective:"Construir y separar números grandes de distintas formas.",
+    learnContent:"Un número puede descomponerse por valor posicional: 345.678 = 300.000 + 40.000 + 5.000 + 600 + 70 + 8.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Descompón 482.315",
+        "Descompón 706.094",
+        "Compón el número: 500.000 + 80.000 + 7.000 + 200 + 40 + 3",
+        "Compón el número: 900.000 + 30.000 + 2.000 + 70 + 5"
+      ]
+    },
+    evidence:"Resolver correctamente 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M1_3",
+    level:1,
+    phase:"application",
+    sequence:3,
+    title:"Comparar y ordenar números grandes",
+    oa:"OA1",
+    criterion:"Comparar y ordenar números naturales grandes de forma creciente y decreciente.",
+    objective:"Ordenar números observando magnitud y valor posicional.",
+    learnContent:"Para comparar números grandes, primero se observa la cantidad de cifras y luego el valor posicional de izquierda a derecha.",
+    activity:{
+      type:"math_exercises",
+      text:"Ordena según se indique:",
+      questions:[
+        "De menor a mayor: 456.321, 405.623, 465.231",
+        "De mayor a menor: 1.204.500, 1.240.050, 1.024.500",
+        "Compara usando >, < o = : 507.300 ___ 570.003",
+        "Compara usando >, < o = : 2.045.100 ___ 2.045.010"
+      ]
+    },
+    evidence:"Responder correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA3 · MULTIPLICACIÓN
+  // =========================
+  {
+    id:"M3_1",
+    level:2,
+    phase:"base",
+    sequence:1,
+    title:"Multiplicación de dos dígitos por dos dígitos",
+    oa:"OA3",
+    criterion:"Resolver multiplicaciones de dos dígitos por dos dígitos usando algoritmo.",
+    objective:"Aplicar multiplicación formal correctamente.",
+    learnContent:"En una multiplicación de dos dígitos por dos dígitos se multiplican unidades y decenas por separado y luego se suman los resultados parciales.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "24 × 13",
+        "36 × 21",
+        "48 × 12",
+        "57 × 14"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 multiplicaciones.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M3_2",
+    level:2,
+    phase:"application",
+    sequence:2,
+    title:"Problemas de multiplicación",
+    oa:"OA3",
+    criterion:"Identificar la expresión matemática que resuelve un problema de multiplicación.",
+    objective:"Reconocer cuándo usar multiplicación en contexto.",
+    learnContent:"La multiplicación suele usarse cuando hay grupos iguales o una cantidad repetida varias veces.",
+    activity:{
+      type:"problem_solving",
+      text:"Resuelve los problemas.",
+      questions:[
+        "En 15 cajas hay 24 lápices en cada una. ¿Cuántos lápices hay en total?",
+        "Una sala tiene 18 filas con 12 sillas en cada fila. ¿Cuántas sillas hay?",
+        "Un álbum tiene 16 páginas. En cada página caben 25 láminas. ¿Cuántas láminas caben en total?"
+      ]
+    },
+    evidence:"Elegir y resolver correctamente al menos 2 de 3 problemas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA4 · DIVISIÓN
+  // =========================
+  {
+    id:"M4_1",
+    level:3,
+    phase:"base",
+    sequence:1,
+    title:"División con dividendo de tres cifras",
+    oa:"OA4",
+    criterion:"Resolver divisiones con dividendos de tres cifras y divisores de un dígito.",
+    objective:"Aplicar el algoritmo de la división.",
+    learnContent:"Dividir es repartir o agrupar. El resto indica lo que sobra cuando no se puede repartir exactamente.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "324 ÷ 6",
+        "735 ÷ 5",
+        "864 ÷ 8",
+        "943 ÷ 7"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 divisiones.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M4_2",
+    level:3,
+    phase:"application",
+    sequence:2,
+    title:"Interpretar el resto en problemas",
+    oa:"OA4",
+    criterion:"Resolver problemas que impliquen división e interpretar el resto.",
+    objective:"Comprender qué significa el resto dentro del problema.",
+    learnContent:"En algunos problemas el resto se interpreta como sobrante, y en otros obliga a completar una unidad más.",
+    activity:{
+      type:"problem_solving",
+      text:"Lee y resuelve:",
+      questions:[
+        "Se reparten 50 galletas en 6 bolsas iguales. ¿Cuántas van en cada bolsa y cuántas sobran?",
+        "Hay 53 estudiantes y caben 8 por mesa. ¿Cuántas mesas se necesitan?"
+      ]
+    },
+    evidence:"Resolver y explicar correctamente qué significa el resto en ambos problemas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA6 · PROBLEMAS CON LAS 4 OPERACIONES
+  // =========================
+  {
+    id:"M6_1",
+    level:4,
+    phase:"base",
+    sequence:1,
+    title:"Elegir la operación correcta",
+    oa:"OA6",
+    criterion:"Identificar qué operación se necesita para resolver un problema.",
+    objective:"Distinguir cuándo usar suma, resta, multiplicación o división.",
+    learnContent:"Antes de calcular, conviene preguntarse qué está pasando: juntar, quitar, repetir grupos o repartir.",
+    activity:{
+      type:"problem_solving",
+      text:"Indica qué operación usarías y resuelve:",
+      questions:[
+        "Un kiosco vendió 125 jugos en la mañana y 148 en la tarde. ¿Cuántos vendió en total?",
+        "Una biblioteca tenía 680 libros y prestó 127. ¿Cuántos quedaron?",
+        "Hay 9 paquetes con 24 lápices cada uno. ¿Cuántos lápices hay?",
+        "Se reparten 72 caramelos entre 8 niños. ¿Cuántos recibe cada uno?"
+      ]
+    },
+    evidence:"Elegir correctamente la operación y resolver al menos 3 de 4 problemas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M6_2",
+    level:4,
+    phase:"application",
+    sequence:2,
+    title:"Problemas con dinero",
+    oa:"OA6",
+    criterion:"Resolver problemas de situaciones con dinero usando operaciones o combinaciones de ellas.",
+    objective:"Aplicar operaciones en situaciones de compra, gasto y vuelto.",
+    learnContent:"En problemas con dinero puede haber suma de compras, resta para vuelto o incluso combinación de operaciones.",
+    activity:{
+      type:"problem_solving",
+      text:"Resuelve:",
+      questions:[
+        "Lucas tiene $3.500. Compra un jugo por $900 y un pan por $700. ¿Cuánto gastó y cuánto le quedó?",
+        "María compra 3 cuadernos a $850 cada uno. ¿Cuánto paga en total?",
+        "Si pagó con $5.000 y la compra fue de $2.350, ¿cuánto vuelto recibe?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 2 de 3 problemas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA7 · FRACCIONES PROPIAS
+  // =========================
+  {
+    id:"M7_1",
+    level:5,
+    phase:"base",
+    sequence:1,
+    title:"Representación de fracciones propias",
+    oa:"OA7",
+    criterion:"Identificar representaciones de fracciones propias.",
+    objective:"Reconocer fracciones como partes iguales de un todo.",
+    learnContent:"Una fracción propia tiene numerador menor que denominador. Por ejemplo, 1/2, 3/4 y 2/5.",
+    activity:{
+      type:"math_exercises",
+      text:"Responde:",
+      questions:[
+        "¿Cuál de estas es una fracción propia: 3/4 o 5/3?",
+        "¿Qué representa 1/2?",
+        "¿Qué representa 3/4?",
+        "Escribe una fracción propia con denominador 5."
+      ]
+    },
+    evidence:"Responder correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M7_2",
+    level:5,
+    phase:"base",
+    sequence:2,
+    title:"Fracciones equivalentes",
+    oa:"OA7",
+    criterion:"Identificar fracciones equivalentes.",
+    objective:"Reconocer que distintas fracciones pueden representar la misma cantidad.",
+    learnContent:"Dos fracciones son equivalentes si representan la misma parte del todo, por ejemplo 1/2 = 2/4.",
+    activity:{
+      type:"math_exercises",
+      text:"Complete o responde:",
+      questions:[
+        "1/2 = __/4",
+        "2/3 = __/6",
+        "¿Son equivalentes 3/4 y 6/8?",
+        "¿Son equivalentes 2/5 y 4/10?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M7_3",
+    level:5,
+    phase:"application",
+    sequence:3,
+    title:"Comparar fracciones propias",
+    oa:"OA7",
+    criterion:"Comparar fracciones propias con igual y distinto denominador.",
+    objective:"Decidir cuál fracción es mayor o menor.",
+    learnContent:"Si dos fracciones tienen igual denominador, es mayor la que tenga mayor numerador. Si tienen igual numerador, es mayor la que tenga menor denominador.",
+    activity:{
+      type:"math_exercises",
+      text:"Compara usando >, < o = :",
+      questions:[
+        "3/5 ___ 2/5",
+        "1/2 ___ 1/4",
+        "2/3 ___ 3/4",
+        "4/8 ___ 1/2"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 comparaciones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA10 y OA11 · DECIMALES
+  // =========================
+  {
+    id:"M10_1",
+    level:6,
+    phase:"base",
+    sequence:1,
+    title:"Fracción a decimal",
+    oa:"OA10",
+    criterion:"Escribir como decimal fracciones con denominador 2, 4, 5 y 10.",
+    objective:"Relacionar fracciones sencillas con decimales.",
+    learnContent:"Ejemplos: 1/2 = 0,5 ; 1/4 = 0,25 ; 3/10 = 0,3 ; 4/5 = 0,8.",
+    activity:{
+      type:"math_exercises",
+      text:"Convierte a decimal:",
+      questions:[
+        "1/2",
+        "3/4",
+        "2/5",
+        "7/10"
+      ]
+    },
+    evidence:"Convertir correctamente al menos 3 de 4 fracciones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M11_1",
+    level:6,
+    phase:"application",
+    sequence:2,
+    title:"Comparar y ordenar decimales",
+    oa:"OA11",
+    criterion:"Comparar y ordenar decimales hasta la milésima.",
+    objective:"Distinguir números decimales según su valor.",
+    learnContent:"Para comparar decimales, se observan décimas, centésimas y milésimas de izquierda a derecha.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Ordena de menor a mayor: 0,5 ; 0,25 ; 0,75",
+        "Compara: 0,48 ___ 0,5",
+        "Compara: 0,305 ___ 0,350",
+        "Ordena: 1,2 ; 1,02 ; 1,12"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA13 · SUMA Y RESTA DE FRACCIONES/DECIMALES
+  // =========================
+  {
+    id:"M13_1",
+    level:7,
+    phase:"base",
+    sequence:1,
+    title:"Suma y resta de decimales",
+    oa:"OA13",
+    criterion:"Resolver problemas o ejercicios con adiciones y sustracciones de decimales.",
+    objective:"Calcular con decimales correctamente.",
+    learnContent:"Para sumar o restar decimales se alinean comas y posiciones.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1,25 + 0,5",
+        "3,7 - 1,2",
+        "0,85 + 0,15",
+        "2,4 - 0,35"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M13_2",
+    level:7,
+    phase:"base",
+    sequence:2,
+    title:"Suma y resta de fracciones simples",
+    oa:"OA13",
+    criterion:"Resolver ejercicios y problemas simples con fracciones propias.",
+    objective:"Calcular sumas y restas sencillas de fracciones con apoyo.",
+    learnContent:"Es más fácil sumar o restar fracciones cuando tienen el mismo denominador.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1/5 + 2/5",
+        "4/8 - 1/8",
+        "2/10 + 3/10",
+        "5/6 - 2/6"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA14 y OA15 · PATRONES Y ECUACIONES
+  // =========================
+  {
+    id:"M14_1",
+    level:8,
+    phase:"base",
+    sequence:1,
+    title:"Patrones numéricos",
+    oa:"OA14",
+    criterion:"Extender una secuencia e identificar su regla.",
+    objective:"Descubrir y continuar sucesiones.",
+    learnContent:"Un patrón es una regla que se repite. Puede aumentar o disminuir en una cantidad fija.",
+    activity:{
+      type:"math_exercises",
+      text:"Completa y explica la regla:",
+      questions:[
+        "2, 4, 6, 8, __, __",
+        "15, 20, 25, __, __",
+        "30, 27, 24, __, __",
+        "1, 3, 5, 7, __, __"
+      ]
+    },
+    evidence:"Completar correctamente la secuencia y decir la regla en al menos 3 de 4 casos.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M15_1",
+    level:8,
+    phase:"application",
+    sequence:2,
+    title:"Ecuaciones de un paso",
+    oa:"OA15",
+    criterion:"Resolver ecuaciones de un paso con sumas o restas.",
+    objective:"Encontrar el valor desconocido en igualdades simples.",
+    learnContent:"Una ecuación es una igualdad con un número desconocido. Se busca qué número completa correctamente la igualdad.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "x + 5 = 12",
+        "x - 3 = 9",
+        "7 + x = 15",
+        "20 - x = 8"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ecuaciones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA17, OA18, OA19, OA22 · GEOMETRÍA Y MEDICIÓN
+  // =========================
+  {
+    id:"M17_1",
+    level:9,
+    phase:"base",
+    sequence:1,
+    title:"Paralelas, perpendiculares e intersecciones",
+    oa:"OA17",
+    criterion:"Identificar lados, caras o aristas paralelas, perpendiculares o que se intersecan.",
+    objective:"Reconocer relaciones entre líneas y lados en figuras.",
+    learnContent:"Paralelas: nunca se cruzan. Perpendiculares: forman ángulo recto. Intersección: se cruzan.",
+    activity:{
+      type:"short_answer",
+      text:"Responde con tus palabras y da un ejemplo de cada caso:",
+      questions:[
+        "¿Qué son líneas paralelas?",
+        "¿Qué son líneas perpendiculares?",
+        "¿Qué significa que dos líneas se intersecan?"
+      ]
+    },
+    evidence:"Definir correctamente al menos 2 de 3 conceptos y dar un ejemplo.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M18_1",
+    level:9,
+    phase:"base",
+    sequence:2,
+    title:"Congruencia y transformaciones",
+    oa:"OA18",
+    criterion:"Identificar figuras congruentes usando traslación, reflexión o rotación.",
+    objective:"Reconocer figuras que mantienen forma y tamaño.",
+    learnContent:"Dos figuras congruentes tienen la misma forma y tamaño aunque cambien de posición.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué significa que dos figuras sean congruentes?",
+        "Nombra una transformación que no cambia el tamaño de la figura.",
+        "¿Una figura rotada puede seguir siendo congruente? Explica."
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M19_1",
+    level:9,
+    phase:"application",
+    sequence:3,
+    title:"Longitudes y conversiones",
+    oa:"OA19",
+    criterion:"Resolver problemas que involucren longitudes y sus transformaciones.",
+    objective:"Usar mm, cm y m en problemas simples.",
+    learnContent:"1 m = 100 cm y 1 cm = 10 mm.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Convierte 3 m a cm",
+        "Convierte 250 cm a m y cm",
+        "Convierte 45 mm a cm y mm",
+        "Una cuerda mide 2 m 30 cm. ¿Cuántos cm mide en total?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M22_1",
+    level:10,
+    phase:"application",
+    sequence:4,
+    title:"Áreas de figuras",
+    oa:"OA22",
+    criterion:"Calcular áreas de triángulos, paralelogramos y trapecios y estimar áreas de figuras irregulares.",
+    objective:"Reconocer que el área mide superficie ocupada.",
+    learnContent:"El área se puede calcular o estimar contando cuadrados o usando fórmulas sencillas según la figura.",
+    activity:{
+      type:"short_answer",
+      text:"Responde y calcula cuando corresponda:",
+      questions:[
+        "¿Qué mide el área de una figura?",
+        "Si un rectángulo cubre 12 cuadrículas, ¿cuál es su área en cuadrículas?",
+        "Si un triángulo ocupa 6 cuadrículas completas, ¿cuál es su área aproximada por conteo?"
+      ]
+    },
+    evidence:"Responder con idea correcta de área y resolver al menos 2 de 3 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA23, OA24, OA26 · DATOS Y PROBABILIDADES
+  // =========================
+  {
+    id:"M23_1",
+    level:11,
+    phase:"base",
+    sequence:1,
+    title:"Promedio de datos",
+    oa:"OA23",
+    criterion:"Determinar el promedio de un conjunto de datos e interpretarlo.",
+    objective:"Calcular promedios simples y explicarlos.",
+    learnContent:"El promedio se obtiene sumando los datos y dividiendo por la cantidad de datos.",
+    activity:{
+      type:"math_exercises",
+      text:"Calcula el promedio:",
+      questions:[
+        "5, 7, 8",
+        "10, 12, 14, 16",
+        "3, 3, 6, 8"
+      ]
+    },
+    evidence:"Calcular correctamente al menos 2 de 3 promedios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M24_1",
+    level:11,
+    phase:"base",
+    sequence:2,
+    title:"Probabilidad simple",
+    oa:"OA24",
+    criterion:"Describir la posibilidad de ocurrencia usando seguro, posible, poco posible e imposible.",
+    objective:"Expresar la probabilidad con lenguaje simple.",
+    learnContent:"Seguro: siempre ocurre. Imposible: no puede ocurrir. Posible y poco posible dependen de qué tan probable sea.",
+    activity:{
+      type:"short_answer",
+      text:"Clasifica cada situación:",
+      questions:[
+        "Al lanzar una moneda, obtener cara o sello",
+        "Sacar una pelota roja de una bolsa donde todas son rojas",
+        "Sacar una pelota azul de una bolsa donde solo hay verdes"
+      ]
+    },
+    evidence:"Clasificar correctamente al menos 2 de 3 situaciones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M26_1",
+    level:11,
+    phase:"application",
+    sequence:3,
+    title:"Lectura de tablas y gráficos",
+    oa:"OA26",
+    criterion:"Interpretar tablas, gráficos de barra simple y gráficos de línea.",
+    objective:"Leer datos representados visualmente y responder preguntas.",
+    learnContent:"Un gráfico muestra información de forma ordenada; hay que leer títulos, categorías y cantidades.",
+    activity:{
+      type:"short_answer",
+      text:"Imagina un gráfico donde lunes=3, martes=5, miércoles=2, jueves=6.",
+      questions:[
+        "¿Qué día tiene más?",
+        "¿Qué día tiene menos?",
+        "¿Cuántos hay entre lunes y martes juntos?",
+        "¿Qué diferencia hay entre jueves y miércoles?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 3 de 4 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REPASOS Y EVALUACIONES
+  // =========================
+  {
+    id:"M_R1",
+    level:90,
+    phase:"refuerzo",
+    sequence:1,
+    title:"Repaso general 1 — números y operaciones",
+    oa:"Repaso",
+    criterion:"Reforzar OA1, OA3, OA4 y OA6.",
+    objective:"Consolidar habilidades de números y operaciones.",
+    learnContent:"Repaso enfocado en valor posicional, multiplicación, división y problemas.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Descompón 345.678",
+        "24 × 13",
+        "735 ÷ 5",
+        "Tienes $2.000 y gastas $750. ¿Cuánto te queda?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M_R2",
+    level:90,
+    phase:"refuerzo",
+    sequence:2,
+    title:"Repaso general 2 — fracciones y decimales",
+    oa:"Repaso",
+    criterion:"Reforzar OA7, OA10, OA11 y OA13.",
+    objective:"Consolidar fracciones y decimales.",
+    learnContent:"Repaso de equivalencias, comparaciones y operaciones simples.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1/2 = __/4",
+        "3/5 ___ 2/5",
+        "1/2 como decimal",
+        "1,25 + 0,5"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M_E1",
+    level:99,
+    phase:"evaluation",
+    sequence:1,
+    title:"Mini evaluación 1 — números y operaciones",
+    oa:"OA1, OA3, OA4, OA6",
+    criterion:"Demostrar dominio inicial en contenidos de números y operaciones.",
+    objective:"Comprobar comprensión y aplicación sin apoyo directo.",
+    learnContent:"Evaluación breve de aplicación.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "Compón el número: 400.000 + 50.000 + 6.000 + 70 + 2",
+        "36 × 21",
+        "864 ÷ 8",
+        "En 12 cajas hay 18 lápices por caja. ¿Cuántos lápices hay?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M_E2",
+    level:99,
+    phase:"evaluation",
+    sequence:2,
+    title:"Mini evaluación 2 — fracciones, decimales y datos",
+    oa:"OA7, OA10, OA11, OA13, OA23, OA24, OA26",
+    criterion:"Demostrar dominio en fracciones, decimales, promedio, probabilidad y lectura de datos.",
+    objective:"Comprobar comprensión de contenidos posteriores.",
+    learnContent:"Evaluación breve acumulativa.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "Escribe 3/4 como decimal",
+        "Ordena: 0,5 ; 0,25 ; 0,75",
+        "Calcula el promedio de 4, 6 y 8",
+        "Clasifica como seguro, posible o imposible: obtener un 7 al lanzar un dado de 6 caras"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
 ],
+
+  
 lenguaje: [
 {
 id:"L1",
@@ -938,39 +1830,81 @@ function expandByWeight(list){
 }
 
 function buildStudentPlan(studentId){
-  const subjects = CURRICULUM[studentId] || {};
+  const rawSubjects = CURRICULUM[studentId] || {};
+  const preferredOrder = SUBJECT_ORDER[studentId] || Object.keys(rawSubjects);
+
+  const orderedSubjects = [
+    ...preferredOrder.filter(s => rawSubjects[s]),
+    ...Object.keys(rawSubjects).filter(s => !preferredOrder.includes(s))
+  ];
+
   const result = {};
-  for (const subject in subjects){
-    result[subject] = expandByWeight(subjects[subject]);
-  }
+
+  orderedSubjects.forEach(subject => {
+    const list = Array.isArray(rawSubjects[subject]) ? rawSubjects[subject] : [];
+
+    result[subject] = expandByWeight(list)
+      .map((item, idx) => normalizeCurriculumItem(subject, item, idx))
+      .sort((a, b) => {
+        if (a.level !== b.level) return a.level - b.level;
+
+        const pa = PHASE_WEIGHT[a.phase] || 999;
+        const pb = PHASE_WEIGHT[b.phase] || 999;
+        if (pa !== pb) return pa - pb;
+
+        if (a.sequence !== b.sequence) return a.sequence - b.sequence;
+
+        return String(a.id).localeCompare(String(b.id));
+      });
+  });
+
   return result;
 }
 
 function interleaveSubjects(studentId, subjectPlans){
-  const subjects = Object.keys(subjectPlans);
-  const maxLength = Math.max(0, ...subjects.map(s => subjectPlans[s].length));
+  const preferredOrder = SUBJECT_ORDER[studentId] || Object.keys(subjectPlans);
+  const subjects = [
+    ...preferredOrder.filter(s => subjectPlans[s]),
+    ...Object.keys(subjectPlans).filter(s => !preferredOrder.includes(s))
+  ];
+
+  const cursors = {};
+  subjects.forEach(subject => { cursors[subject] = 0; });
+
   const result = [];
+  let keepGoing = true;
 
-  for (let i = 0; i < maxLength; i++){
+  while (keepGoing){
+    keepGoing = false;
+
     subjects.forEach(subject => {
-      const item = subjectPlans[subject][i];
-      if (!item) return;
+      const list = subjectPlans[subject] || [];
+      const pointer = cursors[subject];
 
-      result.push({
-        id: `${subject}_${item.id}_${i}`,
-        subject,
-        title: item.title || item.text || "Cápsula",
-        text: item.text || item.title || "Cápsula",
-        oa: item.oa || "",
-        criterion: item.criterion || "",
-        objective: item.objective || "",
-        learnContent: item.learnContent || "",
-        activity: item.activity || null,
-        evidence: item.evidence || "",
-        durationMin: item.durationMin || 20,
-        links: item.links || [],
-        keywords: item.keywords || `${item.title || item.text || ""} ${subject} explicación ejercicios paso a paso`
-      });
+      if (pointer < list.length){
+        const item = list[pointer];
+        result.push({
+          id: `${subject}_${item.id}_${pointer}`,
+          subject,
+          title: item.title || item.text || "Cápsula",
+          text: item.text || item.title || "Cápsula",
+          oa: item.oa || "",
+          criterion: item.criterion || "",
+          objective: item.objective || "",
+          learnContent: item.learnContent || "",
+          activity: item.activity || null,
+          evidence: item.evidence || "",
+          durationMin: item.durationMin || 20,
+          links: item.links || [],
+          keywords: item.keywords || `${item.title || item.text || ""} ${subject} explicación ejercicios paso a paso`,
+          phase: item.phase || "base",
+          level: item.level || 1,
+          sequence: item.sequence || 1
+        });
+
+        cursors[subject]++;
+        keepGoing = true;
+      }
     });
   }
 
@@ -1001,8 +1935,8 @@ function buildDayPlan(date){
   const deadpoolPlan = interleaveSubjects("deadpool", buildStudentPlan("deadpool"));
   const mayPlan = interleaveSubjects("may", buildStudentPlan("may"));
 
-  const deadpoolSlice = deadpoolPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
-  const maySlice = mayPlan.slice(idx*tasksPerDay, (idx+1)*tasksPerDay);
+  const deadpoolSlice = deadpoolPlan.slice(idx * tasksPerDay, (idx + 1) * tasksPerDay);
+  const maySlice = mayPlan.slice(idx * tasksPerDay, (idx + 1) * tasksPerDay);
 
   const slotDeadpool = {
     title: "Deadpoollcer0",
@@ -1285,7 +2219,12 @@ function renderTask({date, studentId, subject, blockKey, task, examMode, onlyPen
       `OA: ${task.oa}`
     ]));
   }
-
+  if (task.level || task.phase){
+    body.appendChild(el("div", { class:"small", style:"margin-top:4px; color:#4b647a;" }, [
+      `Nivel: ${task.level || "—"} · Fase: ${task.phase || "base"}`
+    ]));
+  }
+  
   // OBJETIVO
   if (task.objective){
     body.appendChild(el("div", { class:"mutedBox", style:"margin-top:8px;" }, [
