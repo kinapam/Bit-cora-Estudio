@@ -397,7 +397,7 @@ o
  *  ========================= */
 const RANGE = { start: "2026-05-25", end: "2026-09-15" };
 const EXCLUDED = new Set(["2026-06-29","2026-07-16","2026-08-04","2026-09-03"]);
-const PLAN_VERSION = 10;
+const PLAN_VERSION = 11;
 const SUBJECT_ORDER = {
   deadpool: ["matematicas", "lenguaje", "ciencias", "historia", "ingles", "lectura"],
   may: ["matematicas", "lenguaje", "ciencias", "historia", "ingles", "guitarra"]
@@ -1349,472 +1349,3167 @@ matematicas: [
   }
 
 ],
-
-  
 lenguaje: [
-{
-id:"L1",
-title:"Comprensión de narración breve",
-oa:"OA4",
-criterion:"Extraer información explícita e implícita en narraciones, y opinar sobre acciones de personajes fundamentando con información del texto.",
-objective:"Comprender una narración breve y distinguir entre información explícita e implícita.",
-learnContent:"Una respuesta explícita sale directamente del texto.\nUna respuesta implícita se deduce a partir de pistas.\nUna opinión fundamentada incluye una razón basada en lo leído.",
-activity:{
-type:"reading_questions",
-text:"Alicia salió temprano de casa porque el cielo estaba gris. Su hermano le dijo que llevara paraguas, pero Alicia respondió que no era necesario. A mitad de camino al almacén comenzó a llover fuerte. Alicia intentó cubrir su mochila con la chaqueta, pero los cuadernos igual se mojaron. Cuando volvió, dijo: 'La próxima vez escucharé mejor'.",
-questions:[
-"¿Por qué Alicia salió temprano?",
-"¿Quién le aconsejó llevar paraguas?",
-"¿Por qué los cuadernos se mojaron?",
-"¿Qué aprendió Alicia?",
-"¿Te parece responsable Alicia? Explica tu respuesta."
-]
-},
-evidence:"Responder por escrito las preguntas del texto.",
-durationMin:20,
-weight:1,
-links:[]
-},
-{
-id:"L2",
-title:"Escritura de narración breve",
-oa:"OA14",
-criterion:"Escribir narraciones con estructura clara, conectores adecuados, descripciones y un conflicto evidente.",
-objective:"Escribir una historia corta con inicio, problema y final.",
-learnContent:"Una narración breve debe tener tres partes:\n1. inicio: quién y dónde\n2. problema: qué ocurre\n3. final: cómo se resuelve\nPuedes usar conectores como primero, después y al final.",
-activity:{
-type:"writing",
-text:"Escribe una historia de 6 a 8 líneas que comience así:\n\n“Primero, un perro pequeño encontró una caja en el patio…”\n\nTu historia debe incluir:\n- un lugar\n- un problema\n- una solución"
-},
-evidence:"Escribir un texto con inicio, problema y final.",
-durationMin:20,
-weight:1,
-links:[]
-}
-],
-ciencias: [
+
+  // =========================
+  // NIVEL 0 · REFUERZOS PREVIOS
+  // =========================
   {
-    id:"C1",
-    title:"Organización de los seres vivos",
-    oa:"OA1",
-    criterion:"Reconocer que los seres vivos se organizan en célula, tejido, órgano, sistema y organismo.",
-    objective:"Comprender los niveles de organización de los seres vivos.",
-    learnContent:"Los seres vivos se organizan así:\ncélula → tejido → órgano → sistema → organismo",
-    activity:{
-      type:"classification",
-      text:"Ordena correctamente los siguientes conceptos.",
-      questions:[
-        "célula",
-        "órgano",
-        "sistema",
-        "tejido",
-        "organismo"
-      ]
-    },
-    evidence:"Ordenar correctamente los niveles y explicarlos brevemente.",
-    durationMin:15,
-    weight:1,
-    links:[]
-  },
-  {
-    id:"C2",
-    title:"Ciclo del agua",
-    oa:"OA12",
-    criterion:"Reconocer el ciclo del agua y sus etapas.",
-    objective:"Comprender cómo circula el agua en la naturaleza.",
-    learnContent:"El ciclo del agua tiene 4 etapas:\nevaporación, formación de nubes, lluvia y retorno a ríos y mares.",
-    activity:{
-      type:"drawing_explanation",
-      text:"Dibuja el ciclo del agua e identifica sus etapas.\nLuego explica qué ocurre en cada una."
-    },
-    evidence:"Dibujo correcto + explicación simple.",
-    durationMin:20,
-    weight:1,
-    links:[]
-  }
-],
-ingles: [
-  {
-    id:"EN1",
-    title:"Comprensión de texto simple",
-    oa:"OA5",
-    criterion:"Leer textos simples y responder preguntas sobre información explícita.",
-    objective:"Comprender información básica en un texto corto en inglés.",
-    learnContent:"En textos simples en inglés, busca palabras clave como nombre, edad, gustos y familia.",
+    id:"L0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Comprensión literal básica",
+    oa:"Refuerzo previo",
+    objective:"Entender información directa",
     activity:{
       type:"reading_questions",
-      text:"My name is Ben. I am ten years old. I live with my mother and my sister. I like apples and milk.",
+      text:"Pedro fue al colegio con su hermana.",
       questions:[
-        "What is the boy’s name?",
-        "How old is Ben?",
-        "Who does Ben live with?",
-        "What does Ben like?",
-        "Write one sentence: I like ______."
+        "¿Quién fue al colegio?",
+        "¿Con quién fue?",
+        "¿A dónde fue?"
       ]
     },
-    evidence:"Responder correctamente las preguntas y escribir una frase propia.",
-    durationMin:15,
+    evidence:"Responde correctamente",
+    durationMin:10,
     weight:1,
     links:[]
   },
+
   {
-    id:"ENR1",
-    title:"Uso de frases simples",
-    oa:"OA15",
-    criterion:"Escribir frases simples en inglés.",
-    objective:"Reforzar escritura básica en inglés.",
-    learnContent:"Frases simples usan:\nI + verbo + complemento\nEjemplo: I like apples",
+    id:"L0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Oración completa",
+    oa:"Refuerzo previo",
+    objective:"Escribir oraciones completas",
     activity:{
       type:"writing",
-      text:"Escribe 4 frases:",
-      questions:[
-        "I like ______",
-        "I have ______",
-        "I am ______",
-        "I can ______"
-      ]
+      text:"Escribe 3 oraciones completas usando sujeto y verbo."
     },
-    evidence:"Frases comprensibles.",
-    durationMin:15,
+    evidence:"Oraciones completas",
+    durationMin:10,
     weight:1,
     links:[]
-  }
-],
-refuerzo: [
+  },
+
+  // =========================
+  // OA4 · NARRACIONES
+  // =========================
   {
-    id:"R1",
-    title:"Repaso de comprensión lectora",
+    id:"L4_1",
+    level:1,
+    phase:"base",
+    title:"Información explícita en narraciones",
     oa:"OA4",
-    criterion:"Responder preguntas de comprensión identificando información explícita e implícita.",
-    objective:"Revisar habilidades de comprensión lectora.",
-    learnContent:"Para comprender un texto debes:\n- leer con atención\n- buscar información clave\n- responder usando el texto",
+    objective:"Identificar información directa",
     activity:{
       type:"reading_questions",
-      text:"Juan salió sin chaqueta. El cielo estaba nublado, pero pensó que no llovería. Después de unos minutos comenzó a llover fuerte y Juan se mojó completamente.",
+      text:"Ana salió tarde y perdió el bus.",
       questions:[
-        "¿Por qué Juan salió sin chaqueta?",
-        "¿Qué sucedió después?",
-        "¿Cometió un error Juan? ¿por qué?"
+        "¿Quién salió tarde?",
+        "¿Qué perdió?",
+        "¿Qué pasó primero?"
       ]
     },
-    evidence:"Respuestas correctas y explicación simple.",
+    evidence:"Correcto",
     durationMin:15,
     weight:1,
     links:[]
   },
+
   {
-    id:"R2",
-    title:"Mini evaluación matemática",
-    oa:"OA1-OA6",
-    criterion:"Aplicar operaciones y comprender números en situaciones simples.",
-    objective:"Demostrar dominio básico en matemáticas.",
-    learnContent:"Aplica lo aprendido en ejercicios y problemas.",
+    id:"L4_2",
+    level:2,
+    phase:"application",
+    title:"Inferencia en narraciones",
+    oa:"OA4",
+    objective:"Deducir información implícita",
     activity:{
-      type:"mixed_exercises",
-      text:"Resuelve sin ayuda:",
+      type:"reading_questions",
+      text:"Juan salió sin paraguas. Luego llegó mojado.",
       questions:[
-        "Descompón 345.678",
-        "Ordena: 450.321, 405.999, 499.100",
-        "Resuelve: 36 × 4",
-        "Problema: Si tienes $2000 y gastas $750, ¿cuánto te queda?"
+        "¿Estaba lloviendo?",
+        "¿Qué debería haber hecho Juan?"
       ]
     },
-    evidence:"Resolver al menos 3 correctamente.",
+    evidence:"Inferencias correctas",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L4_3",
+    level:3,
+    phase:"application",
+    title:"Opinión fundamentada",
+    oa:"OA4",
+    objective:"Opinar con fundamento",
+    activity:{
+      type:"reading_questions",
+      text:"María ayudó a su compañero.",
+      questions:[
+        "¿Te parece correcta su acción?",
+        "Explica por qué."
+      ]
+    },
+    evidence:"Opinión con razón",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L4_4",
+    level:3,
+    phase:"base",
+    title:"Personajes y ambiente",
+    oa:"OA4",
+    objective:"Describir elementos de narración",
+    activity:{
+      type:"reading_questions",
+      text:"El cuento ocurre en un bosque oscuro.",
+      questions:[
+        "¿Dónde ocurre?",
+        "¿Cómo es el ambiente?"
+      ]
+    },
+    evidence:"Describe correctamente",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA5 · POESÍA
+  // =========================
+  {
+    id:"L5_1",
+    level:4,
+    phase:"base",
+    title:"Elementos del poema",
+    oa:"OA5",
+    objective:"Reconocer rima, verso y estrofa",
+    activity:{
+      type:"reading_questions",
+      text:"El gato mira el plato\ncon un salto barato",
+      questions:[
+        "¿Tiene rima?",
+        "¿Cuántos versos hay?",
+        "¿Qué palabras riman?"
+      ]
+    },
+    evidence:"Identifica correctamente",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L5_2",
+    level:4,
+    phase:"application",
+    title:"Lenguaje figurado",
+    oa:"OA5",
+    objective:"Interpretar metáforas simples",
+    activity:{
+      type:"reading_questions",
+      text:"Sus ojos eran dos estrellas.",
+      questions:[
+        "¿Son realmente estrellas?",
+        "¿Qué quiere decir?"
+      ]
+    },
+    evidence:"Interpretación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA6 · TEXTOS NO LITERARIOS
+  // =========================
+  {
+    id:"L6_1",
+    level:5,
+    phase:"base",
+    title:"Comprender texto informativo",
+    oa:"OA6",
+    objective:"Extraer información",
+    activity:{
+      type:"reading_questions",
+      text:"El agua es esencial para la vida.",
+      questions:[
+        "¿De qué trata el texto?",
+        "¿Cuál es la idea principal?"
+      ]
+    },
+    evidence:"Responde correctamente",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L6_2",
+    level:5,
+    phase:"application",
+    title:"Comparar información",
+    oa:"OA6",
+    objective:"Relacionar ideas",
+    activity:{
+      type:"reading_questions",
+      text:"Texto A: el perro corre.\nTexto B: el perro duerme.",
+      questions:[
+        "¿Qué tienen en común?",
+        "¿En qué se diferencian?"
+      ]
+    },
+    evidence:"Comparación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA7 · EVALUACIÓN CRÍTICA
+  // =========================
+  {
+    id:"L7_1",
+    level:6,
+    phase:"application",
+    title:"Propósito del texto",
+    oa:"OA7",
+    objective:"Identificar para qué fue escrito",
+    activity:{
+      type:"reading_questions",
+      text:"Compra ahora este producto.",
+      questions:[
+        "¿Cuál es el propósito?",
+        "¿A quién está dirigido?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA14 · ESCRITURA NARRATIVA
+  // =========================
+  {
+    id:"L14_1",
+    level:7,
+    phase:"base",
+    title:"Estructura de narración",
+    oa:"OA14",
+    objective:"Reconocer inicio, problema y final",
+    activity:{
+      type:"writing",
+      text:"Escribe una historia con inicio, problema y final."
+    },
+    evidence:"Estructura clara",
     durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L14_2",
+    level:7,
+    phase:"application",
+    title:"Uso de conectores",
+    oa:"OA14",
+    objective:"Usar conectores",
+    activity:{
+      type:"writing",
+      text:"Escribe una historia usando: primero, después, finalmente."
+    },
+    evidence:"Uso correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA15 · TEXTO INFORMATIVO
+  // =========================
+  {
+    id:"L15_1",
+    level:8,
+    phase:"base",
+    title:"Escribir texto informativo",
+    oa:"OA15",
+    objective:"Informar sobre un tema",
+    activity:{
+      type:"writing",
+      text:"Escribe un pequeño texto sobre los animales."
+    },
+    evidence:"Texto con idea clara",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REFUERZO Y EVALUACIÓN
+  // =========================
+  {
+    id:"L_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo comprensión",
+    oa:"Repaso",
+    objective:"Reforzar habilidades",
+    activity:{
+      type:"reading_questions",
+      text:"Luis perdió su cuaderno.",
+      questions:[
+        "¿Qué pasó?",
+        "¿Por qué?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación lenguaje",
+    oa:"OA4-OA15",
+    objective:"Evaluar comprensión y escritura",
+    activity:{
+      type:"reading_questions",
+      questions:[
+        "Lee y responde",
+        "Da opinión",
+        "Escribe un texto"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
+],
+ciencias: [
+
+  // NIVEL 1
+  {
+    id:"C1_1",
+    level:1,
+    phase:"base",
+    title:"Organización de los seres vivos",
+    oa:"OA1",
+    objective:"Comprender niveles de organización",
+    activity:{
+      type:"classification",
+      questions:["célula","tejido","órgano","sistema","organismo"]
+    },
+    evidence:"Orden correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // NIVEL 2
+  {
+    id:"C5_1",
+    level:2,
+    phase:"base",
+    title:"Alimentación y nutrientes",
+    oa:"OA5",
+    activity:{
+      type:"short_answer",
+      text:"¿Para qué sirven los alimentos?",
+      questions:[
+        "¿Qué alimentos ayudan al crecimiento?",
+        "¿Qué alimentos aportan energía?"
+      ]
+    },
+    evidence:"Respuestas correctas",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // NIVEL 3
+  {
+    id:"C7_1",
+    level:3,
+    phase:"base",
+    title:"Microorganismos",
+    oa:"OA7",
+    activity:{
+      type:"classification",
+      questions:[
+        "bacterias",
+        "virus",
+        "hongos"
+      ]
+    },
+    evidence:"Clasificación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // NIVEL 4
+  {
+    id:"C10_1",
+    level:4,
+    phase:"base",
+    title:"Conductores y aislantes",
+    oa:"OA10",
+    activity:{
+      type:"classification",
+      questions:[
+        "cobre",
+        "plástico",
+        "aluminio",
+        "goma"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // NIVEL 5
+  {
+    id:"C12_1",
+    level:5,
+    phase:"base",
+    title:"Distribución del agua",
+    oa:"OA12",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Dónde hay agua dulce?",
+        "¿Dónde hay agua salada?",
+        "¿Por qué es escasa el agua dulce?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // NIVEL 6
+  {
+    id:"C14_1",
+    level:6,
+    phase:"application",
+    title:"Impacto humano en el agua",
+    oa:"OA14",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "Nombra una forma de contaminación",
+        "¿Cómo podemos cuidar el agua?"
+      ]
+    },
+    evidence:"Ideas correctas",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // REFUERZO
+  {
+    id:"C_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo ciencias",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "¿Qué es una célula?",
+        "Ejemplo de alimento saludable"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // EVALUACIÓN
+  {
+    id:"C_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación ciencias",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Clasifica microorganismos",
+        "Explica rol del agua",
+        "Da ejemplo de conductor"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
+],
+
+ingles: [
+
+  {
+    id:"EN5_1",
+    level:1,
+    phase:"base",
+    title:"Comprensión básica",
+    oa:"OA5",
+    activity:{
+      type:"reading_questions",
+      text:"My name is Ben. I am 10 years old.",
+      questions:[
+        "What is his name?",
+        "How old is he?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN6_1",
+    level:2,
+    phase:"base",
+    title:"Propósito del texto",
+    oa:"OA6",
+    activity:{
+      type:"reading_questions",
+      text:"Invitation to a party",
+      questions:[
+        "What is the purpose?",
+        "What information is given?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN8_1",
+    level:3,
+    phase:"application",
+    title:"Opinión en inglés",
+    oa:"OA8",
+    activity:{
+      type:"writing",
+      text:"Do you like apples? Write: I like / I don't like."
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN14_1",
+    level:4,
+    phase:"base",
+    title:"Escritura guiada",
+    oa:"OA14",
+    activity:{
+      type:"writing",
+      text:"Write a sentence: My name is ___"
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN15_1",
+    level:5,
+    phase:"application",
+    title:"Funciones en inglés",
+    oa:"OA15",
+    activity:{
+      type:"writing",
+      text:"Write 3 sentences:",
+      questions:[
+        "I have ___",
+        "I like ___",
+        "I am ___"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // REFUERZO
+  {
+    id:"EN_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo inglés",
+    activity:{
+      type:"writing",
+      questions:[
+        "I like apples",
+        "I am 10"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // EVALUACIÓN
+  {
+    id:"EN_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación inglés",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Read and answer",
+        "Write sentence"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
     weight:1,
     links:[]
   }
 ],
 historia: [
-{ id:"H1", text:"Zonas geográficas", weight:2, links:[
-{ label:"MINEDUC · HI05 OA09 Zonas naturales", url:"https://www.curriculumnacional.cl/recursos/hi-05-oa-9-u1-a9" },
-{ label:"MINEDUC · Mapa zonas naturales de Chile", url:"https://www.curriculumnacional.cl/recursos/mapa-zonas-naturales-chile" }]},
-{ id:"H2", text:"Recursos naturales", weight:2, links:[
-{ label:"MINEDUC · HI05 OA10 Recursos naturales", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-10" },
-{ label:"MINEDUC · Chile y su producción de recursos", url:"https://www.curriculumnacional.cl/recursos/chile-produccion-recursos" }]},
-{ id:"H3", text:"Pueblos originarios", weight:2, links:[{label:"Pueblos originarios Chile", url:"https://www.curriculumnacional.cl/recursos/pueblos-originarios-chile"}] },
-{ id:"H4", text:"Inicio de la historia de Chile", weight:2, links:[
-{ label:"MINEDUC · HI05 OA01 Viajes de descubrimiento", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-01/18189:HI05-OA-01" },
-{ label:"MINEDUC · Viajes y descubrimientos geográficos", url:"https://www.curriculumnacional.cl/estudiantes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-01/33997:Viajes-y-descubrimientos-geograficos" },
-{ label:"MINEDUC · HI05 OA02 Conquista de América y Chile", url:"https://www.curriculumnacional.cl/docentes/Educacion-General/Historia-Geografia-y-Ciencias-Sociales-5-basico/HI05-OA-02/18190:HI05-OA-02" },
-{ label:"MINEDUC · Conquista de América", url:"https://www.curriculumnacional.cl/docente/629/w3-article-23337.html" },
-{ label:"MINEDUC · HI05 OA06 Colonia", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-06" },
-{ label:"MINEDUC · La colonia en América", url:"https://www.curriculumnacional.cl/recursos/colonia-america" },
-{ label:"MINEDUC · HI05 OA13 Derechos humanos", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-13" },
-{ label:"MINEDUC · Todas las personas tenemos derechos", url:"https://www.curriculumnacional.cl/recursos/personas-derechos" },
-{ label:"MINEDUC · HI05 OA14 Derechos y deberes", url:"https://www.curriculumnacional.cl/curriculum/1o-6o-basico/historia-geografia-ciencias-sociales/5-basico/hi05-oa-14" },
-{ label:"MINEDUC · Derechos y deberes (actividad)", url:"https://www.curriculumnacional.cl/recursos/hi-05-oa13-oa-14-u4-a2" }
-]}
+
+  {
+    id:"H2_1",
+    level:1,
+    phase:"base",
+    title:"Conquista de América",
+    oa:"OA2",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Quiénes conquistaron América?",
+        "Nombra una expedición"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H3_1",
+    level:2,
+    phase:"application",
+    title:"Consecuencias de la conquista",
+    oa:"OA3",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué cambió en América?",
+        "¿Qué beneficios tuvo Europa?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H6_1",
+    level:3,
+    phase:"base",
+    title:"La colonia",
+    oa:"OA6",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué era la colonia?",
+        "¿Cuál era el rol de la iglesia?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H7_1",
+    level:4,
+    phase:"application",
+    title:"Relación españoles-mapuches",
+    oa:"OA7",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué fue la guerra de Arauco?",
+        "¿Qué es el mestizaje?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H9_1",
+    level:5,
+    phase:"base",
+    title:"Zonas naturales de Chile",
+    oa:"OA9",
+    activity:{
+      type:"classification",
+      questions:[
+        "Norte Grande",
+        "Zona Central",
+        "Zona Sur"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H10_1",
+    level:6,
+    phase:"application",
+    title:"Recursos naturales",
+    oa:"OA10",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "Nombra un recurso renovable",
+        "Nombra uno no renovable"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H13_1",
+    level:7,
+    phase:"base",
+    title:"Derechos humanos",
+    oa:"OA13",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué es un derecho?",
+        "Nombra uno"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"H14_1",
+    level:7,
+    phase:"application",
+    title:"Deberes y responsabilidades",
+    oa:"OA14",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué es un deber?",
+        "¿Por qué debemos respetar leyes?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // REFUERZO
+  {
+    id:"H_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo historia",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Define colonia",
+        "Nombra zona natural"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // EVALUACIÓN
+  {
+    id:"H_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación historia",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Explica conquista",
+        "Nombra recursos",
+        "Ejemplo derecho"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
 ],
-lectura: [
-{ id:"R1", text:"Lectura recreativa diaria", weight:1, links:[{ label:"BPDigital", url:"https://www.bpdigital.cl/" }]}
-]
-},
 may: {
 matematicas: [
-{
-id: "M1",
-title: "Fracciones impropias y números mixtos",
-oa: "OA5",
-criterion: "Expresar fracciones impropias como números mixtos y viceversa.",
-objective: "Transformar fracciones impropias en números mixtos y convertir números mixtos en fracciones impropias.",
-learnContent: "Una fracción impropia tiene numerador mayor que denominador.\nPara convertir 7/3 a número mixto, divide 7 entre 3: caben 2 y sobra 1. Entonces 7/3 = 2 1/3.",
-activity: {
-type: "math_exercises",
-text: "Resuelve los siguientes ejercicios.",
-questions: [
-"Convierte 9/4 a número mixto.",
-"Convierte 11/2 a número mixto.",
-"Convierte 8/3 a número mixto.",
-"Convierte 1 2/5 a fracción impropia.",
-"Convierte 3 1/4 a fracción impropia."
-]
-},
-evidence: "Resolver correctamente al menos 4 de los 5 ejercicios.",
-durationMin: 20,
-weight: 1,
-links: []
-},
-{
-id: "M2",
-title: "Porcentaje como parte de 100",
-oa: "OA4",
-criterion: "Expresar porcentajes como fracción o decimal y resolver problemas que involucren porcentajes.",
-objective: "Entender el porcentaje como una parte de cada 100.",
-learnContent: "El porcentaje significa 'de cada 100'.\n25% = 25 de cada 100\n50% = la mitad\n10% = 10 de cada 100",
-activity: {
-type: "math_exercises",
-text: "Resuelve los siguientes ejercicios.",
-questions: [
-"25% de 100 =",
-"50% de 200 =",
-"10% de 80 =",
-"En una clase hay 20 estudiantes. Si el 50% lleva cuaderno azul, ¿cuántos estudiantes son?"
-]
-},
-evidence: "Resolver correctamente al menos 3 de los 4 ejercicios.",
-durationMin: 15,
-weight: 1,
-links: []
-},
-{
-    id:"ME2",
-    title:"Mini evaluación matemática",
-    oa:"OA2-OA5",
-    criterion:"Aplicar operaciones, fracciones y porcentajes.",
-    objective:"Demostrar habilidades matemáticas.",
-    learnContent:"Aplica lo aprendido sin apoyo.",
+
+  // =========================
+  // NIVEL 0 · REFUERZO PREVIO NECESARIO
+  // =========================
+  {
+    id:"M0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Refuerzo de cuatro operaciones",
+    oa:"Refuerzo previo",
+    criterion:"Resolver sumas, restas, multiplicaciones y divisiones básicas correctamente.",
+    objective:"Asegurar una base sólida de cálculo antes de trabajar razones, porcentajes y ecuaciones.",
+    learnContent:"Las operaciones básicas son la base para resolver problemas más complejos. Conviene distinguir cuándo sumar, restar, multiplicar o dividir.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "345 + 278",
+        "900 - 456",
+        "36 × 4",
+        "144 ÷ 12"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Refuerzo de fracciones básicas",
+    oa:"Refuerzo previo",
+    criterion:"Reconocer fracciones simples como partes de un todo.",
+    objective:"Preparar el trabajo con fracciones impropias, mixtos y operaciones posteriores.",
+    learnContent:"Una fracción representa partes iguales de un todo. Por ejemplo, 1/2 significa una de dos partes iguales.",
+    activity:{
+      type:"math_exercises",
+      text:"Responde:",
+      questions:[
+        "¿Qué representa 1/2?",
+        "¿Qué representa 3/4?",
+        "¿Cuál es mayor: 1/2 o 1/4?",
+        "Escribe una fracción que represente tres partes de cinco."
+      ]
+    },
+    evidence:"Responder correctamente al menos 3 de 4 ítems.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 2 · CUATRO OPERACIONES EN PROBLEMAS
+  // =========================
+  {
+    id:"M2_1",
+    level:1,
+    phase:"base",
+    sequence:1,
+    title:"Cálculos con cuatro operaciones",
+    oa:"OA2",
+    criterion:"Resolver ejercicios que involucren las cuatro operaciones.",
+    objective:"Aplicar con seguridad suma, resta, multiplicación y división.",
+    learnContent:"Antes de resolver un problema, conviene identificar si se están juntando, quitando, repitiendo grupos o repartiendo cantidades.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1.245 + 378",
+        "9.000 - 457",
+        "48 × 23",
+        "864 ÷ 8"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M2_2",
+    level:1,
+    phase:"application",
+    sequence:2,
+    title:"Problemas con cuatro operaciones",
+    oa:"OA2",
+    criterion:"Resolver problemas que involucren las cuatro operaciones.",
+    objective:"Elegir la operación adecuada según el contexto.",
+    learnContent:"Los problemas pueden requerir una sola operación o una combinación de operaciones.",
+    activity:{
+      type:"problem_solving",
+      text:"Resuelve los siguientes problemas:",
+      questions:[
+        "En una biblioteca hay 6 estantes con 24 libros cada uno. ¿Cuántos libros hay en total?",
+        "Un colegio tenía 980 cuadernos y entregó 365. ¿Cuántos quedaron?",
+        "Si 72 lápices se reparten entre 9 estudiantes, ¿cuántos recibe cada uno?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 2 de 3 problemas.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 3 · RAZÓN
+  // =========================
+  {
+    id:"M3_1",
+    level:2,
+    phase:"base",
+    sequence:1,
+    title:"Concepto de razón",
+    oa:"OA3",
+    criterion:"Identificar la razón presentada en un contexto.",
+    objective:"Comprender que una razón compara dos cantidades.",
+    learnContent:"Una razón compara cantidades. Por ejemplo, si hay 2 lápices rojos y 3 azules, la razón rojos:azules es 2:3.",
+    activity:{
+      type:"math_exercises",
+      text:"Responde:",
+      questions:[
+        "Si hay 4 niñas y 6 niños, ¿cuál es la razón niñas:niños?",
+        "Si hay 3 manzanas y 1 plátano, ¿cuál es la razón manzanas:plátanos?",
+        "Escribe una razón para 5 perros y 2 gatos."
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 ítems.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M3_2",
+    level:2,
+    phase:"application",
+    sequence:2,
+    title:"Razón en problemas",
+    oa:"OA3",
+    criterion:"Resolver problemas que involucren razones.",
+    objective:"Aplicar razones en situaciones cotidianas.",
+    learnContent:"Las razones ayudan a comparar cantidades y a interpretar relaciones entre grupos.",
+    activity:{
+      type:"problem_solving",
+      text:"Resuelve:",
+      questions:[
+        "En un curso hay 8 niñas y 12 niños. ¿Cuál es la razón niñas:niños?",
+        "Una receta usa 2 tazas de leche y 5 de harina. ¿Cuál es la razón leche:harina?",
+        "En una bolsa hay 6 bolitas verdes y 3 rojas. ¿Cuál es la razón verdes:rojas?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 2 de 3 problemas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 4 · PORCENTAJE
+  // =========================
+  {
+    id:"M4_1",
+    level:3,
+    phase:"base",
+    sequence:1,
+    title:"Porcentaje como fracción o decimal",
+    oa:"OA4",
+    criterion:"Expresar un porcentaje como fracción o decimal.",
+    objective:"Comprender el porcentaje como parte de 100.",
+    learnContent:"Un porcentaje significa 'de cada 100'. Por ejemplo, 25% = 25/100 = 0,25.",
+    activity:{
+      type:"math_exercises",
+      text:"Convierte:",
+      questions:[
+        "25% a fracción",
+        "50% a decimal",
+        "10% a fracción",
+        "75% a decimal"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 conversiones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M4_2",
+    level:3,
+    phase:"application",
+    sequence:2,
+    title:"Problemas de porcentaje",
+    oa:"OA4",
+    criterion:"Resolver problemas que involucren porcentajes.",
+    objective:"Aplicar porcentajes en cantidades reales.",
+    learnContent:"A veces se puede pensar el porcentaje como una fracción equivalente o como una parte de 100.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "25% de 100",
+        "50% de 240",
+        "10% de 80",
+        "En una clase hay 20 estudiantes. Si el 50% lleva cuaderno azul, ¿cuántos estudiantes son?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 5 · FRACCIONES IMPROPIAS Y NÚMEROS MIXTOS
+  // =========================
+  {
+    id:"M5_1",
+    level:4,
+    phase:"base",
+    sequence:1,
+    title:"Fracciones impropias y números mixtos",
+    oa:"OA5",
+    criterion:"Expresar fracciones impropias como números mixtos y viceversa.",
+    objective:"Transformar entre ambas representaciones.",
+    learnContent:"Una fracción impropia tiene numerador mayor que denominador. Ejemplo: 7/3 = 2 1/3.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Convierte 9/4 a número mixto",
+        "Convierte 11/2 a número mixto",
+        "Convierte 1 2/5 a fracción impropia",
+        "Convierte 3 1/4 a fracción impropia"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M5_2",
+    level:4,
+    phase:"application",
+    sequence:2,
+    title:"Equivalencias y recta numérica",
+    oa:"OA5",
+    criterion:"Identificar fracciones equivalentes y ubicar fracciones o mixtos en la recta numérica.",
+    objective:"Relacionar distintas representaciones de una misma cantidad.",
+    learnContent:"Fracciones equivalentes representan lo mismo; además, fracciones y mixtos pueden ubicarse en la recta numérica.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "¿Son equivalentes 2/4 y 1/2?",
+        "¿Son equivalentes 3/6 y 1/2?",
+        "Indica entre qué números enteros queda 7/4 en la recta numérica",
+        "Indica entre qué números enteros queda 2 1/3 en la recta numérica"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 8 · SUMA Y RESTA DE FRACCIONES / DECIMALES
+  // =========================
+  {
+    id:"M8_1",
+    level:5,
+    phase:"base",
+    sequence:1,
+    title:"Suma y resta de decimales",
+    oa:"OA8",
+    criterion:"Sumar y restar decimales en problemas o ejercicios.",
+    objective:"Operar con decimales alineando correctamente sus cifras.",
+    learnContent:"Para sumar o restar decimales, se alinean las comas y se opera por posición.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1,25 + 0,5",
+        "3,7 - 1,2",
+        "0,85 + 0,15",
+        "2,4 - 0,35"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M8_2",
+    level:5,
+    phase:"application",
+    sequence:2,
+    title:"Suma y resta de fracciones y mixtos",
+    oa:"OA8",
+    criterion:"Resolver problemas rutinarios y no rutinarios con fracciones propias, impropias o números mixtos.",
+    objective:"Aplicar operaciones con fracciones en situaciones breves.",
+    learnContent:"Se puede sumar o restar fracciones si se expresan de manera comparable; con mismo denominador es más directo.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "1/2 + 1/4",
+        "3/4 - 1/4",
+        "1 1/2 + 1/2",
+        "2 1/4 - 1/4"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ejercicios.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 11 · ECUACIONES
+  // =========================
+  {
+    id:"M11_1",
+    level:6,
+    phase:"base",
+    sequence:1,
+    title:"Ecuaciones de primer grado",
+    oa:"OA11",
+    criterion:"Resolver ecuaciones de primer grado con una incógnita.",
+    objective:"Encontrar el valor desconocido en igualdades simples.",
+    learnContent:"Resolver una ecuación es encontrar qué número hace verdadera la igualdad.",
+    activity:{
+      type:"math_exercises",
+      text:"Resuelve:",
+      questions:[
+        "x + 5 = 12",
+        "x - 3 = 9",
+        "7 + x = 15",
+        "20 - x = 8"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ecuaciones.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 16 · ÁNGULOS
+  // =========================
+  {
+    id:"M16_1",
+    level:7,
+    phase:"base",
+    sequence:1,
+    title:"Ángulos opuestos por el vértice y complementarios",
+    oa:"OA16",
+    criterion:"Identificar estos pares de ángulos y calcular medidas sencillas.",
+    objective:"Reconocer relaciones básicas entre ángulos que se forman al cruzarse dos rectas.",
+    learnContent:"Los opuestos por el vértice son iguales. Los complementarios suman 90°.",
+    activity:{
+      type:"math_exercises",
+      text:"Responde:",
+      questions:[
+        "Si un ángulo mide 35°, ¿cuánto mide su complementario?",
+        "Si dos ángulos son opuestos por el vértice y uno mide 48°, ¿cuánto mide el otro?",
+        "¿Qué significa que dos ángulos sean complementarios?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 ítems.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 18 y OA 19 · SUPERFICIE Y VOLUMEN
+  // =========================
+  {
+    id:"M18_1",
+    level:8,
+    phase:"base",
+    sequence:1,
+    title:"Superficie de cubos y paralelepípedos",
+    oa:"OA18",
+    criterion:"Calcular áreas de redes y superficies de cubos y paralelepípedos.",
+    objective:"Entender que la superficie es el área total exterior de una figura 3D.",
+    learnContent:"La superficie total se relaciona con las caras de la figura.",
+    activity:{
+      type:"short_answer",
+      text:"Responde y calcula cuando corresponda:",
+      questions:[
+        "¿Qué significa superficie de un cubo?",
+        "Si una cara cuadrada mide 4 cm² y el cubo tiene 6 caras iguales, ¿cuál es la superficie total?"
+      ]
+    },
+    evidence:"Responder correctamente los 2 ítems o al menos la idea y el cálculo principal.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M19_1",
+    level:8,
+    phase:"application",
+    sequence:2,
+    title:"Volumen de cubos y paralelepípedos",
+    oa:"OA19",
+    criterion:"Determinar el volumen de estas figuras y resolver problemas simples.",
+    objective:"Comprender que el volumen mide el espacio interior de una figura 3D.",
+    learnContent:"El volumen se relaciona con largo, ancho y alto; en un cubo, todas las aristas son iguales.",
+    activity:{
+      type:"short_answer",
+      text:"Responde y calcula:",
+      questions:[
+        "¿Qué mide el volumen?",
+        "Si un cubo tiene arista 2 cm, ¿cuál es su volumen?"
+      ]
+    },
+    evidence:"Responder correctamente ambos ítems o la idea central y el cálculo.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 23 · EXPERIMENTOS ALEATORIOS
+  // =========================
+  {
+    id:"M23_1",
+    level:9,
+    phase:"base",
+    sequence:1,
+    title:"Resultados en experimentos aleatorios",
+    oa:"OA23",
+    criterion:"Conjeturar tendencias y enumerar resultados posibles con monedas o dados.",
+    objective:"Interpretar posibilidades en experimentos simples.",
+    learnContent:"En experimentos aleatorios no se sabe con certeza qué ocurrirá, pero sí se pueden enumerar resultados posibles.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué resultados son posibles al lanzar una moneda?",
+        "¿Qué resultados son posibles al lanzar un dado de 6 caras?",
+        "Si lanzas muchas veces una moneda, ¿qué tendencia esperarías observar?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA 24 · GRÁFICOS
+  // =========================
+  {
+    id:"M24_1",
+    level:10,
+    phase:"application",
+    sequence:1,
+    title:"Gráficos de barra doble y circulares",
+    oa:"OA24",
+    criterion:"Leer e interpretar gráficos de barra doble y gráficos circulares.",
+    objective:"Extraer conclusiones a partir de gráficos.",
+    learnContent:"Para interpretar un gráfico se observa el título, las categorías, los valores y qué comparación pide la pregunta.",
+    activity:{
+      type:"short_answer",
+      text:"Imagina un gráfico de barras dobles donde Equipo A anota 5 goles en enero y 7 en febrero; Equipo B anota 4 en enero y 8 en febrero.",
+      questions:[
+        "¿Qué equipo anotó más goles en enero?",
+        "¿Qué equipo anotó más goles en febrero?",
+        "¿Cuántos goles anotó el Equipo A en total?",
+        "¿Cuál fue la diferencia total entre ambos equipos?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 3 de 4 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REPASO / REFUERZO
+  // =========================
+  {
+    id:"M_R1",
+    level:90,
+    phase:"refuerzo",
+    sequence:1,
+    title:"Repaso general 1 — operaciones, razones y porcentajes",
+    oa:"Repaso",
+    criterion:"Reforzar OA 2, 3 y 4.",
+    objective:"Consolidar los contenidos iniciales de cálculo y comparación.",
+    learnContent:"Repaso acumulativo de cuatro operaciones, razones y porcentajes.",
     activity:{
       type:"mixed_exercises",
       text:"Resuelve:",
       questions:[
-        "Convierte 9/4 a número mixto",
-        "25% de 200 =",
-        "Resuelve: 45 × 3",
-        "Problema: Si compras algo por $1500 y pagas $2000, ¿cuánto te devuelven?"
+        "480 ÷ 12",
+        "Razón entre 3 perros y 6 gatos",
+        "25% de 200",
+        "1.250 + 375"
       ]
     },
-    evidence:"Al menos 3 correctas.",
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M_R2",
+    level:90,
+    phase:"refuerzo",
+    sequence:2,
+    title:"Repaso general 2 — fracciones, ecuaciones y gráficos",
+    oa:"Repaso",
+    criterion:"Reforzar OA 5, 8, 11, 16, 24.",
+    objective:"Consolidar contenidos medios y avanzados.",
+    learnContent:"Repaso acumulativo con mezcla de representación, operación y análisis.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve:",
+      questions:[
+        "Convierte 7/3 a mixto",
+        "1/2 + 1/4",
+        "x + 4 = 10",
+        "¿Cuánto mide el complementario de 40°?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // EVALUACIONES
+  // =========================
+  {
+    id:"M_E1",
+    level:99,
+    phase:"evaluation",
+    sequence:1,
+    title:"Mini evaluación 1 — números, razones y porcentajes",
+    oa:"OA 2, 3, 4",
+    criterion:"Demostrar dominio inicial de cálculo, razones y porcentajes.",
+    objective:"Comprobar comprensión sin apoyo directo.",
+    learnContent:"Evaluación breve acumulativa.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "36 × 24",
+        "Razón entre 4 rojas y 8 azules",
+        "50% de 240",
+        "900 - 457"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"M_E2",
+    level:99,
+    phase:"evaluation",
+    sequence:2,
+    title:"Mini evaluación 2 — fracciones, ecuaciones, volumen y gráficos",
+    oa:"OA 5, 8, 11, 18, 19, 23, 24",
+    criterion:"Demostrar dominio de contenidos posteriores del temario.",
+    objective:"Evaluar comprensión acumulativa de los OA avanzados.",
+    learnContent:"Evaluación breve acumulativa.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "Convierte 9/4 a número mixto",
+        "2 1/4 - 1/4",
+        "x - 3 = 7",
+        "Si un cubo tiene arista 2 cm, ¿cuál es su volumen?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
     durationMin:20,
     weight:1,
     links:[]
   }
+
 ],
 lenguaje: [
-{
-id: "L1",
-title: "Causa y consecuencia en narraciones",
-oa: "OA4",
-criterion: "Identificar relaciones de causa-consecuencia en las acciones ocurridas en narraciones.",
-objective: "Reconocer qué hecho provoca otro dentro de una narración.",
-learnContent: "La causa es lo que hace que algo ocurra.\nLa consecuencia es lo que ocurre después por esa causa.",
-activity: {
-type: "reading_questions",
-text: "Tomás debía llevar un cartel para la feria científica. Lo dejó junto a la puerta la noche anterior, pero por la mañana salió con prisa y no lo tomó. En el colegio, cuando llegó su turno de exponer, se dio cuenta de que no lo tenía. Tuvo que explicar el experimento solo de memoria. Aunque lo hizo bastante bien, prometió revisar su mochila antes de salir de casa.",
-questions: [
-"¿Qué olvidó Tomás?",
-"¿Por qué olvidó el cartel?",
-"¿Qué consecuencia tuvo ese olvido?",
-"¿Qué aprendió Tomás al final?",
-"Escribe una oración de causa y otra de consecuencia."
-]
-},
-evidence: "Responder correctamente las preguntas y escribir una causa y una consecuencia.",
-durationMin: 20,
-weight: 1,
-links: []
-},
-{
-id: "L2",
-title: "Opinión fundamentada sobre un personaje",
-oa: "OA4",
-criterion: "Expresar opiniones sobre actitudes y acciones de personajes, fundamentándolas con ejemplos del texto.",
-objective: "Escribir una opinión breve, clara y fundamentada.",
-learnContent: "Una opinión fundamentada debe decir lo que piensas y agregar una razón usando información del texto.\nPuedes usar: 'Creo que… porque en el texto…'",
-activity: {
-type: "reading_questions",
-text: "Sofía vio a un compañero nuevo en el recreo. Como estaba solo, le preguntó si quería jugar. El compañero aceptó y luego le agradeció la invitación.",
-questions: [
-"¿Qué hizo Sofía?",
-"¿Te parece una buena actitud?",
-"Escribe tu opinión en 3 líneas usando esta estructura: Creo que… porque en el texto…"
-]
-},
-evidence: "Escribir una opinión con una razón basada en el texto.",
-durationMin: 15,
-weight: 1,
-links: []
-},
-{
-    id:"LR1",
-    title:"Comprensión y opinión",
-    oa:"OA4",
-    criterion:"Opinar fundamentando con información del texto.",
-    objective:"Demostrar comprensión y opinión.",
-    learnContent:"Una buena respuesta:\n- dice lo que piensas\n- incluye una razón\n- usa información del texto",
+
+  // =========================
+  // NIVEL 0 · REFUERZO PREVIO
+  // =========================
+  {
+    id:"L0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Comprensión literal básica",
+    oa:"Refuerzo previo",
+    objective:"Identificar información explícita en textos simples",
     activity:{
       type:"reading_questions",
-      text:"Carlos ayudó a un compañero a levantar sus cuadernos. El profesor destacó su acción frente al curso.",
+      text:"Ana fue al mercado a comprar frutas.",
       questions:[
-        "¿Qué hizo Carlos?",
-        "¿Por qué fue importante?",
-        "¿Te parece correcta su acción? Explica."
+        "¿Quién fue al mercado?",
+        "¿A dónde fue?",
+        "¿Qué iba a comprar?"
       ]
     },
-    evidence:"Opinión con justificación.",
+    evidence:"Responde correctamente",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Oraciones y conectores básicos",
+    oa:"Refuerzo previo",
+    objective:"Construir oraciones claras",
+    activity:{
+      type:"writing",
+      text:"Escribe 3 oraciones usando: y, pero, porque."
+    },
+    evidence:"Oraciones completas",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA4 · NARRACIONES
+  // =========================
+  {
+    id:"L4_1",
+    level:1,
+    phase:"base",
+    title:"Acciones principales",
+    oa:"OA4",
+    objective:"Identificar hechos importantes",
+    activity:{
+      type:"reading_questions",
+      text:"Pedro estudió y luego rindió una prueba.",
+      questions:[
+        "¿Qué hizo Pedro?",
+        "¿Qué pasó después?"
+      ]
+    },
+    evidence:"Identifica acciones",
     durationMin:15,
     weight:1,
     links:[]
+  },
+
+  {
+    id:"L4_2",
+    level:2,
+    phase:"application",
+    title:"Causa y consecuencia",
+    oa:"OA4",
+    objective:"Relacionar eventos",
+    activity:{
+      type:"reading_questions",
+      text:"María salió sin abrigo y se enfermó.",
+      questions:[
+        "¿Cuál fue la causa?",
+        "¿Cuál fue la consecuencia?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L4_3",
+    level:3,
+    phase:"application",
+    title:"Opinión fundamentada",
+    oa:"OA4",
+    objective:"Opinar con respaldo",
+    activity:{
+      type:"reading_questions",
+      text:"Juan ayudó a su amigo.",
+      questions:[
+        "¿Te parece correcta su acción?",
+        "Fundamenta tu respuesta."
+      ]
+    },
+    evidence:"Opinión con razón",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L4_4",
+    level:3,
+    phase:"base",
+    title:"Ambiente y época",
+    oa:"OA4",
+    objective:"Describir contexto",
+    activity:{
+      type:"reading_questions",
+      text:"El relato ocurre en un pueblo antiguo.",
+      questions:[
+        "¿Dónde ocurre?",
+        "¿En qué época podría ser?"
+      ]
+    },
+    evidence:"Descripción correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA5 · POESÍA
+  // =========================
+  {
+    id:"L5_1",
+    level:4,
+    phase:"base",
+    title:"Lenguaje figurado",
+    oa:"OA5",
+    objective:"Interpretar figuras literarias",
+    activity:{
+      type:"reading_questions",
+      text:"El viento cantaba suavemente.",
+      questions:[
+        "¿Qué significa?",
+        "¿Es literal?"
+      ]
+    },
+    evidence:"Interpretación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L5_2",
+    level:4,
+    phase:"application",
+    title:"Figuras literarias",
+    oa:"OA5",
+    objective:"Reconocer comparaciones y personificaciones",
+    activity:{
+      type:"reading_questions",
+      questions:[
+        "¿Es comparación o personificación? 'Corre como el viento'",
+        "¿Es comparación o personificación? 'El sol sonríe'"
+      ]
+    },
+    evidence:"Clasificación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA6 · TEXTOS NO LITERARIOS
+  // =========================
+  {
+    id:"L6_1",
+    level:5,
+    phase:"base",
+    title:"Información explícita",
+    oa:"OA6",
+    objective:"Extraer ideas principales",
+    activity:{
+      type:"reading_questions",
+      text:"El reciclaje ayuda al medio ambiente.",
+      questions:[
+        "¿De qué trata el texto?",
+        "¿Cuál es la idea principal?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L6_2",
+    level:5,
+    phase:"application",
+    title:"Comparación de textos",
+    oa:"OA6",
+    objective:"Relacionar información",
+    activity:{
+      type:"reading_questions",
+      text:"Texto A: reciclar es bueno.\nTexto B: reciclar reduce contaminación.",
+      questions:[
+        "¿Qué tienen en común?",
+        "¿En qué se diferencian?"
+      ]
+    },
+    evidence:"Comparación correcta",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA7 · EVALUACIÓN CRÍTICA
+  // =========================
+  {
+    id:"L7_1",
+    level:6,
+    phase:"application",
+    title:"Propósito del texto",
+    oa:"OA7",
+    objective:"Reconocer intención",
+    activity:{
+      type:"reading_questions",
+      text:"Compra este producto para mejorar tu salud.",
+      questions:[
+        "¿Cuál es el propósito?",
+        "¿Quién es el receptor?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L7_2",
+    level:6,
+    phase:"application",
+    title:"Fuentes y confiabilidad",
+    oa:"OA7",
+    objective:"Evaluar información",
+    activity:{
+      type:"reading_questions",
+      questions:[
+        "¿Es lo mismo leer una noticia en dos fuentes?",
+        "¿Por qué es importante comparar?"
+      ]
+    },
+    evidence:"Respuesta crítica",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA14 · NARRACIÓN
+  // =========================
+  {
+    id:"L14_1",
+    level:7,
+    phase:"base",
+    title:"Estructura narrativa",
+    oa:"OA14",
+    objective:"Crear historia completa",
+    activity:{
+      type:"writing",
+      text:"Escribe una historia con inicio, desarrollo y final."
+    },
+    evidence:"Estructura clara",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L14_2",
+    level:7,
+    phase:"application",
+    title:"Diálogo y descripción",
+    oa:"OA14",
+    objective:"Enriquecer narración",
+    activity:{
+      type:"writing",
+      text:"Escribe un texto incluyendo diálogo y descripción."
+    },
+    evidence:"Uso correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA15 · TEXTO INFORMATIVO
+  // =========================
+  {
+    id:"L15_1",
+    level:8,
+    phase:"base",
+    title:"Texto informativo",
+    oa:"OA15",
+    objective:"Organizar ideas",
+    activity:{
+      type:"writing",
+      text:"Escribe un texto con inicio, desarrollo y conclusión."
+    },
+    evidence:"Organización correcta",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L15_2",
+    level:8,
+    phase:"application",
+    title:"Párrafos y conectores",
+    oa:"OA15",
+    objective:"Organizar información",
+    activity:{
+      type:"writing",
+      text:"Escribe un artículo con 2 párrafos usando conectores."
+    },
+    evidence:"Uso correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REFUERZO
+  // =========================
+  {
+    id:"L_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo comprensión",
+    activity:{
+      type:"reading_questions",
+      text:"Luis olvidó su cuaderno.",
+      questions:[
+        "¿Qué pasó?",
+        "¿Por qué ocurrió?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L_R2",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo escritura",
+    activity:{
+      type:"writing",
+      text:"Escribe 3 oraciones con conectores."
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // EVALUACIÓN
+  // =========================
+  {
+    id:"L_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación lenguaje 1",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Comprensión",
+        "Inferencia",
+        "Opinión"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"L_E2",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación lenguaje 2",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Texto informativo",
+        "Narración",
+        "Análisis"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
   }
+
 ],
 ciencias: [
+
+  // =========================
+  // NIVEL 0 · REFUERZO PREVIO
+  // =========================
   {
-    id:"C1",
-    title:"Fotosíntesis",
-    oa:"OA1",
-    criterion:"Explicar el proceso de fotosíntesis identificando sus elementos.",
-    objective:"Comprender cómo las plantas producen su alimento.",
-    learnContent:"La fotosíntesis necesita:\nagua, dióxido de carbono y luz.\nProduce azúcar y oxígeno.",
+    id:"C0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Refuerzo: seres vivos y necesidades básicas",
+    oa:"Refuerzo previo",
+    criterion:"Distinguir seres vivos y reconocer necesidades básicas para vivir.",
+    objective:"Preparar el trabajo de fotosíntesis, cadenas alimentarias y energía.",
+    learnContent:"Los seres vivos necesitan agua, aire y energía para vivir. Las plantas fabrican su propio alimento y los animales dependen de otros seres vivos.",
     activity:{
       type:"short_answer",
       text:"Responde:",
       questions:[
-        "¿Qué necesita la planta para la fotosíntesis?",
-        "¿Qué produce?",
+        "¿Qué necesita un ser vivo para vivir?",
+        "¿Las plantas y los animales consiguen su energía de la misma forma?",
+        "Nombra un ser vivo productor y un consumidor."
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Refuerzo: estados de la materia",
+    oa:"Refuerzo previo",
+    criterion:"Reconocer sólido, líquido y gas en ejemplos cotidianos.",
+    objective:"Preparar el trabajo de cambios de estado de la materia.",
+    learnContent:"La materia puede presentarse como sólido, líquido o gas. El agua permite observar fácilmente estos estados.",
+    activity:{
+      type:"classification",
+      text:"Clasifica cada ejemplo:",
+      questions:[
+        "hielo",
+        "agua",
+        "vapor",
+        "madera",
+        "leche"
+      ]
+    },
+    evidence:"Clasificar correctamente al menos 4 de 5 ejemplos.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA1 · FOTOSÍNTESIS
+  // =========================
+  {
+    id:"C1_1",
+    level:1,
+    phase:"base",
+    sequence:1,
+    title:"Qué es la fotosíntesis",
+    oa:"OA1",
+    criterion:"Explicar de forma simple el proceso de fotosíntesis e identificar sus elementos necesarios.",
+    objective:"Comprender qué necesitan las plantas para producir su alimento.",
+    learnContent:"La fotosíntesis necesita agua, dióxido de carbono y luz. Como resultado, la planta produce azúcar y libera oxígeno.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué necesita una planta para hacer fotosíntesis?",
+        "¿Qué produce la fotosíntesis?",
         "¿Por qué es importante la luz?"
       ]
     },
-    evidence:"Responder correctamente y explicar en forma simple.",
+    evidence:"Responder correctamente las 3 preguntas o al menos 2 con explicación clara.",
     durationMin:15,
     weight:1,
     links:[]
   },
+
   {
-    id:"C2",
-    title:"Tipos de energía",
-    oa:"OA8",
-    criterion:"Clasificar tipos de energía e identificar su origen.",
-    objective:"Reconocer diferentes tipos de energía.",
-    learnContent:"Energías renovables: sol, viento, agua.\nNo renovables: petróleo, carbón.",
+    id:"C1_2",
+    level:1,
+    phase:"application",
+    sequence:2,
+    title:"Aplicación de fotosíntesis",
+    oa:"OA1",
+    criterion:"Fundamentar predicciones simples sobre fenómenos relacionados con la fotosíntesis.",
+    objective:"Relacionar el proceso de fotosíntesis con situaciones concretas.",
+    learnContent:"Si a una planta le falta agua, luz o dióxido de carbono, el proceso de fotosíntesis se altera.",
     activity:{
-      type:"classification",
-      text:"Clasifica las siguientes fuentes:",
+      type:"short_answer",
+      text:"Piensa y responde:",
       questions:[
-        "Energía solar",
-        "Petróleo",
-        "Viento",
-        "Carbón"
+        "¿Qué pasaría con una planta si no recibe luz durante varios días?",
+        "¿Qué ocurriría si nunca la regaran?",
+        "¿Por qué las plantas son importantes para el aire que respiramos?"
       ]
     },
-    evidence:"Clasificación correcta.",
+    evidence:"Responder correctamente al menos 2 de 3 preguntas con una justificación simple.",
     durationMin:15,
     weight:1,
     links:[]
-  }
-],
+  },
 
-historia: [
+  // =========================
+  // OA2 · CADENAS Y REDES ALIMENTARIAS
+  // =========================
   {
-    id:"H1",
-    title:"Independencia de Chile",
+    id:"C2_1",
+    level:2,
+    phase:"base",
+    sequence:1,
+    title:"Productores, consumidores y descomponedores",
     oa:"OA2",
-    criterion:"Describir el proceso de independencia de Chile.",
-    objective:"Comprender los eventos principales de la independencia.",
-    learnContent:"La independencia comenzó en 1810 con la Primera Junta.\nFue un proceso con avances y retrocesos.",
+    criterion:"Identificar niveles tróficos y su función en cadenas y redes alimentarias.",
+    objective:"Reconocer el papel de cada ser vivo en el flujo de energía.",
+    learnContent:"Los productores fabrican su alimento; los consumidores se alimentan de otros seres vivos; los descomponedores transforman restos orgánicos.",
+    activity:{
+      type:"classification",
+      text:"Clasifica cada ejemplo:",
+      questions:[
+        "pasto",
+        "conejo",
+        "zorro",
+        "hongo"
+      ]
+    },
+    evidence:"Clasificar correctamente al menos 3 de 4 ejemplos.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C2_2",
+    level:2,
+    phase:"application",
+    sequence:2,
+    title:"Cadenas alimentarias",
+    oa:"OA2",
+    criterion:"Describir flujos de materia y energía en cadenas alimentarias.",
+    objective:"Construir y leer una cadena alimentaria simple.",
+    learnContent:"La energía pasa desde los productores a los consumidores y, finalmente, a los descomponedores.",
+    activity:{
+      type:"short_answer",
+      text:"Observa esta cadena: pasto → conejo → zorro",
+      questions:[
+        "¿Quién es el productor?",
+        "¿Quién es el consumidor de primer orden?",
+        "¿Qué pasaría si desapareciera el pasto?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA5 · PUBERTAD
+  // =========================
+  {
+    id:"C5_1",
+    level:3,
+    phase:"base",
+    sequence:1,
+    title:"Cambios en la pubertad",
+    oa:"OA5",
+    criterion:"Identificar modificaciones biológicas visibles y conductuales durante la pubertad.",
+    objective:"Reconocer la pubertad como etapa del desarrollo humano.",
+    learnContent:"En la pubertad ocurren cambios físicos y conductuales propios del crecimiento.",
     activity:{
       type:"short_answer",
       text:"Responde:",
       questions:[
-        "¿Qué ocurrió en 1810?",
-        "¿Fue fácil el proceso de independencia? ¿por qué?",
-        "¿Por qué se considera un proceso?"
+        "Nombra dos cambios que ocurren en la pubertad.",
+        "¿La pubertad es igual en todas las personas?",
+        "¿Por qué se considera una etapa del desarrollo?"
       ]
     },
-    evidence:"Responder con ideas claras.",
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C5_2",
+    level:3,
+    phase:"application",
+    sequence:2,
+    title:"Comparación de cambios en la pubertad",
+    oa:"OA5",
+    criterion:"Comparar cambios en hombres y mujeres durante la pubertad.",
+    objective:"Distinguir semejanzas y diferencias de los cambios propios de la edad.",
+    learnContent:"Hay cambios compartidos por todas las personas y otros que son específicos.",
+    activity:{
+      type:"short_answer",
+      text:"Completa y compara:",
+      questions:[
+        "Menciona un cambio común a todos durante la pubertad.",
+        "Menciona un cambio específico que pueda ocurrir en mujeres.",
+        "Menciona un cambio específico que pueda ocurrir en hombres."
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 ítems.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA6 · HIGIENE Y ACTIVIDAD FÍSICA
+  // =========================
+  {
+    id:"C6_1",
+    level:4,
+    phase:"base",
+    sequence:1,
+    title:"Actividad física y salud",
+    oa:"OA6",
+    criterion:"Explicar por qué el deporte sistemático favorece el estado de salud.",
+    objective:"Relacionar actividad física con bienestar y prevención de problemas.",
+    learnContent:"Realizar actividad física regular ayuda al cuerpo a mantenerse sano y activo.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Por qué hacer ejercicio ayuda a la salud?",
+        "Nombra un beneficio de la actividad física regular."
+      ]
+    },
+    evidence:"Responder correctamente las 2 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C6_2",
+    level:4,
+    phase:"application",
+    sequence:2,
+    title:"Higiene corporal en la pubertad",
+    oa:"OA6",
+    criterion:"Reconocer beneficios de la higiene corporal y enfermedades asociadas a una mala higiene.",
+    objective:"Comprender la importancia del aseo e higiene en esta etapa del desarrollo.",
+    learnContent:"La higiene corporal ayuda a prevenir enfermedades y a mantener el bienestar.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "Nombra dos hábitos de higiene importantes en la pubertad.",
+        "¿Qué problema puede causar una mala higiene corporal?",
+        "¿Por qué cambia la necesidad de aseo en esta etapa?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA8 · ENERGÍA
+  // =========================
+  {
+    id:"C8_1",
+    level:5,
+    phase:"base",
+    sequence:1,
+    title:"La energía en seres vivos y objetos",
+    oa:"OA8",
+    criterion:"Explicar el rol de la energía para los seres vivos y los objetos.",
+    objective:"Comprender que la energía permite cambios y procesos vitales.",
+    learnContent:"La energía es necesaria para que los seres vivos realicen funciones vitales y para que los objetos cambien en la vida cotidiana.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Para qué necesitan energía las plantas y los animales?",
+        "Da un ejemplo de un objeto que use energía.",
+        "¿Qué ocurre si no hay energía?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C8_2",
+    level:5,
+    phase:"application",
+    sequence:2,
+    title:"Tipos de energía en la vida diaria",
+    oa:"OA8",
+    criterion:"Identificar manifestaciones de energía lumínica, sonora, eléctrica, calórica y cinética.",
+    objective:"Distinguir distintos tipos de energía en aparatos y situaciones cotidianas.",
+    learnContent:"La energía puede manifestarse de muchas formas: luz, calor, sonido, movimiento y electricidad.",
+    activity:{
+      type:"classification",
+      text:"Relaciona cada ejemplo con el tipo de energía principal:",
+      questions:[
+        "ampolleta",
+        "radio",
+        "estufa",
+        "bicicleta en movimiento"
+      ]
+    },
+    evidence:"Clasificar correctamente al menos 3 de 4 ejemplos.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA11 · RECURSOS ENERGÉTICOS
+  // =========================
+  {
+    id:"C11_1",
+    level:6,
+    phase:"base",
+    sequence:1,
+    title:"Energías renovables y no renovables",
+    oa:"OA11",
+    criterion:"Clasificar fuentes de energía como renovables o no renovables.",
+    objective:"Distinguir distintos tipos de fuentes energéticas.",
+    learnContent:"Las energías renovables se regeneran naturalmente; las no renovables se agotan con el uso.",
+    activity:{
+      type:"classification",
+      text:"Clasifica cada fuente:",
+      questions:[
+        "energía solar",
+        "petróleo",
+        "viento",
+        "carbón"
+      ]
+    },
+    evidence:"Clasificar correctamente las 4 fuentes o al menos 3 de 4.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C11_2",
+    level:6,
+    phase:"application",
+    sequence:2,
+    title:"Uso responsable de la energía",
+    oa:"OA11",
+    criterion:"Proponer medidas para el uso responsable de la energía.",
+    objective:"Aplicar el concepto de energía responsable a situaciones cotidianas.",
+    learnContent:"Ahorrar energía ayuda al ambiente y al uso responsable de los recursos.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "Nombra dos acciones para ahorrar energía en casa.",
+        "¿Por qué conviene usar energías renovables?"
+      ]
+    },
+    evidence:"Responder correctamente las 2 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA13 · CAMBIOS DE ESTADO
+  // =========================
+  {
+    id:"C13_1",
+    level:7,
+    phase:"base",
+    sequence:1,
+    title:"Cambios de estado de la materia",
+    oa:"OA13",
+    criterion:"Identificar cambios de estado en contextos cotidianos.",
+    objective:"Reconocer fusión, evaporación, ebullición, condensación, solidificación y sublimación.",
+    learnContent:"La materia cambia de estado según gana o pierde energía.",
+    activity:{
+      type:"classification",
+      text:"Relaciona cada ejemplo con el cambio de estado:",
+      questions:[
+        "el hielo se derrite",
+        "el agua hierve",
+        "el vapor forma gotas",
+        "el agua se congela"
+      ]
+    },
+    evidence:"Clasificar correctamente al menos 3 de 4 ejemplos.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C13_2",
+    level:7,
+    phase:"application",
+    sequence:2,
+    title:"Partículas y cambios de estado",
+    oa:"OA13",
+    criterion:"Explicar cambios de estado a nivel particulado y comparar comportamiento de partículas.",
+    objective:"Relacionar estado de la materia con el movimiento y cercanía de las partículas.",
+    learnContent:"En los sólidos las partículas están más juntas; en los gases, más separadas y con mayor movimiento.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Cómo están las partículas en un sólido?",
+        "¿Qué pasa con las partículas cuando el agua se evapora?",
+        "¿En qué se diferencian las partículas de un líquido y un gas?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA16 · CAPAS DE LA TIERRA
+  // =========================
+  {
+    id:"C16_1",
+    level:8,
+    phase:"base",
+    sequence:1,
+    title:"Capas de la Tierra",
+    oa:"OA16",
+    criterion:"Describir atmósfera, litósfera e hidrósfera y ubicar sus principales rasgos.",
+    objective:"Reconocer las capas externas de la Tierra y su importancia.",
+    learnContent:"Las capas externas de la Tierra ayudan a hacer posible la vida y entregan recursos para las personas.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué es la atmósfera?",
+        "¿Qué es la hidrósfera?",
+        "¿Qué es la litósfera?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C16_2",
+    level:8,
+    phase:"application",
+    sequence:2,
+    title:"Recursos y protección de las capas de la Tierra",
+    oa:"OA16",
+    criterion:"Identificar recursos de las capas externas y proponer medidas de protección.",
+    objective:"Relacionar las capas de la Tierra con recursos y cuidado ambiental.",
+    learnContent:"El aire, el agua y el suelo son fundamentales y pueden alterarse por la acción humana.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "¿Qué recurso importante obtenemos del suelo?",
+        "¿Qué recurso importante obtenemos del agua?",
+        "Nombra una medida para proteger el aire o el suelo."
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA18 · EROSIÓN
+  // =========================
+  {
+    id:"C18_1",
+    level:9,
+    phase:"base",
+    sequence:1,
+    title:"La erosión y sus agentes",
+    oa:"OA18",
+    criterion:"Identificar agentes que provocan la erosión y describir sus consecuencias.",
+    objective:"Comprender cómo se transforma la superficie terrestre.",
+    learnContent:"La erosión puede ser provocada por el viento, el agua y las actividades humanas.",
+    activity:{
+      type:"short_answer",
+      text:"Responde:",
+      questions:[
+        "Nombra dos agentes que provoquen erosión.",
+        "¿Qué puede pasar con un terreno muy erosionado?",
+        "¿Cómo puede influir la acción humana en la erosión?"
+      ]
+    },
+    evidence:"Responder correctamente al menos 2 de 3 preguntas.",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REPASO / REFUERZO
+  // =========================
+  {
+    id:"C_R1",
+    level:90,
+    phase:"refuerzo",
+    sequence:1,
+    title:"Repaso ciencias 1 — fotosíntesis y cadenas alimentarias",
+    oa:"Repaso",
+    criterion:"Reforzar OA 1 y OA 2.",
+    objective:"Consolidar comprensión de base biológica y ecológica.",
+    learnContent:"Repaso acumulativo de fotosíntesis, productores, consumidores y descomponedores.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve:",
+      questions:[
+        "¿Qué necesita la fotosíntesis?",
+        "¿Qué produce la fotosíntesis?",
+        "En la cadena pasto → conejo → zorro, ¿quién es productor?",
+        "¿Qué pasaría si desaparece el pasto?"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
     durationMin:20,
     weight:1,
     links:[]
   },
-{
-    id:"HR1",
-    title:"Repaso independencia",
-    oa:"OA2",
-    criterion:"Identificar eventos clave de la independencia.",
-    objective:"Reforzar comprensión histórica.",
-    learnContent:"La independencia fue un proceso que comenzó en 1810.",
+
+  {
+    id:"C_R2",
+    level:90,
+    phase:"refuerzo",
+    sequence:2,
+    title:"Repaso ciencias 2 — energía, materia y Tierra",
+    oa:"Repaso",
+    criterion:"Reforzar OA 8, 11, 13, 16 y 18.",
+    objective:"Consolidar contenidos físicos y ambientales.",
+    learnContent:"Repaso acumulativo de energía, cambios de estado, capas de la Tierra y erosión.",
     activity:{
-      type:"short_answer",
-      text:"Responde:",
+      type:"mixed_exercises",
+      text:"Resuelve:",
       questions:[
-        "¿Qué ocurrió en 1810?",
-        "¿Quiénes participaron?",
-        "¿Por qué fue importante?"
+        "Clasifica: solar / petróleo / viento / carbón",
+        "¿Qué cambio de estado ocurre cuando el hielo se derrite?",
+        "¿Qué es la atmósfera?",
+        "Nombra un agente de erosión"
       ]
     },
-    evidence:"Respuestas claras.",
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // EVALUACIONES
+  // =========================
+  {
+    id:"C_E1",
+    level:99,
+    phase:"evaluation",
+    sequence:1,
+    title:"Mini evaluación 1 — vida, pubertad e higiene",
+    oa:"OA 1, 2, 5, 6",
+    criterion:"Demostrar comprensión de procesos vitales, pubertad y hábitos saludables.",
+    objective:"Evaluación breve de contenidos biológicos iniciales.",
+    learnContent:"Evaluación acumulativa.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "¿Qué necesita la fotosíntesis?",
+        "¿Quién es el productor en una cadena alimentaria?",
+        "Nombra un cambio de la pubertad",
+        "Nombra un hábito de higiene importante"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"C_E2",
+    level:99,
+    phase:"evaluation",
+    sequence:2,
+    title:"Mini evaluación 2 — energía, materia y Tierra",
+    oa:"OA 8, 11, 13, 16, 18",
+    criterion:"Demostrar dominio de contenidos físico-ambientales del temario.",
+    objective:"Evaluación breve acumulativa de los contenidos posteriores.",
+    learnContent:"Evaluación acumulativa.",
+    activity:{
+      type:"mixed_exercises",
+      text:"Resuelve sin ayuda:",
+      questions:[
+        "Nombra dos tipos de energía en la vida diaria",
+        "¿Qué es una energía no renovable?",
+        "¿Qué cambio de estado ocurre cuando el vapor forma gotas?",
+        "Nombra una capa de la Tierra y una medida para protegerla"
+      ]
+    },
+    evidence:"Resolver correctamente al menos 3 de 4 ítems.",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
+],
+  
+ historia: [
+
+  // =========================
+  // REFUERZO
+  // =========================
+  {
+    id:"H0_1",
+    level:0,
+    phase:"base",
+    title:"Línea de tiempo básica",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué significa pasado?",
+        "¿Qué significa presente?",
+        "Nombra un hecho del pasado"
+      ]
+    },
+    evidence:"Correcto",
     durationMin:15,
     weight:1,
     links:[]
   },
+
+  // OA1
   {
-    id:"H2",
-    title:"Democracia y ciudadanía",
-    oa:"OA15",
-    criterion:"Reconocer la importancia de la participación ciudadana.",
-    objective:"Comprender el rol de los ciudadanos en la democracia.",
-    learnContent:"La democracia permite elegir autoridades y participar en decisiones.",
+    id:"H1_1",
+    level:1,
+    phase:"base",
+    title:"Antecedentes independencia",
+    oa:"OA1",
     activity:{
       type:"short_answer",
-      text:"Responde:",
       questions:[
-        "¿Qué es la democracia?",
-        "¿Por qué es importante votar?",
-        "Da un ejemplo de participación."
+        "Nombra una causa de la independencia",
+        "¿Qué pasó con Fernando VII?"
       ]
     },
-    evidence:"Explicaciones simples y correctas.",
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA2
+  {
+    id:"H2_1",
+    level:2,
+    phase:"base",
+    title:"Proceso independencia Chile",
+    oa:"OA2",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué ocurrió en 1810?",
+        "Nombra una batalla importante"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA3
+  {
+    id:"H3_1",
+    level:3,
+    phase:"application",
+    title:"Organización república",
+    oa:"OA3",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué es una república?",
+        "¿Qué cambió después de la independencia?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA5
+  {
+    id:"H5_1",
+    level:4,
+    phase:"base",
+    title:"Territorio Chile siglo XIX",
+    oa:"OA5",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "Nombra un proceso de expansión territorial",
+        "¿Qué fue la Guerra del Pacífico?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA7
+  {
+    id:"H7_1",
+    level:5,
+    phase:"application",
+    title:"Democratización siglo XX",
+    oa:"OA7",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Quiénes pudieron votar con el tiempo?",
+        "¿Qué cambios sociales ocurrieron?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA8
+  {
+    id:"H8_1",
+    level:6,
+    phase:"application",
+    title:"Dictadura y democracia",
+    oa:"OA8",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué ocurrió en 1973?",
+        "¿Por qué es importante la democracia?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA9
+  {
+    id:"H9_1",
+    level:6,
+    phase:"base",
+    title:"Cambios en sociedad chilena",
+    oa:"OA9",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué ha cambiado en la sociedad?",
+        "¿Qué se mantiene?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA11
+  {
+    id:"H11_1",
+    level:7,
+    phase:"base",
+    title:"Regiones de Chile",
+    oa:"OA11",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "Nombra una región",
+        "¿Qué características tiene?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA12
+  {
+    id:"H12_1",
+    level:7,
+    phase:"application",
+    title:"Ambientes naturales",
+    oa:"OA12",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "Nombra un ambiente natural",
+        "¿Cómo vive la gente ahí?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // OA15-18
+  {
+    id:"H15_1",
+    level:8,
+    phase:"base",
+    title:"Democracia y derechos",
+    oa:"OA15-18",
+    activity:{
+      type:"short_answer",
+      questions:[
+        "¿Qué son los poderes del Estado?",
+        "¿Qué es un derecho?",
+        "¿Qué es un deber?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // REPASO
+  {
+    id:"H_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Repaso historia",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Define independencia",
+        "Nombra un derecho",
+        "Nombra una región"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // EVALUACIÓN
+  {
+    id:"H_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación historia",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Proceso independencia",
+        "Democracia",
+        "Territorio"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:20,
+    weight:1,
+    links:[]
+  }
+
+],
+ingles: [
+
+  // =========================
+  // NIVEL 0 · REFUERZO PREVIO
+  // =========================
+  {
+    id:"EN0_1",
+    level:0,
+    phase:"base",
+    sequence:1,
+    title:"Frases básicas en inglés",
+    oa:"Refuerzo previo",
+    activity:{
+      type:"writing",
+      text:"Completa:",
+      questions:[
+        "My name is ___",
+        "I am ___ years old",
+        "I like ___"
+      ]
+    },
+    evidence:"Completa correctamente",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN0_2",
+    level:0,
+    phase:"base",
+    sequence:2,
+    title:"Verbo can / can’t",
+    oa:"Refuerzo previo",
+    activity:{
+      type:"writing",
+      questions:[
+        "I can run",
+        "I can’t swim"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA5 · COMPRENSIÓN
+  // =========================
+  {
+    id:"EN5_1",
+    level:1,
+    phase:"base",
+    title:"Comprensión de texto simple",
+    oa:"OA5",
+    activity:{
+      type:"reading_questions",
+      text:"I go to school by bus.",
+      questions:[
+        "How does he go?",
+        "Where does he go?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN5_2",
+    level:1,
+    phase:"application",
+    title:"Direcciones y posición",
+    oa:"OA5",
+    activity:{
+      type:"reading_questions",
+      text:"The park is next to the school.",
+      questions:[
+        "Where is the park?",
+        "What is next to the school?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA6 · PROPÓSITO Y VOCABULARIO
+  // =========================
+  {
+    id:"EN6_1",
+    level:2,
+    phase:"base",
+    title:"Propósito del texto",
+    oa:"OA6",
+    activity:{
+      type:"reading_questions",
+      text:"Menu: Pizza, Juice, Salad",
+      questions:[
+        "What is the purpose?",
+        "Is it a menu or story?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN6_2",
+    level:2,
+    phase:"application",
+    title:"Identificar información",
+    oa:"OA6",
+    activity:{
+      type:"reading_questions",
+      text:"She is a doctor. She works in a hospital.",
+      questions:[
+        "What is her job?",
+        "Where does she work?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA8 · OPINIÓN Y CONEXIÓN
+  // =========================
+  {
+    id:"EN8_1",
+    level:3,
+    phase:"application",
+    title:"Opinión",
+    oa:"OA8",
+    activity:{
+      type:"writing",
+      text:"Do you like pizza? Write: I like / I don't like"
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN8_2",
+    level:3,
+    phase:"application",
+    title:"Conexión personal",
+    oa:"OA8",
+    activity:{
+      type:"writing",
+      text:"Write about your favorite food or activity"
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA14 · ESCRITURA GUIADA
+  // =========================
+  {
+    id:"EN14_1",
+    level:4,
+    phase:"base",
+    title:"Writing with model",
+    oa:"OA14",
+    activity:{
+      type:"writing",
+      text:"Write: My name is ___ and I live in ___"
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN14_2",
+    level:4,
+    phase:"application",
+    title:"Simple text",
+    oa:"OA14",
+    activity:{
+      type:"writing",
+      text:"Write 3 sentences about your day"
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // OA15 · FUNCIONES DEL LENGUAJE
+  // =========================
+  {
+    id:"EN15_1",
+    level:5,
+    phase:"base",
+    title:"Presente continuo",
+    oa:"OA15",
+    activity:{
+      type:"writing",
+      questions:[
+        "He is running",
+        "They are eating"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN15_2",
+    level:5,
+    phase:"application",
+    title:"Pasado simple",
+    oa:"OA15",
+    activity:{
+      type:"writing",
+      questions:[
+        "I went to school",
+        "I played soccer"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN15_3",
+    level:5,
+    phase:"application",
+    title:"Preguntas",
+    oa:"OA15",
+    activity:{
+      type:"writing",
+      questions:[
+        "Where are you?",
+        "Who is he?",
+        "How many apples?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // REFUERZO
+  // =========================
+  {
+    id:"EN_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Refuerzo inglés",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "I like apples",
+        "She is running",
+        "Where is the dog?"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:10,
+    weight:1,
+    links:[]
+  },
+
+  // =========================
+  // EVALUACIÓN
+  // =========================
+  {
+    id:"EN_E1",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación 1",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Read and answer",
+        "Write sentences"
+      ]
+    },
+    evidence:"Correcto",
+    durationMin:15,
+    weight:1,
+    links:[]
+  },
+
+  {
+    id:"EN_E2",
+    level:99,
+    phase:"evaluation",
+    title:"Evaluación 2",
+    activity:{
+      type:"mixed_exercises",
+      questions:[
+        "Present and past",
+        "Questions",
+        "Opinion"
+      ]
+    },
+    evidence:"Correcto",
     durationMin:15,
     weight:1,
     links:[]
   }
+
 ],
 guitarra: [
-{ id:"G1", text:"Partes de la guitarra", weight:1, links:[
-{ label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }]},
-{ id:"G2", text:"Postura y agarre", weight:1, links:[
-{ label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }]},
-{ id:"G3", text:"Primeros acordes (Em, A, D)", weight:2, links:[
-{ label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" },
-{ label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }]},
-{ id:"G4", text:"Acordes básicos (G, C)", weight:2, links:[
-{ label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }]},
-{ id:"G5", text:"Cambio de acordes", weight:2, links:[
-{ label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }]},
-{ id:"G6", text:"Ritmo básico", weight:2, links:[
-{ label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }]},
-{ id:"G7", text:"Primera canción simple", weight:2, links:[
-{ label:"YouTube · Playlist Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }]}
-]}};
+
+  {
+    id:"G1",
+    level:1,
+    phase:"base",
+    title:"Partes de la guitarra",
+    links:[
+      { label:"Marty Music · Curso gratis guitarra acústica", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+    ]
+  },
+
+  {
+    id:"G2",
+    level:1,
+    phase:"base",
+    title:"Postura y agarre",
+    links:[
+      { label:"Marty Music · Curso guitarra principiantes", url:"https://www.martymusic.com/free-beginner-acoustic-guitar-lessons" }
+    ]
+  },
+
+  {
+    id:"G3",
+    level:2,
+    phase:"application",
+    title:"Primeros acordes (Em, A, D)",
+    links:[
+      { label:"YouTube · Marty Beginner Acoustic", url:"https://www.youtube.com/playlist?list=PLP3kvqg_Ut85O11T56_oBq-2qyfja8NWe" }
+    ]
+  },
+
+  {
+    id:"G4",
+    level:2,
+    phase:"application",
+    title:"Acordes básicos (G, C)",
+    links:[]
+  },
+
+  {
+    id:"G5",
+    level:3,
+    phase:"application",
+    title:"Cambio de acordes",
+    links:[]
+  },
+
+  {
+    id:"G6",
+    level:3,
+    phase:"application",
+    title:"Ritmo básico",
+    links:[]
+  },
+
+  {
+    id:"G7",
+    level:4,
+    phase:"application",
+    title:"Primera canción simple",
+    links:[]
+  },
+
+  {
+    id:"G_R1",
+    level:90,
+    phase:"refuerzo",
+    title:"Práctica libre guitarra",
+    links:[]
+  }
+
+]
+}};
 /** =========================
  *  GENERACIÓN DEL PLAN
  *  ========================= */
