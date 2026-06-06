@@ -5367,10 +5367,49 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
  *  ========================= */
 (function init(){
 const today = new Date();
+let initDate = today;
+
+// buscar primer día con pendientes
+const local = loadLocal();
+const mergedDates = new Set([
+  ...Object.keys(local || {}),
+  ...Object.keys(LIVE_CACHE || {})
+]);
+
+const dates = Array.from(mergedDates).sort();
+
+for (const date of dates){
+  if (!inRange(date)) continue;
+  if (date > iso(today)) continue;
+
+  const source = (LIVE_CACHE[date] || local[date] || {});
+  let pending = 0;
+
+  for (const u of ["may","deadpool"]){
+    const uObj = source[u] || {};
+    for (const subj of Object.keys(uObj)){
+      const blocks = uObj[subj] || {};
+      for (const bKey of Object.keys(blocks)){
+        const tasks = blocks[bKey] || {};
+        for (const tKey of Object.keys(tasks)){
+          if (!tasks[tKey]?.done) pending++;
+        }
+      }
+    }
+  }
+
+  if (pending > 0){
+    initDate = parseISO(date);
+    break;
+  }
+}
+
+// fallback si no hay pendientes
 const start = parseISO(RANGE.start);
 const end = parseISO(RANGE.end);
-let initDate = start;
-if (today >= start && today <= end) initDate = today;
+if (initDate < start) initDate = start;
+if (initDate > end) initDate = end;
+
 document.getElementById("datePick").value = iso(initDate);
 document.getElementById("datePick").addEventListener("change", render);
 document.getElementById("userPick").addEventListener("change", render);
