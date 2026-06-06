@@ -5367,48 +5367,50 @@ document.getElementById("importFile").addEventListener("change", async (e)=>{
  *  ========================= */
 (function init(){
 const today = new Date();
+const start = parseISO(RANGE.start);
+const end = parseISO(RANGE.end);
+
 let initDate = today;
 
-// buscar primer día con pendientes
-const local = loadLocal();
-const mergedDates = new Set([
-  ...Object.keys(local || {}),
-  ...Object.keys(LIVE_CACHE || {})
-]);
+// buscar primer día con tareas pendientes reales
+for (let d = new Date(start); d <= today; d.setDate(d.getDate()+1)) {
 
-const dates = Array.from(mergedDates).sort();
+  if (!isStudyDay(d)) continue;
 
-for (const date of dates){
-  if (!inRange(date)) continue;
-  if (date > iso(today)) continue;
+  const day = buildDayPlan(new Date(d));
 
-  const source = (LIVE_CACHE[date] || local[date] || {});
-  let pending = 0;
+  let hasPending = false;
 
-  for (const u of ["may","deadpool"]){
-    const uObj = source[u] || {};
-    for (const subj of Object.keys(uObj)){
-      const blocks = uObj[subj] || {};
-      for (const bKey of Object.keys(blocks)){
-        const tasks = blocks[bKey] || {};
-        for (const tKey of Object.keys(tasks)){
-          if (!tasks[tKey]?.done) pending++;
+  for (const slot of day.slots || []){
+    for (const s of slot.students || []){
+      for (const t of s.tasks || []){
+        const st = getItemState(
+          iso(d),
+          s.id,
+          t.subject,
+          s.block.key,
+          t.id
+        );
+
+        if (!st || !st.done){
+          hasPending = true;
+          break;
         }
       }
+      if (hasPending) break;
     }
+    if (hasPending) break;
   }
 
-  if (pending > 0){
-    initDate = parseISO(date);
+  if (hasPending){
+    initDate = new Date(d);
     break;
   }
 }
 
-// fallback si no hay pendientes
-const start = parseISO(RANGE.start);
-const end = parseISO(RANGE.end);
-if (initDate < start) initDate = start;
-if (initDate > end) initDate = end;
+// fallback seguro
+if (today < start) initDate = start;
+if (today > end) initDate = today;
 
 document.getElementById("datePick").value = iso(initDate);
 document.getElementById("datePick").addEventListener("change", render);
