@@ -481,7 +481,39 @@ function isStudyDay(d){
 function dayLabel(d){
   return d.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"2-digit", day:"2-digit" });
 }
+  
+function calcProgressBySubject(userFilter){
+  const result = {};
+  const local = loadLocal();
+  const source = LIVE_CACHE || local || {};
 
+  const users = (userFilter === "family") ? ["may","deadpool"] : [userFilter];
+
+  for (const date of Object.keys(source)){
+    const day = source[date];
+
+    for (const u of users){
+      const uObj = day[u] || {};
+
+      for (const subj of Object.keys(uObj)){
+        result[subj] ??= {done:0,total:0};
+
+        const blocks = uObj[subj];
+        for (const bKey of Object.keys(blocks)){
+          const tasks = blocks[bKey];
+          for (const tKey of Object.keys(tasks)){
+            result[subj].total++;
+            if (tasks[tKey]?.done) result[subj].done++;
+          }
+        }
+      }
+    }
+  }
+
+  return result;
+}
+
+  
 /** =========================
  *  CURRÍCULUM (sin autoLinks)
  *  ========================= */
@@ -5245,8 +5277,16 @@ function renderWithPlan(day, d, userFilter, onlyPending, examMode){
       ]));
     }
 
-    document.getElementById("statsBox").textContent =
-      `Hoy: ${pr.done}/${pr.total}. ` + (examMode ? "Modo examen activo." : "Cápsulas pedagógicas activas.");
+const statsBox = document.getElementById("statsBox");
+statsBox.innerHTML =
+  `Hoy: ${pr.done}/${pr.total}. ` +
+  (examMode ? "Modo examen activo." : "Cápsulas pedagógicas activas.");
+    const prog = calcProgressBySubject(userFilter);
+for (const s of Object.keys(prog)){
+  const p = prog[s];
+  const percent = p.total ? Math.round((p.done/p.total)*100) : 0;
+  statsBox.innerHTML += `<br>${s}: ${percent}%`;
+}
   } else {
     document.getElementById("titleNote").textContent = day.message;
     document.getElementById("dayTypePill").className = "pill warn";
@@ -5260,7 +5300,6 @@ function renderWithPlan(day, d, userFilter, onlyPending, examMode){
 
   updateSyncAlert();
 }
-
 /** =========================
  *  NAVEGACIÓN / AJUSTES
  *  ========================= */
