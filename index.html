@@ -485,35 +485,44 @@ function dayLabel(d){
 function calcProgressBySubject(userFilter){
   const result = {};
   const local = loadLocal();
-  const source = LIVE_CACHE || local || {};
+
+  // ✅ combinar fuentes correctamente
+  const source = {...local, ...LIVE_CACHE};
 
   const users = (userFilter === "family") ? ["may","deadpool"] : [userFilter];
 
   for (const date of Object.keys(source)){
-  const day = source[date];
+    const day = source[date];
 
-  for (const u of users){
-    const uObj = day[u] || {};
+    for (const u of users){
+      const uObj = day[u] || {};
 
-    for (const subj of Object.keys(uObj)){
-      const normalized = normalizeSubjectName(subj);
-      result[normalized] ??= {done:0,total:0};
+      for (const subj of Object.keys(uObj)){
+        const blocks = uObj[subj];
 
-      const blocks = uObj[subj];
-      for (const bKey of Object.keys(blocks)){
-        const tasks = blocks[bKey];
-        for (const tKey of Object.keys(tasks)){
-          result[normalized].total++;
-          if (tasks[tKey]?.done) result[normalized].done++;
+        for (const bKey of Object.keys(blocks)){
+          const tasks = blocks[bKey];
+
+          for (const tKey of Object.keys(tasks)){
+            const task = tasks[tKey];
+
+            const realSubject = normalizeSubjectName(task?.subject);
+
+            result[realSubject] ??= {done:0,total:0};
+
+            result[realSubject].total++;
+
+            if (task?.done){
+              result[realSubject].done++;
+            }
+          }
         }
       }
     }
   }
-}
 
   return result;
 }
-
 function normalizeSubjectName(s){
   if (!s) return "otros";
 
