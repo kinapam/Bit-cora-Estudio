@@ -490,29 +490,44 @@ function calcProgressBySubject(userFilter){
   const users = (userFilter === "family") ? ["may","deadpool"] : [userFilter];
 
   for (const date of Object.keys(source)){
-    const day = source[date];
+  const day = source[date];
 
-    for (const u of users){
-      const uObj = day[u] || {};
+  for (const u of users){
+    const uObj = day[u] || {};
 
-      for (const subj of Object.keys(uObj)){
-        result[subj] ??= {done:0,total:0};
+    for (const subj of Object.keys(uObj)){
+      const normalized = normalizeSubjectName(subj);
+      result[normalized] ??= {done:0,total:0};
 
-        const blocks = uObj[subj];
-        for (const bKey of Object.keys(blocks)){
-          const tasks = blocks[bKey];
-          for (const tKey of Object.keys(tasks)){
-            result[subj].total++;
-            if (tasks[tKey]?.done) result[subj].done++;
-          }
+      const blocks = uObj[subj];
+      for (const bKey of Object.keys(blocks)){
+        const tasks = blocks[bKey];
+        for (const tKey of Object.keys(tasks)){
+          result[normalized].total++;
+          if (tasks[tKey]?.done) result[normalized].done++;
         }
       }
     }
   }
+}
 
   return result;
 }
 
+function normalizeSubjectName(s){
+  if (!s) return "otros";
+
+  s = s.toLowerCase();
+
+  if (s.includes("mat")) return "Matemática";
+  if (s.includes("leng")) return "Lenguaje";
+  if (s.includes("cien")) return "Ciencias";
+  if (s.includes("hist")) return "Historia";
+  if (s.includes("ing")) return "Inglés";
+  if (s.includes("guit")) return "Guitarra";
+
+  return "Otros";
+}
   
 /** =========================
  *  CURRÍCULUM (sin autoLinks)
