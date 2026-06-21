@@ -481,51 +481,49 @@ function isStudyDay(d){
 function dayLabel(d){
   return d.toLocaleDateString("es-ES", { weekday:"long", year:"numeric", month:"2-digit", day:"2-digit" });
 }
+
+function normalizeSubjectName(s){
+  if (!s) return "Otros";
+
+  s = String(s).toLowerCase().trim();
+
+  if (s === "matemática" || s === "matematica" || s === "matematicas" || s === "mate") return "Matemática";
+  if (s === "lenguaje") return "Lenguaje";
+  if (s === "ciencias") return "Ciencias";
+  if (s === "historia") return "Historia";
+  if (s === "ingles" || s === "inglés") return "Inglés";
+  if (s === "guitarra") return "Guitarra";
+
+  return "Otros";
+}
+
   
 function calcProgressBySubject(userFilter){
   const result = {};
   const local = loadLocal();
-  // ✅ combinar fuentes correctamente
-  const source = {...local, ...LIVE_CACHE};
+  const source = { ...local, ...LIVE_CACHE };
   const users = (userFilter === "family") ? ["may","deadpool"] : [userFilter];
   for (const date of Object.keys(source)){
     const day = source[date];
     for (const u of users){
       const uObj = day[u] || {};
       for (const subj of Object.keys(uObj)){
+        const realSubject = normalizeSubjectName(subj);
+        result[realSubject] ??= {done:0,total:0};
         const blocks = uObj[subj];
         for (const bKey of Object.keys(blocks)){
           const tasks = blocks[bKey];
           for (const tKey of Object.keys(tasks)){
-            const task = tasks[tKey];
-            const realSubject = normalizeSubjectName(subj);
-            result[realSubject] ??= {done:0,total:0};
             result[realSubject].total++;
-            if (task?.done){
-            result[realSubject].done++;
-            }
+            if (tasks[tKey]?.done) result[realSubject].done++;
           }
         }
       }
     }
   }
-
-  return result;
+return result;
 }
-function normalizeSubjectName(s){
-  if (!s) return "otros";
 
-  s = s.toLowerCase();
-
-  if (s.includes("mat")) return "Matemática";
-  if (s.includes("leng")) return "Lenguaje";
-  if (s.includes("cien")) return "Ciencias";
-  if (s.includes("hist")) return "Historia";
-  if (s.includes("ing")) return "Inglés";
-  if (s.includes("guit")) return "Guitarra";
-
-  return "Otros";
-}
   
 /** =========================
  *  CURRÍCULUM (sin autoLinks)
